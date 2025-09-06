@@ -28,7 +28,9 @@ npm run build
 
 # Set up Prisma
 echo "🌱 Setting up Prisma..."
+cd server
 npx prisma generate
+cd ..
 
 echo "⏳ Running database migrations..."
 npm run docker:up
