@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+}
+
+enum KnowledgeLevel {
+  NONE
+  BASIC
+  GOOD
+  EXCELLENT
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  username   String   @unique
+  password   String
+  first_name String
+  last_name  String
+  role       Role     @default(USER)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  attendances   Attendance[]
+  registrations Registered[]
+  songKnowledge UserSongKnowledge[]
+}
+
+model Event {
+  id                   Int      @id @default(autoincrement())
+  name                 String
+  date                 DateTime
+  place                String
+  description          String?
+  type                 String
+  requiresAttendance   Boolean  @default(false)
+  requiresRegistration Boolean  @default(false)
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
+
+  attendances   Attendance[]
+  registrations Registered[]
+  songs         EventSongs[]
+}
+
+model Attendance {
+  id         Int              @id @default(autoincrement())
+  userId     Int
+  eventId    Int
+  status     AttendanceStatus @default(PRESENT)
+  created_at DateTime         @default(now())
+
+  user  User  @relation(fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+}
+
+model Registered {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  eventId    Int
+  created_at DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+}
+
+model EventSongs {
+  id      Int @id @default(autoincrement())
+  eventId Int
+  songId  Int
+
+  event Event @relation(fields: [eventId], references: [id])
+  song  Song  @relation(fields: [songId], references: [id])
+}
+
+model Song {
+  id             Int      @id @default(autoincrement())
+  title          String
+  page           Int?
+  starting_tones String?
+  voices         String? // e.g., "SATB"
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  events    EventSongs[]
+  knowledge UserSongKnowledge[]
+}
+
+model UserSongKnowledge {
+  id     Int            @id @default(autoincrement())
+  userId Int
+  songId Int
+  level  KnowledgeLevel @default(NONE)
+
+  user User @relation(fields: [userId], references: [id])
+  song Song @relation(fields: [songId], references: [id])
+}

@@ -1,0 +1,35 @@
+{
+  "name": "choir-hub",
+  "version": "1.0.0",
+  "description": "Choir Hub - A project aimed to simplify the communication within CSK",
+  "main": "server/dist/index.js",
+  "scripts": {
+    "prisma:generate": "cd server && npx prisma generate",
+    "dev": "npm run docker:up && concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "build": "cd server && npm run build && cd ../client && npm run build",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+    "setup-db": "cd server && npm run setup-db",
+    "type-check": "cd server && npm run type-check && cd ../client && npm run type-check",
+    "docker:up": "cd server && docker-compose up -d",
+    "docker:down": "cd server && docker-compose down",
+    "docker:logs": "cd server && docker-compose logs -f",
+    "docker:ps": "cd server && docker-compose ps",
+    "docker:restart": "cd server && docker-compose down && docker-compose up -d"
+  },
+  "keywords": [
+    "react",
+    "nodejs",
+    "postgresql",
+    "express",
+    "typescript",
+    "vite"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {}
+}
