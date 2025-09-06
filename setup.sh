@@ -1,4 +1,3 @@
-#!/bin/bash
 echo "🚀 Setting up Project..."
 
 # Clean up any existing node_modules and lock files
@@ -32,12 +31,12 @@ echo "🌱 Setting up Prisma..."
 npx prisma generate
 
 echo "⏳ Running database migrations..."
-cd server
 npm run docker:up
+cd server
 npx prisma migrate dev --name init
 npx prisma db seed
-npm run docker:down
 cd ..
+npm run docker:down
 
 echo "✅ Setup complete! You can now run:"
 echo "  npm run dev"

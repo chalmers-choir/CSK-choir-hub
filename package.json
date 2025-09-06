@@ -31,5 +31,7 @@
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
 }

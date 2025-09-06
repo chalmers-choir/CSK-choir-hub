@@ -44,14 +44,8 @@ A full-stack choir management platform built with **TypeScript**, React frontend
 ```bash
 git clone <repository-url>
 cd turnekoren
+(chmod +x setup.sh)
 ./setup.sh
-```
-
-**For Windows:**
-```bash
-git clone <repository-url>
-cd turnekoren
-setup.bat
 ```
 
 ### Manual Setup
