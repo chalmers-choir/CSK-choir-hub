@@ -41,4 +41,4 @@ cd ..
 npm run docker:down
 
 echo "✅ Setup complete! You can now run:"
-echo "  npm run dev"
+echo "npm run dev"

@@ -67,34 +67,9 @@ cd turnekoren
    npm run install-all
    ```
 
-3. **Set up PostgreSQL database**
-   - Create a new PostgreSQL database named `turnekoren_db`
+3. **Update the .end**
    - Update the database configuration in `server/env.example` and rename it to `.env`
 
-4. **Configure environment variables**
-   ```bash
-   cd server
-   cp env.example .env
-   ```
-   
-   Edit `server/.env` with your database credentials:
-   ```env
-   PORT=5000
-   NODE_ENV=development
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_NAME=turnekoren_db
-   DB_USER=your_username
-   DB_PASSWORD=your_password
-   JWT_SECRET=your_jwt_secret_key_here
-   JWT_EXPIRES_IN=24h
-   CORS_ORIGIN=http://localhost:3000
-   ```
-
-5. **Set up the database**
-   ```bash
-   npm run setup-db
-   ```
 
 ## Running the Application
 
