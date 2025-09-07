@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { z } from 'zod';
 
+import * as userService from "../services/userService";
 import * as authService from "../services/authService";
 
 export const register = async (req: Request, res: Response) => {
@@ -19,7 +20,7 @@ export const register = async (req: Request, res: Response) => {
     const { email, password, username, first_name, last_name, voice, choir } = req.body;
 
     try {
-        const token = await authService.registerUser({
+        const token = await userService.registerUser({
             email,
             password,
             username,
