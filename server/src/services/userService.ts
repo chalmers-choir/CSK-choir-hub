@@ -84,20 +84,20 @@ export async function removeGroup(userId: number, groupId: number): Promise<void
 
 /**
  * Fetch all roles for a user.
- * @param {string} userId - The user ID.
+ * @param {number} userId - The user ID.
  * @returns {Promise<any[]>} List of roles.
  */
-export async function getUserRoles(userId: string): Promise<any[]> {
+export async function getUserRoles(userId: number): Promise<any[]> {
     // return userModel.getUserRoles(userId);
     return [];
 }
 
 /**
  * Fetch all groups for a user.
- * @param {string} userId - The user ID.
+ * @param {number} userId - The user ID.
  * @returns {Promise<any[]>} List of groups.
  */
-export async function getUserGroups(userId: string): Promise<any[]> {
+export async function getUserGroups(userId: number): Promise<any[]> {
     // return userModel.getUserGroups(userId);
     return []; // Placeholder until implemented
 }
