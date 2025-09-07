@@ -5,13 +5,29 @@ const prisma = new PrismaClient();
 async function main() {
     console.log("Seeding database...");
 
-    // Optional: clear existing data
-    await prisma.songKnowledge.deleteMany();
-    await prisma.eventAttendance.deleteMany();
-    await prisma.eventRegistration.deleteMany();
-    await prisma.song.deleteMany();
-    await prisma.event.deleteMany();
-    await prisma.user.deleteMany();
+    // Optional: clear existing data, if table exists
+    const tables = await prisma.$queryRaw<
+      Array<{ table_name: string }>
+    >`SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';`;
+
+    if (tables.some((table) => table.table_name === "SongKnowledge")) {
+      await prisma.songKnowledge.deleteMany();
+    }
+    if (tables.some((table) => table.table_name === "EventAttendance")) {
+      await prisma.eventAttendance.deleteMany();
+    }
+    if (tables.some((table) => table.table_name === "EventRegistration")) {
+      await prisma.eventRegistration.deleteMany();
+    }
+    if (tables.some((table) => table.table_name === "Song")) {
+      await prisma.song.deleteMany();
+    }
+    if (tables.some((table) => table.table_name === "Event")) {
+      await prisma.event.deleteMany();
+    }
+    if (tables.some((table) => table.table_name === "User")) {
+      await prisma.user.deleteMany();
+    }
 
     // Create Users
     const [admin, john, jane, bob] = await Promise.all([

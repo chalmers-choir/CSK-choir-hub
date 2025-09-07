@@ -32,13 +32,19 @@ cd server
 npx prisma generate
 cd ..
 
-echo "⏳ Running database migrations..."
-npm run docker:up
-cd server
-npx prisma migrate dev --name init
-npx prisma db seed
-cd ..
-npm run docker:down
+# Run script that drops all tables in the database
+# Ask for confirmation first, otherwise skip the drop
+read -p "⚠️  This COULD DROP ALL TABLES in the database. Are you sure? (y/N) " confirm
+if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+  echo "⏳ Running database migrations..."
+  npm run docker:up
+  cd server
+  npx prisma migrate dev --name init
+  npx prisma db seed
+  cd ..
+  npm run docker:down
+fi
+
 
 echo "✅ Setup complete! You can now run:"
 echo "npm run dev"
