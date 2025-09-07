@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 // TODO: get away from relative paths
-import { users, deleteUser } from "../../controllers/userController";
+import { deleteUser, users } from "../../controllers/userController";
 import { requireAuth } from "../../middleware/authMiddleware";
 
 const router = Router();

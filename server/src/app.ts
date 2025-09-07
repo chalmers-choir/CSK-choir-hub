@@ -3,8 +3,8 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 
-import routes from "./routes/routes";
-import setupSwagger from './config/swagger';
+import routes from "./api/routes/routes";
+import setupSwagger from "./core/config/swagger";
 
 const app = express();
 
@@ -34,7 +34,13 @@ setupSwagger(app); // Swagger setup
 app.use("/api", routes); // Main API routes
 
 /* ---- Error Handling Middlewares ---- */
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use(
+  (
+    err: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     console.error(err.stack);
     res.status(500).json({ error: "Something went wrong" });
   }

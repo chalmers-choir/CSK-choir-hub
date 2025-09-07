@@ -1,6 +1,6 @@
+import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
 import app from "./app";
-import { PrismaClient } from "@prisma/client";
 
 // Load environment variables
 dotenv.config();
@@ -19,7 +19,6 @@ const startServer = async () => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
-
   } catch (err) {
     console.error("Database connection error:", err);
     process.exit(1);

@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 // TODO: get away from relative paths
-import { health } from "../../controllers/healthController";
+import { health } from "@api/controllers";
 
 const router = Router();
 
