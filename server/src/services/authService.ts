@@ -1,26 +1,7 @@
 import bcrypt from "bcryptjs";
-import logger from '../utils/logger';
 
-import { createUser, findUserByEmail, findUserByUsername } from "../models/userModel";
+import { findUserByEmail, findUserByUsername } from "../models/userModel";
 import { generateToken } from "../utils/generateToken";
-import { RegisterInput } from "../../types";
-
-export const registerUser = async (newUser: RegisterInput): Promise<string> => {
-    const { email, password } = newUser;
-
-    // Check if user already exists
-    const existing = await findUserByEmail(email);
-    if (existing) throw new Error("User already exists");
-
-
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await createUser({ ...newUser, password: hashedPassword });
-
-    logger.info('User created', { userId: user.id });
-
-    return generateToken(user.id);
-};
 
 interface LoginInput {
     identifier: string; // email or username
