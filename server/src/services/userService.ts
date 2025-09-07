@@ -2,6 +2,8 @@ import * as userModel from '../models/userModel';
 import * as roleModel from '../models/roleModel';
 import { Choir, Voice } from '@prisma/client';
 
+import jwt from "jsonwebtoken";
+
 /**
  * Create a new user after checking email and username uniqueness.
  * @param {object} userData - The user data to create.
@@ -34,8 +36,8 @@ export async function deleteUser(userId: number): Promise<void> {
  * @param {object} filters - Filter options: choir, voice, role.
  * @returns {Promise<any[]>} List of users.
  */
-export async function listUsers(filters: { choir?: Choir; voice?: Voice; roleId?: number; groupId?: number }): Promise<any[]> {
-    return userModel.listUsers(filters);
+export async function getUsers(filters: { choir?: Choir; voice?: Voice; roleId?: number; groupId?: number }): Promise<any[]> {
+    return userModel.getUsers(filters);
 }
 
 /**
@@ -101,3 +103,17 @@ export async function getUserGroups(userId: number): Promise<any[]> {
     // return userModel.getUserGroups(userId);
     return []; // Placeholder until implemented
 }
+
+export const getUserIdFromToken = async (token: string) => {
+    if (!token) throw new Error("No token provided");
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: number };
+    const userId = decoded.userId;
+
+    return userId;
+};
+
+export const getAllUsers = async () => {
+    const users = await getUsers({});
+    return users;
+};

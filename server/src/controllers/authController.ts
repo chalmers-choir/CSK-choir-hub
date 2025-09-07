@@ -3,13 +3,15 @@ import * as authService from "../services/authService";
 
 export const register = async (req: Request, res: Response) => {
     try {
-        const { email, password, username, first_name, last_name } = req.body;
+        const { email, password, username, first_name, last_name, voice, choir } = req.body;
         const token = await authService.registerUser({
             email,
             password,
             username,
             firstName: first_name,
-            lastName: last_name
+            lastName: last_name,
+            voice,
+            choir
         });
         return res.status(201).json({ token });
     } catch (err: any) {

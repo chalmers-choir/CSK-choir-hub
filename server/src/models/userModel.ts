@@ -60,7 +60,7 @@ export const deleteUser = async (id: number) => {
 };
 
 // Lists all users, with optional filtering (e.g., by choirId, voice, etc.).
-export const listUsers = async (filter: Partial<{ choir: Choir; voice: Voice; roleId: number; groupId: number }> = {}) => {
+export const getUsers = async (filter: Partial<{ choir: Choir; voice: Voice; roleId: number; groupId: number }> = {}) => {
     const where: any = {};
     if (filter.choir) where.choir = filter.choir;
     if (filter.voice) where.voice = filter.voice;
