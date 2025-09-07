@@ -1,11 +1,22 @@
 import express from "express";
 import cors from "cors";
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
 import healthRoute from "./routes/healthRoute";
 
 const app = express();
+
+app.use(helmet()); // sets security headers
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 1000, // max 100 requests per IP
+});
+
+app.use(limiter);
 
 // Middlewares
 app.use(express.json());

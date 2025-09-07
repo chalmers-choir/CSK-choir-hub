@@ -1,9 +1,23 @@
 import { Request, Response } from "express";
 import * as authService from "../services/authService";
 
+import { z } from 'zod';
+
 export const register = async (req: Request, res: Response) => {
+    const registerSchema = z.object({
+        email: z.email(),
+        username: z.string().min(3),
+        password: z.string().min(6),
+    });
+
+    const result = registerSchema.safeParse(req.body);
+    if (!result.success) {
+        return res.status(400).json({ errors: z.treeifyError(result.error) });
+    }
+
+    const { email, password, username, first_name, last_name, voice, choir } = req.body;
+
     try {
-        const { email, password, username, first_name, last_name, voice, choir } = req.body;
         const token = await authService.registerUser({
             email,
             password,
