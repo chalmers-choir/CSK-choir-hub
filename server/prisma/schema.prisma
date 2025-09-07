@@ -10,9 +10,115 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  USER
-  ADMIN
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email        String @unique
+  username     String @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+
+  dietaryPreferences String?
+
+  groups Group[]
+  roles  Role[]
+  choir  Choir
+  voice  Voice
+
+  attendances   EventAttendance[]
+  registrations EventRegistration[]
+  songKnowledge SongKnowledge[]
+  UserRole      UserRole[]
+  GroupMember   GroupMember[]
+}
+
+model Group {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+
+  description String?
+
+  members      User[]
+  groupMembers GroupMember[]
+}
+
+model GroupMember {
+  id        Int       @id @default(autoincrement())
+  startDate DateTime  @default(now())
+  endDate   DateTime? // null => currently active
+
+  notes String?
+
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group   Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId  Int
+  groupId Int
+
+  @@index([userId])
+  @@index([groupId])
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+
+  description String?
+
+  // relations
+  userRoles UserRole[]
+  User      User?      @relation(fields: [userId], references: [id])
+  userId    Int?
+}
+
+model UserRole {
+  id        Int       @id @default(autoincrement())
+  startDate DateTime  @default(now())
+  endDate   DateTime? // null => currently active
+
+  notes String?
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  userId Int
+  roleId Int
+
+  @@index([userId])
+  @@index([roleId])
+}
+
+enum EventType {
+  REHEARSAL
+  CONCERT
+  GIG
+  PARTY
+  MEETING
+  OTHER
+}
+
+model Event {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String
+  type      EventType
+
+  dateStart   DateTime
+  dateEnd     DateTime
+  place       String
+  description String?
+
+  requiresAttendance   Boolean @default(false)
+  requiresRegistration Boolean @default(false)
+
+  attendances   EventAttendance[]
+  registrations EventRegistration[]
 }
 
 enum AttendanceStatus {
@@ -20,95 +126,110 @@ enum AttendanceStatus {
   ABSENT
 }
 
-enum KnowledgeLevel {
-  NONE
-  BASIC
-  GOOD
-  EXCELLENT
-}
-
-model User {
-  id         Int      @id @default(autoincrement())
-  email      String   @unique
-  username   String   @unique
-  password   String
-  first_name String
-  last_name  String
-  role       Role     @default(USER)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  attendances   Attendance[]
-  registrations Registered[]
-  songKnowledge UserSongKnowledge[]
-}
-
-model Event {
-  id                   Int      @id @default(autoincrement())
-  name                 String
-  date                 DateTime
-  place                String
-  description          String?
-  type                 String
-  requiresAttendance   Boolean  @default(false)
-  requiresRegistration Boolean  @default(false)
-  created_at           DateTime @default(now())
-  updated_at           DateTime @updatedAt
-
-  attendances   Attendance[]
-  registrations Registered[]
-  songs         EventSongs[]
-}
-
-model Attendance {
-  id         Int              @id @default(autoincrement())
-  userId     Int
-  eventId    Int
-  status     AttendanceStatus @default(PRESENT)
-  created_at DateTime         @default(now())
-
-  user  User  @relation(fields: [userId], references: [id])
-  event Event @relation(fields: [eventId], references: [id])
-}
-
-model Registered {
-  id         Int      @id @default(autoincrement())
-  userId     Int
-  eventId    Int
-  created_at DateTime @default(now())
-
-  user  User  @relation(fields: [userId], references: [id])
-  event Event @relation(fields: [eventId], references: [id])
-}
-
-model EventSongs {
-  id      Int @id @default(autoincrement())
+model EventAttendance {
+  userId  Int
   eventId Int
-  songId  Int
+  status  AttendanceStatus
 
-  event Event @relation(fields: [eventId], references: [id])
-  song  Song  @relation(fields: [songId], references: [id])
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@id([userId, eventId])
+  @@index([eventId])
+  @@index([userId])
+}
+
+model EventRegistration {
+  userId    Int
+  eventId   Int
+  createdAt DateTime @default(now())
+
+  comments           String?
+  dietaryPreferences String?
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@id([userId, eventId])
+  @@index([eventId])
+  @@index([userId])
+}
+
+model Book {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  songs Song[]
 }
 
 model Song {
-  id             Int      @id @default(autoincrement())
-  title          String
-  page           Int?
-  starting_tones String?
-  voices         String? // e.g., "SATB"
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
 
-  events    EventSongs[]
-  knowledge UserSongKnowledge[]
+  page          Int?
+  startingTones String?
+
+  book   Book @relation(fields: [bookId], references: [id])
+  bookId Int
+
+  voices        Voice[]
+  tags          Tag[]
+  songKnowledge SongKnowledge[]
+
+  @@unique([bookId, name])
 }
 
-model UserSongKnowledge {
-  id     Int            @id @default(autoincrement())
+enum KnowledgeLevel {
+  OK
+  GIG
+  UTANTILL
+}
+
+model SongKnowledge {
   userId Int
   songId Int
-  level  KnowledgeLevel @default(NONE)
+  voice  Voice
 
-  user User @relation(fields: [userId], references: [id])
-  song Song @relation(fields: [songId], references: [id])
+  level KnowledgeLevel
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  song Song @relation(fields: [songId], references: [id], onDelete: Cascade)
+
+  @@id([userId, songId, voice])
+  @@index([songId])
+  @@index([userId])
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  songs Song[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Voice {
+  S
+  S1
+  S2
+  A
+  A1
+  A2
+  T
+  T1
+  T2
+  B
+  B1
+  B2
+}
+
+enum Choir {
+  MK
+  DK
+  KK
 }
