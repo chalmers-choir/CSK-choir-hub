@@ -1,30 +1,49 @@
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+
 import * as userModel from '../models/userModel';
 import * as roleModel from '../models/roleModel';
 import { Choir, Voice } from '@prisma/client';
 
-import jwt from "jsonwebtoken";
+import { generateToken } from '../utils/generateToken';
+import logger from '../utils/logger';
 
-/**
- * Create a new user after checking email and username uniqueness.
- * @param {object} userData - The user data to create.
- * @returns {Promise<object>} The created user.
- * @throws {Error} If email or username is already used.
- */
-export async function createUser(userData: any): Promise<any> {
-    const existingByEmail = await userModel.findUserByEmail(userData.email);
-    if (existingByEmail) {
-        throw new Error('Email already in use');
-    }
-    const existingByUsername = await userModel.findUserByUsername(userData.username);
-    if (existingByUsername) {
-        throw new Error('Username already in use');
-    }
-    return userModel.createUser(userData);
+
+export interface RegisterInput {
+    email: string;
+    username: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    choir: Choir;
+    voice: Voice;
 }
 
 /**
+ * Create a new user after checking email and username uniqueness.
+ * @param {RegisterInput} userData - The user data to create.
+ * @returns {Promise<string>} Token for created user.
+ * @throws {Error} If email or username is already used.
+ */
+export const registerUser = async (newUser: RegisterInput): Promise<string> => {
+    const { email, password } = newUser;
+
+    // Check if user already exists
+    const existing = await userModel.findUserByEmail(email);
+    if (existing) throw new Error("User already exists");
+
+    // Hash password
+    const passwordHash = await bcrypt.hash(password, 10);
+    const user = await userModel.createUser({ ...newUser, password: passwordHash });
+
+    logger.info('User created', { userId: user.id });
+
+    return generateToken(user.id);
+};
+
+/**
  * Delete a user.
- * @param {string} userId - The user ID.
+ * @param {number} userId - The user ID.
  * @returns {Promise<void>}
  */
 export async function deleteUser(userId: number): Promise<void> {
@@ -33,7 +52,7 @@ export async function deleteUser(userId: number): Promise<void> {
 
 /**
  * List users with optional filters for choir, voice, or role.
- * @param {object} filters - Filter options: choir, voice, role.
+ * @param {object} filters - Filter options: choir, voice, role, group.
  * @returns {Promise<any[]>} List of users.
  */
 export async function getUsers(filters: { choir?: Choir; voice?: Voice; roleId?: number; groupId?: number }): Promise<any[]> {
@@ -42,32 +61,28 @@ export async function getUsers(filters: { choir?: Choir; voice?: Voice; roleId?:
 
 /**
  * Assign a role to a user.
- * @param {string} userId - The user ID.
- * @param {string} roleName - The role to assign.
+ * @param {number} userId - The user ID.
+ * @param {number} roleId - The role ID to assign.
  * @returns {Promise<void>}
  */
-export async function assignRole(userId: number, roleName: string): Promise<void> {
-    const role = await roleModel.findRoleByName(roleName);
-    if (!role) throw new Error('Role not found');
-    await userModel.assignRoleToUser(userId, role.id);
+export async function assignRole(userId: number, roleId: number): Promise<void> {
+    await userModel.assignRoleToUser(userId, roleId);
 }
 
 /**
  * Remove a role from a user.
- * @param {string} userId - The user ID.
- * @param {string} roleName - The role to remove.
+ * @param {number} userId - The user ID.
+ * @param {number} roleId - The role to remove.
  * @returns {Promise<void>}
  */
-export async function removeRole(userId: number, roleName: string): Promise<void> {
-    const role = await roleModel.findRoleByName(roleName);
-    if (!role) throw new Error('Role not found');
-    await userModel.removeRoleFromUser(userId, role.id);
+export async function removeRole(userId: number, roleId: number): Promise<void> {
+    await userModel.removeRoleFromUser(userId, roleId);
 }
 
 /**
  * Add a group to a user.
- * @param {string} userId - The user ID.
- * @param {string} groupId - The group ID.
+ * @param {number} userId - The user ID.
+ * @param {number} groupId - The group ID.
  * @returns {Promise<void>}
  */
 export async function addGroup(userId: number, groupId: number): Promise<void> {
@@ -76,8 +91,8 @@ export async function addGroup(userId: number, groupId: number): Promise<void> {
 
 /**
  * Remove a group from a user.
- * @param {string} userId - The user ID.
- * @param {string} groupId - The group ID.
+ * @param {number} userId - The user ID.
+ * @param {number} groupId - The group ID.
  * @returns {Promise<void>}
  */
 export async function removeGroup(userId: number, groupId: number): Promise<void> {

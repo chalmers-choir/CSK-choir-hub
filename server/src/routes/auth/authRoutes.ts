@@ -1,5 +1,7 @@
 import { Router } from "express";
-import { register, login } from "../controllers/authController";
+
+// TODO: get away from relative paths
+import { register, login } from "../../controllers/authController";
 
 const router = Router();
 

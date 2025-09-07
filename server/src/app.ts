@@ -3,22 +3,21 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 
-import authRoutes from "./routes/authRoutes";
-import healthRoute from "./routes/healthRoute";
-import userRoutes from "./routes/userRoutes";
+import routes from "./routes/routes";
+import setupSwagger from './config/swagger';
 
 const app = express();
 
-app.use(helmet()); // sets security headers
+/* ---- Security Middlewares ---- */
+app.use(helmet());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 1000, // max 100 requests per IP
 });
-
 app.use(limiter);
 
-// Middlewares
+/* ---- Utility Middlewares ---- */
 app.use(express.json());
 
 // CORS configuration
@@ -30,19 +29,12 @@ app.use(
   })
 );
 
-// Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/health", healthRoute);
+/* ---- Routes ---- */
+setupSwagger(app); // Swagger setup
+app.use("/api", routes); // Main API routes
 
-// Error handling
-app.use(
-  (
-    err: any,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+/* ---- Error Handling Middlewares ---- */
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     console.error(err.stack);
     res.status(500).json({ error: "Something went wrong" });
   }

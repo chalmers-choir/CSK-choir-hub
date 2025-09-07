@@ -3,7 +3,8 @@
  */
 
 import { Choir, PrismaClient, Voice } from "@prisma/client";
-import { RegisterInput } from "../../types";
+
+import { RegisterInput } from "../services/userService";
 
 const prisma = new PrismaClient();
 
@@ -11,11 +12,11 @@ const prisma = new PrismaClient();
 export const createUser = async (
     userData: RegisterInput
 ) => {
-    const { email, password: passwordHash, username, firstName, lastName, choir, voice } = userData;
+    const { email, password, username, firstName, lastName, choir, voice } = userData;
     return prisma.user.create({
         data: {
             email,
-            passwordHash,
+            passwordHash: password,
             username,
             firstName,
             lastName,
@@ -27,17 +28,11 @@ export const createUser = async (
 
 // Finds a user by their email address.
 export const findUserByEmail = async (email: string) => {
-    if (!email) {
-        throw new Error("findUserByEmail was called without an email");
-    }
     return prisma.user.findUnique({ where: { email } });
 };
 
 // Finds a user by their username.
 export const findUserByUsername = async (username: string) => {
-    if (!username) {
-        throw new Error("findUserByUsername was called without a username");
-    }
     return prisma.user.findUnique({ where: { username } });
 };
 
@@ -45,6 +40,11 @@ export const findUserByUsername = async (username: string) => {
 export const findUserById = async (id: number) => {
     return prisma.user.findUnique({ where: { id } });
 };
+
+// Finds a user by their ID, including their roles.
+export const findUserByIdWithRoles = async (id: number) => {
+    return prisma.user.findUnique({ where: { id }, include: { roles: true } });
+}
 
 // Updates user fields by ID. Provide an object with fields to update.
 export const updateUser = async (id: number, updateData: Partial<{ email: string; password: string; username: string; firstName: string; lastName: string; choirId: number; voice: Voice; }>) => {

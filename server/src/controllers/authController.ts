@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import * as authService from "../services/authService";
-
 import { z } from 'zod';
 
+import * as authService from "../services/authService";
+
 export const register = async (req: Request, res: Response) => {
+    
     const registerSchema = z.object({
         email: z.email(),
         username: z.string().min(3),
@@ -35,11 +36,10 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
     try {
-        // extract username/email and password from request body
         const { username, password } = req.body;
 
         if (!username || !password) {
-            return res.status(400).json({ error: "Username/email and password are required" });
+            return res.status(400).json({ error: "Username / email and password are required" });
         }
 
         // Determine if input is an email

@@ -6,10 +6,9 @@ async function main() {
     console.log("Seeding database...");
 
     // Optional: clear existing data
-    await prisma.userSongKnowledge.deleteMany();
-    await prisma.eventSongs.deleteMany();
-    await prisma.attendance.deleteMany();
-    await prisma.registered.deleteMany();
+    await prisma.songKnowledge.deleteMany();
+    await prisma.eventAttendance.deleteMany();
+    await prisma.eventRegistration.deleteMany();
     await prisma.song.deleteMany();
     await prisma.event.deleteMany();
     await prisma.user.deleteMany();
@@ -19,41 +18,45 @@ async function main() {
         prisma.user.create({
             data: {
                 email: "admin@example.com",
-                password: "hashed_password_123",
+                passwordHash: "hashed_password_123",
                 username: "admin",
-                first_name: "Alice",
-                last_name: "Anderson",
-                role: "ADMIN",
+                firstName: "Alice",
+                lastName: "Anderson",
+                choir: "KK",
+                voice: "S1",
             },
         }),
         prisma.user.create({
             data: {
                 email: "john.doe@example.com",
-                password: "hashed_password_123",
+                passwordHash: "hashed_password_123",
                 username: "johndoe",
-                first_name: "John",
-                last_name: "Doe",
-                role: "USER",
+                firstName: "John",
+                lastName: "Doe",
+                choir: "KK",
+                voice: "A1",
             },
         }),
         prisma.user.create({
             data: {
                 email: "jane.smith@example.com",
-                password: "hashed_password_123",
+                passwordHash: "hashed_password_123",
                 username: "janesmith",
-                first_name: "Jane",
-                last_name: "Smith",
-                role: "USER",
+                firstName: "Jane",
+                lastName: "Smith",
+                choir: "KK",
+                voice: "T1",
             },
         }),
         prisma.user.create({
             data: {
                 email: "bob.admin@example.com",
-                password: "hashed_password_123",
+                passwordHash: "hashed_password_123",
                 username: "bobadmin",
-                first_name: "Bob",
-                last_name: "Brown",
-                role: "ADMIN",
+                firstName: "Bob",
+                lastName: "Brown",
+                choir: "KK",
+                voice: "B1",
             },
         }),
     ]);
@@ -62,36 +65,40 @@ async function main() {
     const [song1, song2, song3] = await Promise.all([
         prisma.song.create({
             data: {
-                title: "Ave Maria",
+                name: "Ave Maria",
                 page: 12,
-                starting_tones: "C Major",
-                voices: "SATB",
+                startingTones: "C Major",
+                voices: ["S", "A", "T", "B"],
+                bookId: 1
             },
         }),
         prisma.song.create({
             data: {
-                title: "Ode to Joy",
+                name: "Ode to Joy",
                 page: 45,
-                starting_tones: "D Major",
-                voices: "SATB",
+                startingTones: "D Major",
+                voices: ["S", "A", "T", "B"],
+                bookId: 1
             },
         }),
         prisma.song.create({
             data: {
-                title: "Hallelujah",
+                name: "Hallelujah",
                 page: 78,
-                starting_tones: "G Major",
-                voices: "SATB",
+                startingTones: "G Major",
+                voices: ["S", "A", "T", "B"],
+                bookId: 1
             },
         }),
     ]);
 
     // Create Events
-    const [rehearsal, concert] = await Promise.all([
+    const [rehearsal] = await Promise.all([
         prisma.event.create({
             data: {
                 name: "Weekly Rehearsal",
-                date: new Date("2025-09-10T18:00:00Z"),
+                dateStart: new Date("2025-09-10T18:00:00Z"),
+                dateEnd: new Date("2025-09-10T20:00:00Z"),
                 place: "Choir Hall",
                 description: "Weekly practice session",
                 type: "REHEARSAL",
@@ -99,80 +106,41 @@ async function main() {
                 requiresRegistration: false,
             },
         }),
-        prisma.event.create({
-            data: {
-                name: "Autumn Concert",
-                date: new Date("2025-10-15T19:00:00Z"),
-                place: "City Theater",
-                description: "Annual autumn concert performance",
-                type: "CONCERT",
-                requiresAttendance: true,
-                requiresRegistration: true,
-            },
-        }),
-    ]);
-
-    // Link Songs to Events
-    await Promise.all([
-        prisma.eventSongs.create({
-            data: {
-                eventId: rehearsal.id,
-                songId: song1.id,
-            },
-        }),
-        prisma.eventSongs.create({
-            data: {
-                eventId: rehearsal.id,
-                songId: song2.id,
-            },
-        }),
-        prisma.eventSongs.create({
-            data: {
-                eventId: concert.id,
-                songId: song2.id,
-            },
-        }),
-        prisma.eventSongs.create({
-            data: {
-                eventId: concert.id,
-                songId: song3.id,
-            },
-        }),
     ]);
 
     // Add Registrations
     await Promise.all([
-        prisma.registered.create({
+        prisma.eventRegistration.create({
             data: {
                 userId: john.id,
-                eventId: concert.id,
+                eventId: rehearsal.id,
             },
         }),
-        prisma.registered.create({
+        prisma.eventRegistration.create({
             data: {
                 userId: jane.id,
-                eventId: concert.id,
+                eventId: rehearsal.id,
             },
         }),
     ]);
 
     // Add Attendance
     await Promise.all([
-        prisma.attendance.create({
+        prisma.eventAttendance.create({
             data: {
                 userId: john.id,
                 eventId: rehearsal.id,
                 status: "PRESENT",
             },
         }),
-        prisma.attendance.create({
+        prisma.eventAttendance.create({
             data: {
                 userId: jane.id,
                 eventId: rehearsal.id,
                 status: "ABSENT",
             },
         }),
-        prisma.attendance.create({
+        prisma.eventAttendance.create({
             data: {
                 userId: bob.id,
                 eventId: rehearsal.id,
@@ -183,25 +151,28 @@ async function main() {
 
     // Add UserSongKnowledge
     await Promise.all([
-        prisma.userSongKnowledge.create({
+        prisma.songKnowledge.create({
             data: {
                 userId: john.id,
                 songId: song1.id,
-                level: "GOOD",
+                voice: "A1",
+                level: "OK",
             },
         }),
-        prisma.userSongKnowledge.create({
+        prisma.songKnowledge.create({
             data: {
                 userId: john.id,
                 songId: song2.id,
-                level: "BASIC",
+                voice: "A1",
+                level: "UTANTILL",
             },
         }),
-        prisma.userSongKnowledge.create({
+        prisma.songKnowledge.create({
             data: {
                 userId: jane.id,
                 songId: song3.id,
-                level: "EXCELLENT",
+                voice: "T1",
+                level: "GIG",
             },
         }),
     ]);
