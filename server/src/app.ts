@@ -5,6 +5,7 @@ import helmet from "helmet";
 
 import routes from "./api/routes/routes";
 import setupSwagger from "./core/config/swagger";
+import { errorHandler } from "./core";
 
 const app = express();
 
@@ -34,16 +35,6 @@ setupSwagger(app); // Swagger setup
 app.use("/api", routes); // Main API routes
 
 /* ---- Error Handling Middlewares ---- */
-app.use(
-  (
-    err: any,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    console.error(err.stack);
-    res.status(500).json({ error: "Something went wrong" });
-  }
-);
+app.use(errorHandler);
 
 export default app;
