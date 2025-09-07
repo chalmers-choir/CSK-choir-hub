@@ -4,7 +4,7 @@ import { generateToken } from "../utils/generateToken";
 import { RegisterInput } from "../../types";
 
 export const registerUser = async (newUser: RegisterInput): Promise<string> => {
-    const { email, password, username, firstName, lastName } = newUser;
+    const { email, password } = newUser;
 
     // Check if user already exists
     const existing = await findUserByEmail(email);
@@ -35,7 +35,7 @@ export const loginUser = async ({ identifier, type, password }: LoginInput) => {
     }
 
     // Compare hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
         throw new Error("Invalid password");
     }
