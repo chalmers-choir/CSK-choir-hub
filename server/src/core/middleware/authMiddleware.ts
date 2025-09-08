@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { findUserById, findUserByIdWithRoles } from "../models/userModel";
+import { findUserByIdWithRoles } from "@db/models/userModel";
 import { Role } from "@prisma/client";
 
 interface JwtPayload {
@@ -17,6 +17,7 @@ declare module "express-serve-static-core" {
     }
 }
 
+// Todo: does not currently check roles
 export const requireAuth = (allowedRoles?: string[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         const authHeader = req.headers.authorization;
@@ -34,7 +35,7 @@ export const requireAuth = (allowedRoles?: string[]) => {
                 return res.status(401).json({ success: false, message: "User not found" });
             }
 
-            req.user = { id: user.id, email: user.email, roles: user.roles.map(role => role.name) };
+            req.user = { id: user.id, email: user.email, roles: user.roles.map((role: Role) => role.name) };
             return next();
         } catch (err) {
             return res.status(401).json({ success: false, message: "Invalid token" });

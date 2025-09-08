@@ -1,8 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-import * as userModel from '../models/userModel';
-import * as roleModel from '../models/roleModel';
+import * as userModel from '@db/models/userModel';
 import { Choir, Voice } from '@prisma/client';
 
 import { generateToken } from '../utils/generateToken';

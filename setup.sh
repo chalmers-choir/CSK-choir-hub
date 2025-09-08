@@ -34,8 +34,9 @@ cd ..
 
 # Run script that drops all tables in the database
 # Ask for confirmation first, otherwise skip the drop
-read -p "⚠️  This COULD DROP ALL TABLES in the database. Are you sure? (y/N) " confirm
+read -p "⚠️  This RESETS the database. Are you sure? (y/N) " confirm
 if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+  docker volume rm csk_pgdata
   echo "⏳ Running database migrations..."
   npm run docker:up
   cd server
