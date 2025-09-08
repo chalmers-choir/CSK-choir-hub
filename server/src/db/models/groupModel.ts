@@ -1,10 +1,4 @@
-/**
- * - groupModel.ts: For choir groups, sections, or ensembles.
- */
-
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@db/prisma';
 
 /**
  * Creates a new group with the given data.

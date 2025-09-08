@@ -1,11 +1,6 @@
-/**
- * - eventModel.ts: For managing choir events, rehearsals, concerts, etc.
- */
-
-import { PrismaClient, Prisma, EventType, AttendanceStatus } from '@prisma/client';
-
-// Instantiate Prisma client
-const prisma = new PrismaClient();
+import { Prisma } from '@prisma/client';
+import type { EventType, AttendanceStatus } from '@prisma/client';
+import { prisma } from "@db/prisma";
 
 /**
  * Create a new event.

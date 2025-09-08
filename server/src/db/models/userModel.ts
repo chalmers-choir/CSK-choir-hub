@@ -1,11 +1,7 @@
-/**
- * - userModel.ts: For user-related database operations.
- */
-
 import { RegisterInput } from "@core/services";
-import { Choir, PrismaClient, Voice } from "@prisma/client";
+import type { Choir, Voice } from "@prisma/client";
 
-const prisma = new PrismaClient();
+import { prisma } from "@db/prisma";
 
 // Creates a new user with the provided data.
 export const createUser = async (userData: RegisterInput) => {

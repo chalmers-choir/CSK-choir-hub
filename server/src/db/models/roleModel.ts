@@ -1,11 +1,6 @@
-/**
- * - roleModel.ts: For role definitions and assignments (admin, member, etc.).
- */
+import type { Role } from "@prisma/client";
 
-import { PrismaClient, Role } from "@prisma/client";
-
-// Instantiate Prisma client
-const prisma = new PrismaClient();
+import { prisma } from "@db/prisma";
 
 /**
  * Create a new role.

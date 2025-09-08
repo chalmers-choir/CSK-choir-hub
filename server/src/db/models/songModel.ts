@@ -1,11 +1,6 @@
-/**
- * - songModel.ts: For song repertoire, assignments, and metadata.
- */
+import { prisma } from '@db/prisma';
 
-import { PrismaClient, Prisma, Voice, Tag, KnowledgeLevel } from '@prisma/client';
-
-// Instantiate Prisma client
-const prisma = new PrismaClient();
+import { Prisma, Voice, Tag, KnowledgeLevel } from '@prisma/client';
 
 /**
  * Create a new song in the database.
