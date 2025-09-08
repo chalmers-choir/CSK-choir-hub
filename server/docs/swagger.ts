@@ -5,12 +5,12 @@ import { Express } from 'express';
 import path from 'path';
 
 export default function setupSwagger(app: Express) {
-  const swaggerPath = path.join(__dirname, '../../docs/openapi.yaml');
+  const swaggerPath = path.join(__dirname, './openapi.yaml');
   const baseSpec = YAML.load(swaggerPath);
 
   const options: swaggerJsdoc.Options = {
     definition: baseSpec,
-    apis: ['./src/routes/*.ts', './src/controllers/*.ts'],
+    apis: ['../src/routes/*.ts', '../src/controllers/*.ts'],
   };
 
   const specs = swaggerJsdoc(options);

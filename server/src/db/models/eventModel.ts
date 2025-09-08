@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
-import type { EventType, AttendanceStatus } from '@prisma/client';
-import { prisma } from "@db/prisma";
+import type { EventType, AttendanceStatus, EventAttendance, EventRegistration } from '@prisma/client';
+import { prisma } from "../prisma";
 
 /**
  * Create a new event.
@@ -135,7 +135,7 @@ export async function findEventsByUser(userId: number) {
         include: { event: true }
     });
     return {
-        attending: attended.map(a => a.event),
-        registered: registered.map(r => r.event)
+        attending: attended.map((a: EventAttendance) => a.eventId),
+        registered: registered.map((r: EventRegistration) => r.eventId)
     };
 }
