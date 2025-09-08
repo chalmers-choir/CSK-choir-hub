@@ -17,7 +17,10 @@ declare module "express-serve-static-core" {
     }
 }
 
-// Todo: does not currently check roles
+/**
+ * Middleware to protect routes and check user roles.
+ * @param allowedRoles - Array of roles allowed to access the route.
+ */
 export const requireAuth = (allowedRoles?: string[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         const authHeader = req.headers.authorization;
@@ -36,6 +39,16 @@ export const requireAuth = (allowedRoles?: string[]) => {
             }
 
             req.user = { id: user.id, email: user.email, roles: user.roles.map((role: Role) => role.name) };
+
+            // Check roles if allowedRoles is provided
+            if (
+                allowedRoles &&
+                allowedRoles.length > 0 &&
+                !req.user.roles.some((role) => allowedRoles.includes(role))
+            ) {
+                return res.status(403).json({ success: false, message: "Forbidden: Access denied." });
+            }
+
             return next();
         } catch (err) {
             return res.status(401).json({ success: false, message: "Invalid token" });

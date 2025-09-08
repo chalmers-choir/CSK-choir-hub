@@ -1,7 +1,6 @@
 import { Router } from "express";
 
-// TODO: get away from relative paths
-import { login, register } from "../../controllers/authController";
+import { login, register } from "@api/controllers/authController";
 
 const router = Router();
 

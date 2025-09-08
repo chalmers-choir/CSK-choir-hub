@@ -27,10 +27,11 @@
     "paths": {
       "@core/*": ["./core/*"],
       "@api/*": ["./api/*"],
-      "@db/*": ["./db/*"]
+      "@db/*": ["./db/*"],
+      "@types/*": ["./types/*"]
     }
   },
-  "include": ["src/**/*", "types", "scripts"],
+  "include": ["src/**/*", "src/types", "scripts"],
   "exclude": ["node_modules", "dist"]
   // "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }
