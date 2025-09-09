@@ -2,42 +2,22 @@
 
 A full-stack choir management platform built with **TypeScript**, React frontend (Vite) and Node.js/Express backend connected to PostgreSQL database.
 
-## Tech Stack
-
-### Frontend
-
-- **React** with TypeScript
-- **Vite** for fast development and building
-- **React Router** for navigation
-- **Tailwind CSS** for styling
-- **Axios** for API calls
-
-### Backend
-
-- **Node.js** with **TypeScript**
-- **Express.js** framework
-- **PostgreSQL** database
-- **JWT** authentication
-- **bcryptjs** for password hashing
-- **CORS** enabled
-
 ## Installation
 
 ### Quick Setup (Recommended)
 
-1. **For macOS/Linux:**
+1. **Create the .env (important)**
+
+   - Create the database configuration in `server/.env` using `server/.env.example`
+
+2. **For macOS/Linux:**
 
 ```bash
 (chmod +x setup.sh)
 ./setup.sh
 ```
 
-2. **Update the .end**
-   - Update the database configuration in `server/env.example` and rename it to `.env`
-
 ## Running the Application
-
-### Development Mode
 
 Run both frontend and backend simultaneously:
 
