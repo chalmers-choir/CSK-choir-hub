@@ -3,9 +3,9 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 
-import routes from "./api/routes/routes";
-import setupSwagger from "../docs/swagger";
-import { errorHandler } from "./core";
+import routes from "@api/routes/routes";
+import setupSwagger from "@docs/swagger";
+import { errorHandler } from "@middleware";
 
 const app = express();
 

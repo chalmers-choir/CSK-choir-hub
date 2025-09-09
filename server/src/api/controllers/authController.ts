@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 
-import * as authService from "@core/services/authService";
-import * as userService from "@core/services/userService";
+import * as authService from "services/authService";
+import * as userService from "services/userService";
 
 export const register = async (req: Request, res: Response) => {
   const registerSchema = z.object({

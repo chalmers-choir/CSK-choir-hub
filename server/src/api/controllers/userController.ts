@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as userService from "@core/services/userService";
+import * as userService from "services/userService";
 
 // Get all users
 export const users = async (req: Request, res: Response) => {

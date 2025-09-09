@@ -1,21 +1,20 @@
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-import * as userModel from '@db/models/userModel';
-import { Choir, Voice } from '@prisma/client';
+import * as userModel from "@db/models/userModel";
+import { Choir, Voice } from "@prisma/client";
 
-import { generateToken } from '../utils/generateToken';
-import logger from '../utils/logger';
-
+import logger from "@/utils/logger";
+import { generateToken } from "@utils/generateToken";
 
 export interface RegisterInput {
-    email: string;
-    username: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    choir: Choir;
-    voice: Voice;
+  email: string;
+  username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  choir: Choir;
+  voice: Voice;
 }
 
 /**
@@ -25,19 +24,22 @@ export interface RegisterInput {
  * @throws {Error} If email or username is already used.
  */
 export const registerUser = async (newUser: RegisterInput): Promise<string> => {
-    const { email, password } = newUser;
+  const { email, password } = newUser;
 
-    // Check if user already exists
-    const existing = await userModel.findUserByEmail(email);
-    if (existing) throw new Error("User already exists");
+  // Check if user already exists
+  const existing = await userModel.findUserByEmail(email);
+  if (existing) throw new Error("User already exists");
 
-    // Hash password
-    const passwordHash = await bcrypt.hash(password, 10);
-    const user = await userModel.createUser({ ...newUser, password: passwordHash });
+  // Hash password
+  const passwordHash = await bcrypt.hash(password, 10);
+  const user = await userModel.createUser({
+    ...newUser,
+    password: passwordHash,
+  });
 
-    logger.info('User created', { userId: user.id });
+  logger.info("User created", { userId: user.id });
 
-    return generateToken(user.id);
+  return generateToken(user.id);
 };
 
 /**
@@ -46,7 +48,7 @@ export const registerUser = async (newUser: RegisterInput): Promise<string> => {
  * @returns {Promise<void>}
  */
 export async function deleteUser(userId: number): Promise<void> {
-    await userModel.deleteUser(userId);
+  await userModel.deleteUser(userId);
 }
 
 /**
@@ -54,8 +56,13 @@ export async function deleteUser(userId: number): Promise<void> {
  * @param {object} filters - Filter options: choir, voice, role, group.
  * @returns {Promise<any[]>} List of users.
  */
-export async function getUsers(filters: { choir?: Choir; voice?: Voice; roleId?: number; groupId?: number }): Promise<any[]> {
-    return userModel.getUsers(filters);
+export async function getUsers(filters: {
+  choir?: Choir;
+  voice?: Voice;
+  roleId?: number;
+  groupId?: number;
+}): Promise<any[]> {
+  return userModel.getUsers(filters);
 }
 
 /**
@@ -64,8 +71,11 @@ export async function getUsers(filters: { choir?: Choir; voice?: Voice; roleId?:
  * @param {number} roleId - The role ID to assign.
  * @returns {Promise<void>}
  */
-export async function assignRole(userId: number, roleId: number): Promise<void> {
-    await userModel.assignRoleToUser(userId, roleId);
+export async function assignRole(
+  userId: number,
+  roleId: number
+): Promise<void> {
+  await userModel.assignRoleToUser(userId, roleId);
 }
 
 /**
@@ -74,8 +84,11 @@ export async function assignRole(userId: number, roleId: number): Promise<void> 
  * @param {number} roleId - The role to remove.
  * @returns {Promise<void>}
  */
-export async function removeRole(userId: number, roleId: number): Promise<void> {
-    await userModel.removeRoleFromUser(userId, roleId);
+export async function removeRole(
+  userId: number,
+  roleId: number
+): Promise<void> {
+  await userModel.removeRoleFromUser(userId, roleId);
 }
 
 /**
@@ -85,7 +98,7 @@ export async function removeRole(userId: number, roleId: number): Promise<void> 
  * @returns {Promise<void>}
  */
 export async function addGroup(userId: number, groupId: number): Promise<void> {
-    await userModel.addUserToGroup(userId, groupId);
+  await userModel.addUserToGroup(userId, groupId);
 }
 
 /**
@@ -94,8 +107,11 @@ export async function addGroup(userId: number, groupId: number): Promise<void> {
  * @param {number} groupId - The group ID.
  * @returns {Promise<void>}
  */
-export async function removeGroup(userId: number, groupId: number): Promise<void> {
-    await userModel.removeUserFromGroup(userId, groupId);
+export async function removeGroup(
+  userId: number,
+  groupId: number
+): Promise<void> {
+  await userModel.removeUserFromGroup(userId, groupId);
 }
 
 /**
@@ -104,8 +120,8 @@ export async function removeGroup(userId: number, groupId: number): Promise<void
  * @returns {Promise<any[]>} List of roles.
  */
 export async function getUserRoles(userId: number): Promise<any[]> {
-    // return userModel.getUserRoles(userId);
-    return [];
+  // return userModel.getUserRoles(userId);
+  return [];
 }
 
 /**
@@ -114,20 +130,22 @@ export async function getUserRoles(userId: number): Promise<any[]> {
  * @returns {Promise<any[]>} List of groups.
  */
 export async function getUserGroups(userId: number): Promise<any[]> {
-    // return userModel.getUserGroups(userId);
-    return []; // Placeholder until implemented
+  // return userModel.getUserGroups(userId);
+  return []; // Placeholder until implemented
 }
 
 export const getUserIdFromToken = async (token: string) => {
-    if (!token) throw new Error("No token provided");
+  if (!token) throw new Error("No token provided");
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: number };
-    const userId = decoded.userId;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+    userId: number;
+  };
+  const userId = decoded.userId;
 
-    return userId;
+  return userId;
 };
 
 export const getAllUsers = async () => {
-    const users = await getUsers({});
-    return users;
+  const users = await getUsers({});
+  return users;
 };
