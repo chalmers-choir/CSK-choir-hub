@@ -4,7 +4,6 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 
 import routes from "@api/routes/routes";
-import setupSwagger from "@docs/swagger";
 import { errorHandler } from "@middleware";
 
 const app = express();
@@ -31,7 +30,6 @@ app.use(
 );
 
 /* ---- Routes ---- */
-setupSwagger(app); // Swagger setup
 app.use("/api", routes); // Main API routes
 
 /* ---- Error Handling Middlewares ---- */
