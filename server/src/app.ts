@@ -5,6 +5,7 @@ import helmet from "helmet";
 
 import routes from "@api/routes/routes";
 import { errorHandler } from "@middleware";
+import { logAtLevel } from "@middleware";
 
 const app = express();
 
@@ -19,6 +20,9 @@ app.use(limiter);
 
 /* ---- Utility Middlewares ---- */
 app.use(express.json());
+
+/* ---- Logging Middleware ---- */
+app.use(logAtLevel(4));
 
 // CORS configuration
 app.use(
