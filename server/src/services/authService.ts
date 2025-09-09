@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 
 import { findUserByEmail, findUserByUsername } from "@db/models";
-import { generateToken } from "utils";
+import { generateToken } from "@utils/generateToken";
 
 interface LoginInput {
   identifier: string; // email or username

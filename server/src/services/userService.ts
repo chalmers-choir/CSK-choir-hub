@@ -4,8 +4,8 @@ import jwt from "jsonwebtoken";
 import * as userModel from "@db/models/userModel";
 import { Choir, Voice } from "@prisma/client";
 
-import logger from "@/utils/logger";
 import { generateToken } from "@utils/generateToken";
+import logger from "@utils/logger";
 
 export interface RegisterInput {
   email: string;
