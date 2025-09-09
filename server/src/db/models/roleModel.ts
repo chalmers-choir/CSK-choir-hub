@@ -72,12 +72,12 @@ export async function listRoles(): Promise<Role[]> {
 }
 
 /**
- * List all users with a specific role.
+ * Get a user with a specific role.
  * @param roleId Role ID
  */
-export async function listUsersWithRole(roleId: number) {
-  return prisma.userRole.findMany({
-    where: { roleId },
+export async function getUserWithRole(roleId: number) {
+  return prisma.role.findUnique({
+    where: { id: roleId },
     include: { user: true },
   });
 }
@@ -87,8 +87,8 @@ export async function listUsersWithRole(roleId: number) {
  * @param userId User ID
  */
 export async function findRolesByUser(userId: number) {
-  return prisma.userRole.findMany({
-    where: { userId },
-    include: { role: true },
+  return prisma.user.findUnique({
+    where: { id: userId },
+    include: { roles: true },
   });
 }

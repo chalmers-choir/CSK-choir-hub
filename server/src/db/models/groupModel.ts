@@ -1,11 +1,12 @@
 import { prisma } from '@db/prisma';
+import { GroupType } from '@prisma/client';
 
 /**
  * Creates a new group with the given data.
  * @param data - The group data to create.
  * @returns The created group.
  */
-export async function createGroup(data: { name: string; description?: string }) {
+export async function createGroup(data: { name: string; type: GroupType; description?: string }) {
     return await prisma.group.create({
         data,
     });
@@ -66,11 +67,26 @@ export async function listGroups(filters?: { name?: string }) {
  * @param groupId - The ID of the group.
  * @returns An array of users who are members of the group.
  */
-export async function listGroupMembers(groupId: number) {
-    return await prisma.groupMember.findMany({
-        where: { groupId },
-        include: { user: true },
+// TODO - users can be member of several subgroups of the same parent group, so we need to deduplicate the users
+export async function listGroupMembers(groupId: number, visited: Set<number> = new Set()) {
+    if (visited.has(groupId)) return [];
+    visited.add(groupId);
+
+    const group = await prisma.group.findUnique({
+        where: { id: groupId },
+        include: { members: true, children: true },
     });
+
+    if (!group) return [];
+
+    const members = group.members;
+
+    for (const subgroup of group.children) {
+        const subgroupMembers = await listGroupMembers(subgroup.id);
+        members.push(...subgroupMembers);
+    }
+
+    return members;
 }
 
 /**
@@ -79,8 +95,8 @@ export async function listGroupMembers(groupId: number) {
  * @returns An array of groups the user belongs to.
  */
 export async function findGroupsByUser(userId: number) {
-    return await prisma.groupMember.findMany({
-        where: { userId },
-        include: { group: true },
+    return await prisma.group.findMany({
+        where: { members: { some: { id: userId } } },
+        include: { members: true },
     });
 }

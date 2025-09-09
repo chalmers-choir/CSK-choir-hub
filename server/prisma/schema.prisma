@@ -46,10 +46,10 @@ model Group {
 
   members User[]
 
-  parentId Int?
-  parent   Group?  @relation("GroupChildren", fields: [parentId], references: [id])
-  children Group[] @relation("GroupChildren")
-  roles    Role[]
+  parents  Group[] @relation("GroupHierarchy")
+  children Group[] @relation("GroupHierarchy")
+
+  roles Role[]
 }
 
 model Role {
@@ -61,8 +61,8 @@ model Role {
   description String?
   groups      Group[]
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?
 }
 
 enum EventType {
@@ -145,14 +145,11 @@ model Song {
   page          Int?
   startingTones String?
 
-  book   Book @relation(fields: [bookId], references: [id])
-  bookId Int
+  books Book[]
 
   voices        Voice[]
   tags          Tag[]
   songKnowledge SongKnowledge[]
-
-  @@unique([bookId, name])
 }
 
 enum KnowledgeLevel {

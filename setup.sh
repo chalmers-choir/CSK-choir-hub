@@ -36,6 +36,7 @@ cd ..
 # Ask for confirmation first, otherwise skip the drop
 read -p "⚠️  This RESETS the database. Are you sure? (y/N) " confirm
 if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+  npm run docker:down
   docker volume rm csk_pgdata
   echo "⏳ Running database migrations..."
   npm run docker:up

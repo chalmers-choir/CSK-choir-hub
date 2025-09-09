@@ -5,7 +5,7 @@ import { RegisterInput } from "@services";
 
 // Creates a new user with the provided data.
 export const createUser = async (userData: RegisterInput) => {
-  const { email, password, username, firstName, lastName, choir, voice } =
+  const { email, password, username, firstName, lastName } =
     userData;
   return prisma.user.create({
     data: {
@@ -14,8 +14,6 @@ export const createUser = async (userData: RegisterInput) => {
       username,
       firstName,
       lastName,
-      choir,
-      voice,
     },
   });
 };
@@ -95,20 +93,6 @@ export const findUserByRole = async (roleId: number) => {
   });
 };
 
-// Finds all users in a given choir (by choirId).
-export const findUserByChoir = async (choir: Choir) => {
-  return prisma.user.findMany({
-    where: { choir },
-  });
-};
-
-// Finds all users with a specific voice part.
-export const findUserByVoice = async (voice: Voice) => {
-  return prisma.user.findMany({
-    where: { voice },
-  });
-};
-
 // Finds all users with a specific group.
 export const findUserByGroup = async (groupId: number) => {
   return prisma.user.findMany({
@@ -119,7 +103,6 @@ export const findUserByGroup = async (groupId: number) => {
 };
 
 // Assigns a role to a user (many-to-many relation).
-// TODO - Create UserRole
 export const assignRoleToUser = async (userId: number, roleId: number) => {
   return prisma.user.update({
     where: { id: userId },
@@ -140,7 +123,6 @@ export const removeRoleFromUser = async (userId: number, roleId: number) => {
 };
 
 // Adds a user to a group (many-to-many relation).
-// TODO - Create GroupMember
 export const addUserToGroup = async (userId: number, groupId: number) => {
   return prisma.user.update({
     where: { id: userId },
