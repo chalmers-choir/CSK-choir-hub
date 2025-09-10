@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { findUserByIdWithRoles } from "@db/models/userModel";
+import * as userModel from "@db/models/userModel";
 import { Role } from "@prisma/client";
 
 interface JwtPayload {
@@ -32,7 +32,7 @@ export const requireAuth = (allowedRoles?: string[]) => {
         try {
             const token = authHeader.split(" ")[1];
             const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-            const user = await findUserByIdWithRoles(decoded.id);
+            const user = await userModel.findByIdWithRoles(decoded.id);
 
             if (!user) {
                 return res.status(401).json({ success: false, message: "User not found" });
