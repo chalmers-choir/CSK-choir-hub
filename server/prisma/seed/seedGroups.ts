@@ -206,6 +206,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
       type: GroupType.VOICE,
       description: '1Altor i KK',
       parents: { connect: [{ id: kka.id }, { id: a1.id }] },
+      members: { connect: [{ id: users.rebekka.id }] }
     },
   });
 
@@ -215,6 +216,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
         type: GroupType.VOICE,
         description: '2Altor i KK',
         parents: { connect: [{ id: kka.id }, { id: a2.id }] },
+        members: { connect: [{ id: users.ingrid.id }] }
       },
     });
 
@@ -260,6 +262,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
       type: GroupType.VOICE,
       description: '1Basar i KK',
       parents: { connect: [{ id: kkb.id }, { id: b1.id }] },
+      members: { connect: [{ id: users.liam.id }] },
     },
   });
 
@@ -269,6 +272,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
       type: GroupType.VOICE,
       description: '2Basar i KK',
       parents: { connect: [{ id: kkb.id }, { id: b2.id }] },
+      members: { connect: [{ id: users.lucas.id }] },
     },
   });
 
@@ -332,6 +336,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
       type: GroupType.VOICE,
       description: '1Basar i MK',
       parents: { connect: [{ id: mk.id }, { id: b1.id }] },
+      members: { connect: [{ id: users.felix.id }, { id: users.isak.id }, { id: users.robert.id }] }
     },
   });
 
@@ -356,7 +361,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
     data: {
       name: 'Dirigenter',
       type: GroupType.OTHER,
-      description: 'Körens dirigenter',
+      description: 'Körens dirigenter'
     },
   });
 
@@ -389,6 +394,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
       name: 'Webbmästeriet',
       type: GroupType.OTHER,
       description: 'Körens webbmästeri',
+      members: { connect: [{ id: users.liam.id }, { id: users.lucas.id }] }
     },
   });
 
@@ -421,6 +427,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
       name: 'Admins',
       type: GroupType.OTHER,
       description: 'Administratörer av systemet',
+      members: { connect: [{ id: users.lucas.id }, { id: users.liam.id }] }
     },
   });
 

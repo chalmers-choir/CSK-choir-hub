@@ -16,14 +16,17 @@ async function main() {
   console.log("Seeding database...");
 
   // Create Users
+  // TODO: Create more users
   const users = await seedUsers(prisma);
   console.log("Users created:", Object.keys(users).length);
 
-  // Create Groups
+  // Create Groups + Assign Users to Groups
+  // TODO: Assign the new users to Groups
   const groups = await seedGroups(prisma, users);
   console.log("Groups created:", Object.keys(groups).length);
-
-  // Create Roles
+  
+  // Create Roles + Assign Roles to Users and Groups
+  // TODO: Assign the new users to Roles
   const roles = await seedRoles(prisma, groups, users);
   console.log("Roles created:", Object.keys(roles).length);
 
@@ -31,7 +34,8 @@ async function main() {
   const books = await seedBooks(prisma);
   console.log("Books created:", Object.keys(books).length);
 
-  // Create Songs
+  // Create Songs + Assign Songs to Books
+  // TODO: Create more songs
   const songs = await seedSongs(prisma, books);
   console.log("Songs created:", Object.keys(songs).length);
 

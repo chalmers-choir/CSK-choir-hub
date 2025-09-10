@@ -3,3 +3,7 @@ export * from "./groupModel";
 export * from "./roleModel";
 export * from "./songModel";
 export * from "./userModel";
+export * from "./bookModel";
+export * from "./eventRegistrationModel";
+export * from "./eventAttendanceModel";
+export * from "./songKnowledgeModel";

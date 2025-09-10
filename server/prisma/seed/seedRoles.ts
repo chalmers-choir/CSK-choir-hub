@@ -9,6 +9,7 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
       name: 'Dirigent för KK',
       description: 'Leder KK',
       groups: { connect: [{ id: groups.kk.id }] },
+      user: { connect: { id: users.maria.id } },
     },
   });
 
@@ -16,7 +17,7 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Dirigent för DK',
       description: 'Leder DK',
-      user: { connect: { id: users.alice.id } },
+      user: { connect: { id: users.elisabeth.id } },
       groups: { connect: [{ id: groups.dk.id }] },
     },
   });
@@ -25,7 +26,7 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Dirigent för MK',
       description: 'Leder MK',
-      user: { connect: { id: users.bob.id } },
+      user: { connect: { id: users.mathias.id } },
       groups: { connect: [{ id: groups.mk.id }] },
     },
   });
@@ -34,7 +35,7 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: '1a konsertmästaren',
       description: 'Viktigaste styrelseposten',
-      user: { connect: { id: users.evan.id } },
+      user: { connect: { id: users.liam.id } },
       groups: { connect: [{ id: groups.styret.id }] },
     },
   });
@@ -43,7 +44,6 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Konsertmästare för KK',
       description: 'Planerar konserter i KK',
-      user: { connect: { id: users.evan.id } },
       groups: { connect: [{ id: groups.kk.id }, { id: groups.concertmasters.id }] },
     },
   });
@@ -52,7 +52,6 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Konsertmästare för DK',
       description: 'Planerar konserter i DK',
-      user: { connect: { id: users.fred.id } },
       groups: { connect: [{ id: groups.dk.id }, { id: groups.concertmasters.id }] },
     },
   });
@@ -61,7 +60,6 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Konsertmästare för MK',
       description: 'Planerar konserter i MK',
-      user: { connect: { id: users.bob.id } },
       groups: { connect: [{ id: groups.mk.id }, { id: groups.concertmasters.id }] },
     },
   });
@@ -70,7 +68,7 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Kassör',
       description: 'Ansvarar för ekonomin',
-      user: { connect: { id: users.alice.id } },
+      user: { connect: { id: users.vera.id } },
       groups: { connect: [{ id: groups.styret.id }] },
     },
   });
@@ -79,7 +77,7 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Ordförande',
       description: 'Leder styrelsen',
-      user: { connect: { id: users.charles.id } },
+      user: { connect: { id: users.isak.id } },
       groups: { connect: [{ id: groups.styret.id }] },
     },
   });
@@ -88,7 +86,7 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Vice ordförande',
       description: 'Stödjer ordföranden',
-      user: { connect: { id: users.diana.id } },
+      user: { connect: { id: users.lucas.id } },
       groups: { connect: [{ id: groups.styret.id }] },
     },
   });
@@ -97,7 +95,7 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Sekreterare',
       description: 'Ansvarar för protokoll och dokumentation',
-      user: { connect: { id: users.george.id } },
+      user: { connect: { id: users.elinor.id } },
       groups: { connect: [{ id: groups.styret.id }] },
     },
   });
@@ -106,7 +104,7 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'PR-ansvarig',
       description: 'Ansvarar för PR och marknadsföring',
-      user: { connect: { id: users.helen.id } },
+      user: { connect: { id: users.ingrid.id } },
       groups: { connect: [{ id: groups.styret.id }] },
     },
   });
@@ -115,7 +113,6 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Sexmästare',
       description: 'Ansvarar för sociala aktiviteter',
-      user: { connect: { id: users.fred.id } },
       groups: { connect: [{ id: groups.styret.id }, { id: groups.partycommittee.id }] },
     },
   });
@@ -124,7 +121,6 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Sexmästarinna',
       description: 'Ansvarar för sociala aktiviteter',
-      user: { connect: { id: users.helen.id } },
       groups: { connect: [{ id: groups.partycommittee.id }] },
     },
   });
@@ -133,7 +129,7 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Gigmästare',
       description: 'Ansvarar för gig och framträdanden',
-      user: { connect: { id: users.george.id } },
+      user: { connect: { id: users.elin.id } },
       groups: { connect: [{ id: groups.styret.id }, { id: groups.gigmasters.id }] },
     },
   });
@@ -142,7 +138,6 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Gigmästare för KK',
       description: 'Ansvarar för gig och framträdanden i KK',
-      user: { connect: { id: users.fred.id } },
       groups: { connect: [{ id: groups.kk.id }, { id: groups.gigmasters.id }] },
     },
   });
@@ -151,7 +146,6 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Gigmästare för DK',
       description: 'Ansvarar för gig och framträdanden i DK',
-      user: { connect: { id: users.george.id } },
       groups: { connect: [{ id: groups.dk.id }, { id: groups.gigmasters.id }] },
     },
   });
@@ -160,7 +154,7 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     data: {
       name: 'Gigmästare för MK',
       description: 'Ansvarar för gig och framträdanden i MK',
-      user: { connect: { id: users.bob.id } },
+      user: { connect: { id: users.robert.id } },
       groups: { connect: [{ id: groups.mk.id }, { id: groups.gigmasters.id }] },
     },
   });

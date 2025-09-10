@@ -1,6 +1,5 @@
 import { prisma } from "@db/prisma";
 import type {
-  AttendanceStatus,
   EventAttendance,
   EventRegistration,
   EventType,
@@ -59,75 +58,11 @@ export async function listEvents(filters?: { type?: EventType }) {
 }
 
 /**
- * Add attendance: mark a user as attending an event.
- * @param eventId - The ID of the event.
- * @param userId - The ID of the user.
- */
-export async function addAttendance(
-  eventId: number,
-  userId: number,
-  status: AttendanceStatus
-) {
-  return await prisma.eventAttendance.create({
-    data: { eventId, userId, status },
-  });
-}
-
-/**
- * Remove attendance: unmark a user as attending an event.
- * @param eventId - The ID of the event.
- * @param userId - The ID of the user.
- */
-export async function removeAttendance(eventId: number, userId: number) {
-  return await prisma.eventAttendance.deleteMany({
-    where: { eventId, userId },
-  });
-}
-
-/**
  * List attendees for an event.
  * @param eventId - The ID of the event.
  */
 export async function listAttendees(eventId: number) {
   return await prisma.eventAttendance.findMany({
-    where: { eventId },
-    include: { user: true },
-  });
-}
-
-/**
- * Add registration: register a user for an event.
- * @param eventId - The ID of the event.
- * @param userId - The ID of the user.
- */
-export async function addRegistration(
-  eventId: number,
-  userId: number,
-  comments?: string,
-  dietaryPreferences?: string
-) {
-  return await prisma.eventRegistration.create({
-    data: { eventId, userId, comments, dietaryPreferences },
-  });
-}
-
-/**
- * Remove registration: unregister a user from an event.
- * @param eventId - The ID of the event.
- * @param userId - The ID of the user.
- */
-export async function removeRegistration(eventId: number, userId: number) {
-  return await prisma.eventRegistration.deleteMany({
-    where: { eventId, userId },
-  });
-}
-
-/**
- * List registrations for an event.
- * @param eventId - The ID of the event.
- */
-export async function listRegistrations(eventId: number) {
-  return await prisma.eventRegistration.findMany({
     where: { eventId },
     include: { user: true },
   });

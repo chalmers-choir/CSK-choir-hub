@@ -38,6 +38,7 @@ read -p "⚠️  This RESETS the database. Are you sure? (y/N) " confirm
 if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
   npm run docker:down
   docker volume rm csk_pgdata
+  rm -rf server/prisma/migrations
   echo "⏳ Running database migrations..."
   npm run docker:up
   cd server

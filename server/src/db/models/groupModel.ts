@@ -49,17 +49,10 @@ export async function deleteGroup(id: number) {
 
 /**
  * Lists groups, optionally filtered by type or name.
- * @param filters - Optional filters for type and/or name.
  * @returns An array of groups matching the filters.
  */
-export async function listGroups(filters?: { name?: string }) {
-    const where: any = {};
-    if (filters?.name) {
-        where.name = { contains: filters.name, mode: 'insensitive' };
-    }
-    return await prisma.group.findMany({
-        where,
-    });
+export async function listGroups() {
+    return await prisma.group.findMany();
 }
 
 /**
