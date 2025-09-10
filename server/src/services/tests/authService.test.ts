@@ -1,4 +1,4 @@
-import { createUser, findUserByEmail, findUserByUsername } from "@db/models";
+import * as userModel from "@db/models/userModel";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import * as userService from "../usersService";
 
@@ -10,23 +10,17 @@ describe("userService", () => {
   });
 
   it("creates a user if email and username are unique", async () => {
-    (findUserByEmail as any).mockResolvedValue(null);
-    (findUserByUsername as any).mockResolvedValue(null);
-    (createUser as any).mockResolvedValue({
-      id: 1,
-      email: "test@example.com",
-    });
+    (userModel.findByEmail as any).mockResolvedValue(null);
+    (userModel.findByUsername as any).mockResolvedValue(null);
 
     const token = await userService.registerUser({
       email: "test@example.com",
       username: "tester",
       password: "pass",
       firstName: "Test",
-      lastName: "User",
-      choir: "KK",
-      voice: "A1",
+      lastName: "User"
     });
 
-    expect(token);
+    expect(token).toBeDefined();
   });
 });

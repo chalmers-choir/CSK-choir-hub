@@ -13,8 +13,6 @@ export interface RegisterInput {
   password: string;
   firstName: string;
   lastName: string;
-  choir: Choir;
-  voice: Voice;
 }
 
 /**
