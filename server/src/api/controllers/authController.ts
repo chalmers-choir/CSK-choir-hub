@@ -16,7 +16,7 @@ export const registerHandler = async (req: Request, res: Response) => {
     return res.status(400).json({ errors: z.treeifyError(result.error) });
   }
 
-  const { email, password, username, first_name, last_name, voice, choir } =
+  const { email, password, username, first_name, last_name } =
     req.body;
 
   try {
@@ -26,8 +26,6 @@ export const registerHandler = async (req: Request, res: Response) => {
       username,
       firstName: first_name,
       lastName: last_name,
-      voice,
-      choir,
     });
     return res.status(201).json({ token });
   } catch (err: any) {
