@@ -6,6 +6,7 @@ import seedGroups from "./seedGroups";
 import seedSongs from "./seedSongs";
 import seedBooks from "./seedBooks";
 import seedEvents from "./seedEvents";
+import seedTags from "./seedTags";
 import seedEventRegistrations from "./seedEventRegistrations";
 import seedEventAttendances from "./seedEventAttendances";
 import seedUserSongKnowledges from "./seedSongKnowledges";
@@ -34,9 +35,11 @@ async function main() {
   const books = await seedBooks(prisma);
   console.log("Books created:", Object.keys(books).length);
 
-  // Create Songs + Assign Songs to Books
+  const tags = await seedTags(prisma);
+
+  // Create Songs + Assign Songs to Books + Assign Tags to Songs
   // TODO: Create more songs
-  const songs = await seedSongs(prisma, books);
+  const songs = await seedSongs(prisma, books, tags);
   console.log("Songs created:", Object.keys(songs).length);
 
   // Create Events
