@@ -27,7 +27,7 @@ export const registerUser = async (newUser: RegisterInput): Promise<string> => {
   const { email, password } = newUser;
 
   // Check if user already exists
-  const existing = await userModel.findUserByEmail(email);
+  const existing = await userModel.findByEmail(email);
   if (existing) throw new Error("User already exists");
 
   // Hash password
@@ -57,12 +57,13 @@ export async function deleteUser(userId: number): Promise<void> {
  * @returns {Promise<any[]>} List of users.
  */
 export async function getUsers(filters: {
-  choir?: Choir;
-  voice?: Voice;
-  roleId?: number;
   groupId?: number;
 }): Promise<any[]> {
   return userModel.getUsers(filters);
+}
+
+export async function getUser(userId: number) {
+  return userModel.findById(userId);
 }
 
 /**
@@ -98,7 +99,7 @@ export async function removeRole(
  * @returns {Promise<void>}
  */
 export async function addGroup(userId: number, groupId: number): Promise<void> {
-  await userModel.addUserToGroup(userId, groupId);
+  await userModel.addToGroup(userId, groupId);
 }
 
 /**
@@ -111,7 +112,7 @@ export async function removeGroup(
   userId: number,
   groupId: number
 ): Promise<void> {
-  await userModel.removeUserFromGroup(userId, groupId);
+  await userModel.removeFromGroup(userId, groupId);
 }
 
 /**

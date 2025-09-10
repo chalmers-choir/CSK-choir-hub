@@ -19,22 +19,22 @@ export const createUser = async (userData: RegisterInput) => {
 };
 
 // Finds a user by their email address.
-export const findUserByEmail = async (email: string) => {
+export const findByEmail = async (email: string) => {
   return prisma.user.findUnique({ where: { email } });
 };
 
 // Finds a user by their username.
-export const findUserByUsername = async (username: string) => {
+export const findByUsername = async (username: string) => {
   return prisma.user.findUnique({ where: { username } });
 };
 
 // Finds a user by their ID.
-export const findUserById = async (id: number) => {
+export const findById = async (id: number) => {
   return prisma.user.findUnique({ where: { id } });
 };
 
 // Finds a user by their ID, including their roles.
-export const findUserByIdWithRoles = async (id: number) => {
+export const findByIdWithRoles = async (id: number) => {
   return prisma.user.findUnique({ where: { id }, include: { roles: true } });
 };
 
@@ -85,7 +85,7 @@ export const getUsers = async (
 };
 
 // Finds all users assigned a specific role.
-export const findUserByRole = async (roleId: number) => {
+export const findByRole = async (roleId: number) => {
   return prisma.user.findMany({
     where: {
       roles: { some: { id: roleId } },
@@ -94,7 +94,7 @@ export const findUserByRole = async (roleId: number) => {
 };
 
 // Finds all users with a specific group.
-export const findUserByGroup = async (groupId: number) => {
+export const findByGroup = async (groupId: number) => {
   return prisma.user.findMany({
     where: {
       groups: { some: { id: groupId } },
@@ -123,7 +123,7 @@ export const removeRoleFromUser = async (userId: number, roleId: number) => {
 };
 
 // Adds a user to a group (many-to-many relation).
-export const addUserToGroup = async (userId: number, groupId: number) => {
+export const addToGroup = async (userId: number, groupId: number) => {
   return prisma.user.update({
     where: { id: userId },
     data: {
@@ -133,7 +133,7 @@ export const addUserToGroup = async (userId: number, groupId: number) => {
 };
 
 // Removes a user from a group (many-to-many relation).
-export const removeUserFromGroup = async (userId: number, groupId: number) => {
+export const removeFromGroup = async (userId: number, groupId: number) => {
   return prisma.user.update({
     where: { id: userId },
     data: {

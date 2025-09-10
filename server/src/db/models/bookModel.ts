@@ -6,7 +6,7 @@ import { Prisma } from '@prisma/client';
  * Create a new song in the database.
  * @param data Book creation data (title, author, etc.)
  */
-export async function createBook(data: Prisma.BookCreateInput) {
+export async function create(data: Prisma.BookCreateInput) {
     return prisma.book.create({ data });
 }
 
@@ -14,14 +14,14 @@ export async function createBook(data: Prisma.BookCreateInput) {
  * Delete a book by its ID.
  * @param id Book ID
  */
-export async function deleteBook(bookId: number) {
+export async function deleteById(bookId: number) {
     return prisma.book.delete({ where: { id: bookId } });
 }
 
 /**
  * List books
  */
-export async function getBooks() {
+export async function findAll() {
     return prisma.book.findMany({
         include: {
             songs: true,

@@ -1,9 +1,9 @@
 import { Router } from "express";
 
-import { health } from "@api/controllers";
+import { healthHandler } from "@api/controllers";
 
 const router = Router();
 
-router.get("/", health);
+router.get("/", healthHandler);
 
 export default router;

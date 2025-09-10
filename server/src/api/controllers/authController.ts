@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import { z } from "zod";
 
 import * as authService from "@services/authService";
-import * as userService from "@services/userService";
+import * as userService from "@services/usersService";
 
-export const register = async (req: Request, res: Response) => {
+export const registerHandler = async (req: Request, res: Response) => {
   const registerSchema = z.object({
     email: z.email(),
     username: z.string().min(3),
@@ -35,7 +35,7 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const loginHandler = async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
 

@@ -1,6 +1,6 @@
 import { createUser, findUserByEmail, findUserByUsername } from "@db/models";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import * as userService from "../userService";
+import * as userService from "../usersService";
 
 jest.mock("@db/models/userModel");
 

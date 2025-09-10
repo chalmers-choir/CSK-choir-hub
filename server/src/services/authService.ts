@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 
-import { findUserByEmail, findUserByUsername } from "@db/models";
+import * as userModel from "@db";
 import { generateToken } from "@utils/generateToken";
 
 interface LoginInput {
@@ -12,8 +12,8 @@ interface LoginInput {
 export const loginUser = async ({ identifier, type, password }: LoginInput) => {
   const user =
     type === "email"
-      ? await findUserByEmail(identifier)
-      : await findUserByUsername(identifier);
+      ? await userModel.findByEmail(identifier)
+      : await userModel.findByUsername(identifier);
 
   if (!user) {
     throw new Error("User not found");
