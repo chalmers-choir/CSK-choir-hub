@@ -5,7 +5,7 @@ import type { EventAttendance, EventRegistration, EventType, Prisma } from '@pri
  * Create a new event.
  * @param eventData - Data for the new event.
  */
-export async function createEvent(eventData: Prisma.EventCreateInput) {
+export async function create(eventData: Prisma.EventCreateInput) {
   return await prisma.event.create({ data: eventData });
 }
 

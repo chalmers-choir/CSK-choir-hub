@@ -1,10 +1,17 @@
-import { deleteEventHandler, getEventsHandler } from '@api/controllers/eventsController';
+import {
+  createEvent,
+  deleteEvent,
+  getEvents,
+  updateEvent,
+} from '@api/controllers/eventsController';
 import { requireAuth } from '@middleware/authMiddleware';
 import { Router } from 'express';
 
 const router = Router();
 
-router.get('/', getEventsHandler);
-router.delete('/:id', requireAuth(['admin']), deleteEventHandler);
+router.get('/', getEvents);
+router.post('/', requireAuth(['admin']), createEvent);
+router.delete('/:id', requireAuth(['admin']), deleteEvent);
+router.put('/:id', requireAuth(['admin']), updateEvent);
 
 export default router;

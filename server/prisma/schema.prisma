@@ -82,7 +82,7 @@ model Event {
   type      EventType
 
   dateStart   DateTime
-  dateEnd     DateTime
+  dateEnd     DateTime?
   place       String
   description String?
 
