@@ -126,3 +126,35 @@ export async function listSongsForUser(userId: number, knowledgeLevel?: Knowledg
     include: { song: true },
   });
 }
+
+/**
+ * Assign a tag to a song.
+ * @param songId Song ID
+ * @param tagId Tag ID
+ */
+export async function addTag(songId: number, tagId: number) {
+  return prisma.song.update({
+    where: { id: songId },
+    data: {
+      tags: {
+        connect: { id: tagId },
+      },
+    },
+  });
+}
+
+/**
+ * Remove a tag from a song.
+ * @param songId Song ID
+ * @param tagId Tag ID
+ */
+export async function removeTag(songId: number, tagId: number) {
+  return prisma.song.update({
+    where: { id: songId },
+    data: {
+      tags: {
+        disconnect: { id: tagId },
+      },
+    },
+  });
+}

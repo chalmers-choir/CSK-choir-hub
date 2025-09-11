@@ -1,18 +1,23 @@
 import authRoutes from './auth';
+import bookRoutes from './books';
 import eventRoutes from './events';
+import groupRoutes from './groups';
 import healthRoute from './health';
-import userRoutes from './users/users';
+import roleRoutes from './roles';
+import songRoutes from './songs';
+import tagRoutes from './tags';
+import userRoutes from './users';
 import { Router } from 'express';
 
 const router = Router();
 
 router.use('/auth', authRoutes);
-router.use('/books', userRoutes);
+router.use('/books', bookRoutes);
 router.use('/events', eventRoutes);
-router.use('/groups', userRoutes);
-router.use('/roles', userRoutes);
-router.use('/songs', userRoutes);
-router.use('/tags', userRoutes);
+router.use('/groups', groupRoutes);
+router.use('/roles', roleRoutes);
+router.use('/songs', songRoutes);
+router.use('/tags', tagRoutes);
 router.use('/users', userRoutes);
 router.use('/health', healthRoute);
 

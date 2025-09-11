@@ -14,7 +14,7 @@ export const getBooks = async (req: Request, res: Response) => {
 // Get a book by ID
 export const getBookWithId = async (req: Request, res: Response) => {
   try {
-    const bookId = parseInt(req.params.id, 10);
+    const bookId = parseInt(req.params.bookId, 10);
     if (isNaN(bookId)) return res.status(400).json({ error: 'Invalid book ID' });
 
     const book = await bookService.getBookById(bookId);
@@ -44,11 +44,43 @@ export const createBook = async (req: Request, res: Response) => {
 // Delete a book by ID
 export const deleteBook = async (req: Request, res: Response) => {
   try {
-    const bookId = parseInt(req.params.id, 10);
+    const bookId = parseInt(req.params.bookId, 10);
     if (isNaN(bookId)) return res.status(400).json({ error: 'Invalid book ID' });
 
     await bookService.deleteBook(bookId);
     return res.status(204).send();
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+// Add a song to a book
+export const addSongToBook = async (req: Request, res: Response) => {
+  try {
+    const bookId = parseInt(req.params.bookId, 10);
+    if (isNaN(bookId)) return res.status(400).json({ error: 'Invalid book ID' });
+    const { songId } = req.body;
+    if (!songId) {
+      return res.status(400).json({ error: 'songId is required' });
+    }
+
+    await bookService.addSongToBook(bookId, songId);
+    return res.status(200).json({ message: 'Song added to book successfully' });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+// Remove a song from a book
+export const removeSongFromBook = async (req: Request, res: Response) => {
+  try {
+    const { bookId, songId } = req.body;
+    if (!bookId || !songId) {
+      return res.status(400).json({ error: 'bookId and songId are required' });
+    }
+
+    await bookService.removeSongFromBook(bookId, songId);
+    return res.status(200).json({ message: 'Song removed from book successfully' });
   } catch (err: any) {
     return res.status(500).json({ error: err.message });
   }

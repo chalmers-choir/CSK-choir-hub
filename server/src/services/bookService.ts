@@ -15,3 +15,11 @@ export async function createBook(data: { name: string }) {
 export async function deleteBook(bookId: number) {
   await bookModel.deleteById(bookId);
 }
+
+export async function addSongToBook(bookId: number, songId: number) {
+  return bookModel.addSong(bookId, songId);
+}
+
+export async function removeSongFromBook(bookId: number, songId: number) {
+  return bookModel.removeSong(bookId, songId);
+}

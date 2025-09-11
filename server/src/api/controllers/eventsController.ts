@@ -62,3 +62,52 @@ export const updateEvent = async (req: Request, res: Response) => {
     return res.status(500).json({ error: err.message });
   }
 };
+
+// Update user attendance for an event
+export const updateUserAttendance = async (req: Request, res: Response) => {
+  try {
+    const eventId = parseInt(req.params.id, 10);
+    if (isNaN(eventId)) return res.status(400).json({ error: 'Invalid event ID' });
+    const { userId, status } = req.body;
+    if (!userId || !status) {
+      return res.status(400).json({ error: 'User ID and status are required' });
+    }
+
+    const updatedAttendance = await eventService.updateUserAttendance(eventId, userId, status);
+    return res.status(200).json({ attendance: updatedAttendance });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+export const registerUserForEvent = async (req: Request, res: Response) => {
+  try {
+    const eventId = parseInt(req.params.id, 10);
+    if (isNaN(eventId)) return res.status(400).json({ error: 'Invalid event ID' });
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    const registration = await eventService.registerUser(eventId, userId);
+    return res.status(201).json({ registration });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+export const unregisterUserFromEvent = async (req: Request, res: Response) => {
+  try {
+    const eventId = parseInt(req.params.id, 10);
+    if (isNaN(eventId)) return res.status(400).json({ error: 'Invalid event ID' });
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    await eventService.unregisterUser(eventId, userId);
+    return res.status(204).send();
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+};

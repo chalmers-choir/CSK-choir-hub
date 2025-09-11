@@ -42,7 +42,7 @@ export async function findById(bookId: number) {
  * @param bookId Book ID
  * @param songId Song ID
  */
-export async function assignSongToBook(bookId: number, songId: number) {
+export async function addSong(bookId: number, songId: number) {
   return prisma.book.update({
     where: { id: bookId },
     data: {
@@ -58,7 +58,7 @@ export async function assignSongToBook(bookId: number, songId: number) {
  * @param bookId Book ID
  * @param songId Song ID
  */
-export async function removeSongFromBook(bookId: number, songId: number) {
+export async function removeSong(bookId: number, songId: number) {
   return prisma.book.update({
     where: { id: bookId },
     data: {

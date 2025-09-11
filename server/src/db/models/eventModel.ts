@@ -1,5 +1,11 @@
 import { prisma } from '@db/prisma';
-import type { EventAttendance, EventRegistration, EventType, Prisma } from '@prisma/client';
+import type {
+  AttendanceStatus,
+  EventAttendance,
+  EventRegistration,
+  EventType,
+  Prisma,
+} from '@prisma/client';
 
 /**
  * Create a new event.
@@ -88,4 +94,55 @@ export async function findEventsByUser(userId: number) {
     attending: attended.map((a: EventAttendance) => a.eventId),
     registered: registered.map((r: EventRegistration) => r.eventId),
   };
+}
+
+/**
+ * Update user attendance for an event.
+ * @param eventId - The ID of the event.
+ * @param userId - The ID of the user.
+ * @param attending - Whether the user is attending or not.
+ */
+export async function updateUserAttendance(
+  eventId: number,
+  userId: number,
+  status: AttendanceStatus,
+) {
+  // Add or update attendance record
+  return await prisma.eventAttendance.upsert({
+    where: { userId_eventId: { userId, eventId } },
+    create: { userId, eventId, status },
+    update: { status },
+  });
+}
+
+/** Remove user attendance for an event.
+ * @param eventId - The ID of the event.
+ * @param userId - The ID of the user.
+ */
+export async function removeUserAttendance(eventId: number, userId: number) {
+  return await prisma.eventAttendance.deleteMany({
+    where: { eventId, userId },
+  });
+}
+
+/**
+ * Register a user for an event.
+ * @param eventId - The ID of the event.
+ * @param userId - The ID of the user.
+ */
+export async function registerUser(eventId: number, userId: number) {
+  return await prisma.eventRegistration.create({
+    data: { eventId, userId },
+  });
+}
+
+/**
+ * Unregister a user from an event.
+ * @param eventId - The ID of the event.
+ * @param userId - The ID of the user.
+ */
+export async function unregisterUser(eventId: number, userId: number) {
+  return await prisma.eventRegistration.deleteMany({
+    where: { eventId, userId },
+  });
 }

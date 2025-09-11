@@ -31,9 +31,9 @@ export const findById = async (id: number) => {
   return prisma.user.findUnique({ where: { id } });
 };
 
-// Finds a user by their ID, including their roles.
-export const findByIdWithRoles = async (id: number) => {
-  return prisma.user.findUnique({ where: { id }, include: { roles: true } });
+// Finds a user by their ID, including their roles and groups.
+export const findByIdWithRolesAndGroups = async (id: number) => {
+  return prisma.user.findUnique({ where: { id }, include: { roles: true, groups: true } });
 };
 
 // Updates user fields by ID. Provide an object with fields to update.

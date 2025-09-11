@@ -6,7 +6,7 @@ import { GroupType } from '@prisma/client';
  * @param data - The group data to create.
  * @returns The created group.
  */
-export async function createGroup(data: { name: string; type: GroupType; description?: string }) {
+export async function create(data: { name: string; type: GroupType; description?: string }) {
   return await prisma.group.create({
     data,
   });
@@ -29,7 +29,7 @@ export async function findById(id: number) {
  * @param data - The data to update.
  * @returns The updated group.
  */
-export async function updateGroup(id: number, data: { name?: string; description?: string }) {
+export async function update(id: number, data: { name?: string; description?: string }) {
   return await prisma.group.update({
     where: { id },
     data,

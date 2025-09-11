@@ -1,5 +1,5 @@
 import * as userModel from '@db/models/userModel';
-import { Role } from '@prisma/client';
+import { Group, Role } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -11,28 +11,35 @@ declare module 'express-serve-static-core' {
   interface Request {
     user?: {
       id: number;
-      email: string;
       roles: string[];
+      groups: string[];
     };
   }
+}
+
+interface AccessRules {
+  roles?: string[];
+  groups?: string[];
+  allowSelf?: boolean;
+  paramKey?: string; // e.g. "userId" if route has /users/:userId
 }
 
 /**
  * Middleware to protect routes and check user roles.
  * @param allowedRoles - Array of roles allowed to access the route.
  */
-export const requireAuth = (allowedRoles?: string[]) => {
+export const requireAuth = (rules?: AccessRules) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader?.startsWith('Bearer ')) {
       return res.status(401).json({ success: false, message: 'No token provided' });
     }
 
     try {
       const token = authHeader.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-      const user = await userModel.findByIdWithRoles(decoded.id);
+      const user = await userModel.findByIdWithRolesAndGroups(decoded.id);
 
       if (!user) {
         return res.status(401).json({ success: false, message: 'User not found' });
@@ -40,17 +47,26 @@ export const requireAuth = (allowedRoles?: string[]) => {
 
       req.user = {
         id: user.id,
-        email: user.email,
         roles: user.roles.map((role: Role) => role.name),
+        groups: user.groups.map((group: Group) => group.name),
       };
 
-      // Check roles if allowedRoles is provided
-      if (
-        allowedRoles &&
-        allowedRoles.length > 0 &&
-        !req.user.roles.some((role) => allowedRoles.includes(role))
-      ) {
-        return res.status(403).json({ success: false, message: 'Forbidden: Access denied.' });
+      // Role check
+      if (rules?.roles?.length && !req.user.roles.some((r) => rules.roles!.includes(r))) {
+        return res.status(403).json({ success: false, message: 'Forbidden: Role not allowed.' });
+      }
+
+      // Group check
+      if (rules?.groups?.length && !req.user.groups.some((g) => rules.groups!.includes(g))) {
+        return res.status(403).json({ success: false, message: 'Forbidden: Group not allowed.' });
+      }
+
+      // Self check
+      if (rules?.allowSelf && rules.paramKey) {
+        const targetId = parseInt(req.params[rules.paramKey], 10);
+        if (req.user.id !== targetId) {
+          return res.status(403).json({ success: false, message: 'Forbidden: Not your resource.' });
+        }
       }
 
       return next();

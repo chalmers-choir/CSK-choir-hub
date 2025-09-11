@@ -1,5 +1,5 @@
 import { eventModel } from '@db';
-import { EventType } from '@prisma/client';
+import { AttendanceStatus, EventType } from '@prisma/client';
 
 export async function getAllEvents() {
   return eventModel.findAll();
@@ -30,4 +30,24 @@ export async function updateEvent(
   },
 ) {
   return eventModel.update(eventId, updateData);
+}
+
+export async function updateUserAttendance(
+  eventId: number,
+  userId: number,
+  status?: AttendanceStatus,
+) {
+  if (status) {
+    return eventModel.updateUserAttendance(eventId, userId, status);
+  } else {
+    return eventModel.removeUserAttendance(eventId, userId);
+  }
+}
+
+export async function registerUser(eventId: number, userId: number) {
+  return eventModel.registerUser(eventId, userId);
+}
+
+export async function unregisterUser(eventId: number, userId: number) {
+  return eventModel.unregisterUser(eventId, userId);
 }

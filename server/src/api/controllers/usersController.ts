@@ -40,7 +40,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 };
 
 // Assign a user to a group
-export const assignUserToGroup = async (req: Request, res: Response) => {
+export const addUserToGroup = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId, 10);
     const groupId = parseInt(req.params.groupId, 10);

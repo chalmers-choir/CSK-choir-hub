@@ -1,11 +1,10 @@
-import { createTag, deleteTag, getTags } from '@api/controllers/tagsController';
+import { assignTagToSong, removeTagFromSong } from '@api/controllers/songsController';
 import { requireAuth } from '@middleware/authMiddleware';
 import { Router } from 'express';
 
 const router = Router();
 
-router.get('/', getTags);
-router.post('/', requireAuth(['admin']), createTag);
-router.delete('/:id', requireAuth(['admin']), deleteTag);
+router.post('/:id', requireAuth({ roles: ['admin'] }), assignTagToSong);
+router.delete('/:id', requireAuth({ roles: ['admin'] }), removeTagFromSong);
 
 export default router;

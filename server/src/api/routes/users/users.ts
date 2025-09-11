@@ -1,5 +1,5 @@
-import userGroupRoutes from './group';
-import userRoleRoutes from './role';
+import userGroupRoutes from '../groups/groups';
+import userRoleRoutes from '../roles/user';
 import { deleteUser, getUserWithId, getUsers } from '@api/controllers/usersController';
 import { requireAuth } from '@middleware/authMiddleware';
 import { Router } from 'express';
