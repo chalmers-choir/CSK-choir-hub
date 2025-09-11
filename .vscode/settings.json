@@ -3,7 +3,7 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always",
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "always"
   },
   "eslint.validate": ["javascript"],
   "prettier.documentSelectors": ["**/*.{ts,tsx,js,jsx,json,css,md}"]
