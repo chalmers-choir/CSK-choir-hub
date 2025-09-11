@@ -20,37 +20,45 @@ export async function updateGroup(
   return groupModel.update(groupId, data);
 }
 
-export async function addGroupToGroup(parentGroupId: number, subgroupId: number) {
+export async function addGroup(parentGroupId: number, subgroupId: number) {
   // Implementation to add subgroupId to parentGroupId
   // This is a placeholder; actual implementation will depend on your database schema
   return;
 }
 
-export async function removeGroupFromGroup(parentGroupId: number, subgroupId: number) {
+export async function removeGroup(parentGroupId: number, subgroupId: number) {
   // Implementation to remove subgroupId from parentGroupId
   // This is a placeholder; actual implementation will depend on your database schema
   return;
 }
 
-export async function addUserToGroup(groupId: number, userId: number) {
-  // Implementation to add userId to groupId
-  // This is a placeholder; actual implementation will depend on your database schema
-  return;
+/**
+ * Add a group to a user.
+ * @param {number} userId - The user ID.
+ * @param {number} groupId - The group ID.
+ * @returns {Promise<void>}
+ */
+export async function addUser(userId: number, groupId: number): Promise<void> {
+  await groupModel.addUser(userId, groupId);
 }
 
-export async function removeUserFromGroup(groupId: number, userId: number) {
-  // Implementation to remove userId from groupId
-  // This is a placeholder; actual implementation will depend on your database schema
-  return;
+/**
+ * Remove a group from a user.
+ * @param {number} userId - The user ID.
+ * @param {number} groupId - The group ID.
+ * @returns {Promise<void>}
+ */
+export async function removeUser(userId: number, groupId: number): Promise<void> {
+  await groupModel.removeUser(userId, groupId);
 }
 
-export async function addRoleToGroup(groupId: number, roleId: number) {
+export async function addRole(groupId: number, roleId: number) {
   // Implementation to add roleId to groupId
   // This is a placeholder; actual implementation will depend on your database schema
   return;
 }
 
-export async function removeRoleFromGroup(groupId: number, roleId: number) {
+export async function removeRole(groupId: number, roleId: number) {
   // Implementation to remove roleId from groupId
   // This is a placeholder; actual implementation will depend on your database schema
   return;

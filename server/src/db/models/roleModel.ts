@@ -78,13 +78,22 @@ export async function getUserWithRole(roleId: number) {
   });
 }
 
-/**
- * Find all roles assigned to a user.
- * @param userId User ID
- */
-export async function findRolesByUser(userId: number) {
-  return prisma.user.findUnique({
+// Assigns a role to a user (many-to-many relation).
+export const assignUser = async (userId: number, roleId: number) => {
+  return prisma.user.update({
     where: { id: userId },
-    include: { roles: true },
+    data: {
+      roles: { connect: { id: roleId } },
+    },
   });
-}
+};
+
+// Removes a role from a user (one-to-one relation).
+export const removeUser = async (roleId: number) => {
+  return prisma.role.update({
+    where: { id: roleId },
+    data: {
+      userId: null,
+    },
+  });
+};

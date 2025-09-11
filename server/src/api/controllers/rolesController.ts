@@ -23,3 +23,34 @@ export const deleteRoleHandler = async (req: Request, res: Response) => {
     return res.status(500).json({ error: err.message });
   }
 };
+
+// Assign a user to a role
+export const assignUserToRole = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId, 10);
+    const roleId = parseInt(req.params.roleId, 10);
+    if (isNaN(userId) || isNaN(roleId)) {
+      return res.status(400).json({ error: 'Invalid user ID or role ID' });
+    }
+
+    await roleService.assignUser(userId, roleId);
+    return res.status(200).json({ message: 'User assigned to role successfully' });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+// Remove a user from a role
+export const removeUserFromRole = async (req: Request, res: Response) => {
+  try {
+    const roleId = parseInt(req.params.roleId, 10);
+    if (isNaN(roleId)) {
+      return res.status(400).json({ error: 'Invalid role ID' });
+    }
+
+    await roleService.removeUser(roleId);
+    return res.status(200).json({ message: 'User removed from role successfully' });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+};

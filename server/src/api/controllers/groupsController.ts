@@ -65,7 +65,7 @@ export const addGroupToGroup = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Invalid group ID or subgroup ID' });
     }
 
-    await groupService.addGroupToGroup(subgroupId, parentGroupId);
+    await groupService.addGroup(subgroupId, parentGroupId);
     return res.status(200).json({ message: 'Subgroup added successfully' });
   } catch (err: any) {
     return res.status(500).json({ error: err.message });
@@ -81,7 +81,7 @@ export const removeGroupFromGroup = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Invalid group ID or subgroup ID' });
     }
 
-    await groupService.removeGroupFromGroup(subgroupId, parentGroupId);
+    await groupService.removeGroup(subgroupId, parentGroupId);
     return res.status(200).json({ message: 'Subgroup removed successfully' });
   } catch (err: any) {
     return res.status(500).json({ error: err.message });
@@ -97,7 +97,7 @@ export const addRoleToGroup = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Invalid group ID or role ID' });
     }
 
-    await groupService.addRoleToGroup(roleId, groupId);
+    await groupService.addRole(roleId, groupId);
     return res.status(200).json({ message: 'Role assigned to group successfully' });
   } catch (err: any) {
     return res.status(500).json({ error: err.message });
@@ -113,7 +113,7 @@ export const removeRoleFromGroup = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Invalid group ID or role ID' });
     }
 
-    await groupService.removeRoleFromGroup(roleId, groupId);
+    await groupService.removeRole(roleId, groupId);
     return res.status(200).json({ message: 'Role removed from group successfully' });
   } catch (err: any) {
     return res.status(500).json({ error: err.message });
@@ -129,7 +129,7 @@ export const addUserToGroup = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Invalid user ID or group ID' });
     }
 
-    await groupService.addUserToGroup(userId, groupId);
+    await groupService.addUser(userId, groupId);
     return res.status(200).json({ message: 'User added to group successfully' });
   } catch (err: any) {
     return res.status(500).json({ error: err.message });
@@ -145,7 +145,7 @@ export const removeUserFromGroup = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Invalid user ID or group ID' });
     }
 
-    await groupService.removeUserFromGroup(userId, groupId);
+    await groupService.removeUser(userId, groupId);
     return res.status(200).json({ message: 'User removed from group successfully' });
   } catch (err: any) {
     return res.status(500).json({ error: err.message });

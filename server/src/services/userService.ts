@@ -60,46 +60,6 @@ export async function getUser(userId: number) {
 }
 
 /**
- * Assign a role to a user.
- * @param {number} userId - The user ID.
- * @param {number} roleId - The role ID to assign.
- * @returns {Promise<void>}
- */
-export async function assignRole(userId: number, roleId: number): Promise<void> {
-  await userModel.assignRoleToUser(userId, roleId);
-}
-
-/**
- * Remove a role from a user.
- * @param {number} userId - The user ID.
- * @param {number} roleId - The role to remove.
- * @returns {Promise<void>}
- */
-export async function removeRole(userId: number, roleId: number): Promise<void> {
-  await userModel.removeRoleFromUser(userId, roleId);
-}
-
-/**
- * Add a group to a user.
- * @param {number} userId - The user ID.
- * @param {number} groupId - The group ID.
- * @returns {Promise<void>}
- */
-export async function addGroup(userId: number, groupId: number): Promise<void> {
-  await userModel.addToGroup(userId, groupId);
-}
-
-/**
- * Remove a group from a user.
- * @param {number} userId - The user ID.
- * @param {number} groupId - The group ID.
- * @returns {Promise<void>}
- */
-export async function removeGroup(userId: number, groupId: number): Promise<void> {
-  await userModel.removeFromGroup(userId, groupId);
-}
-
-/**
  * Fetch all roles for a user.
  * @param {number} userId - The user ID.
  * @returns {Promise<any[]>} List of roles.

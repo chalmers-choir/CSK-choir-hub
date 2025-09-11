@@ -82,14 +82,62 @@ export async function listGroupMembers(groupId: number, visited: Set<number> = n
   return members;
 }
 
-/**
- * Finds groups that a user belongs to.
- * @param userId - The ID of the user.
- * @returns An array of groups the user belongs to.
- */
-export async function findGroupsByUser(userId: number) {
-  return await prisma.group.findMany({
-    where: { members: { some: { id: userId } } },
-    include: { members: true },
+// Adds a user to a group (many-to-many relation).
+export const addUser = async (userId: number, groupId: number) => {
+  return prisma.user.update({
+    where: { id: userId },
+    data: {
+      groups: { connect: { id: groupId } },
+    },
   });
-}
+};
+
+// Removes a user from a group (many-to-many relation).
+export const removeUser = async (userId: number, groupId: number) => {
+  return prisma.user.update({
+    where: { id: userId },
+    data: {
+      groups: { disconnect: { id: groupId } },
+    },
+  });
+};
+
+// Adds a role to a group (many-to-many relation).
+export const addRole = async (groupId: number, roleId: number) => {
+  return prisma.group.update({
+    where: { id: groupId },
+    data: {
+      roles: { connect: { id: roleId } },
+    },
+  });
+};
+
+// Removes a role from a group (many-to-many relation).
+export const removeRole = async (roleId: number, groupId: number) => {
+  return prisma.group.update({
+    where: { id: groupId },
+    data: {
+      roles: { disconnect: { id: roleId } },
+    },
+  });
+};
+
+// Adds a subgroup to a parent group (self-referential many-to-many relation).
+export const addGroup = async (parentGroupId: number, subgroupId: number) => {
+  return prisma.group.update({
+    where: { id: parentGroupId },
+    data: {
+      children: { connect: { id: subgroupId } },
+    },
+  });
+};
+
+// Removes a subgroup from a parent group (self-referential many-to-many relation).
+export const removeGroup = async (parentGroupId: number, subgroupId: number) => {
+  return prisma.group.update({
+    where: { id: parentGroupId },
+    data: {
+      children: { disconnect: { id: subgroupId } },
+    },
+  });
+};

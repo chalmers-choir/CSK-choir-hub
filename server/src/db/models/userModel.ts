@@ -100,42 +100,25 @@ export const findByGroup = async (groupId: number) => {
   });
 };
 
-// Assigns a role to a user (many-to-many relation).
-export const assignRoleToUser = async (userId: number, roleId: number) => {
-  return prisma.user.update({
+/**
+ * Find all roles assigned to a user.
+ * @param userId User ID
+ */
+export async function findRolesByUser(userId: number) {
+  return prisma.user.findUnique({
     where: { id: userId },
-    data: {
-      roles: { connect: { id: roleId } },
-    },
+    include: { roles: true },
   });
-};
+}
 
-// Removes a role from a user (many-to-many relation).
-export const removeRoleFromUser = async (userId: number, roleId: number) => {
-  return prisma.user.update({
-    where: { id: userId },
-    data: {
-      roles: { disconnect: { id: roleId } },
-    },
+/**
+ * Finds groups that a user belongs to.
+ * @param userId - The ID of the user.
+ * @returns An array of groups the user belongs to.
+ */
+export async function findGroupsByUser(userId: number) {
+  return await prisma.group.findMany({
+    where: { members: { some: { id: userId } } },
+    include: { members: true },
   });
-};
-
-// Adds a user to a group (many-to-many relation).
-export const addToGroup = async (userId: number, groupId: number) => {
-  return prisma.user.update({
-    where: { id: userId },
-    data: {
-      groups: { connect: { id: groupId } },
-    },
-  });
-};
-
-// Removes a user from a group (many-to-many relation).
-export const removeFromGroup = async (userId: number, groupId: number) => {
-  return prisma.user.update({
-    where: { id: userId },
-    data: {
-      groups: { disconnect: { id: groupId } },
-    },
-  });
-};
+}
