@@ -1,0 +1,14 @@
+node_modules
+dist
+build
+client/dist
+server/dist
+coverage
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+.prisma
+.prisma/**
+prisma/migrations
+.next
+.next/**
