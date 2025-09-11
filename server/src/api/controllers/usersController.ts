@@ -1,4 +1,4 @@
-import * as userService from "@services/usersService";
+import * as userService from "@services/userService";
 import { Request, Response } from "express";
 
 // Get all users

@@ -1,4 +1,4 @@
-import * as bookService from "@services/booksService";
+import * as bookService from "@services/bookService";
 import { Request, Response } from "express";
 
 // Get all books
