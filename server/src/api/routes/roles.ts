@@ -1,4 +1,4 @@
-import { deleteRoleHandler, getRolesHandler } from '@api/controllers';
+import { deleteRoleHandler, getRolesHandler } from '@api/controllers/rolesController';
 import { requireAuth } from '@middleware/authMiddleware';
 import { Router } from 'express';
 

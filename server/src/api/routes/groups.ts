@@ -1,4 +1,4 @@
-import { deleteGroupHandler, getGroupsHandler } from '@api/controllers';
+import { deleteGroupHandler, getGroupsHandler } from '@api/controllers/groupsController';
 import { requireAuth } from '@middleware/authMiddleware';
 import { Router } from 'express';
 

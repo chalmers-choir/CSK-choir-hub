@@ -2,7 +2,7 @@ import * as bookService from '@services/bookService';
 import { Request, Response } from 'express';
 
 // Get all books
-export const getBooksHandler = async (req: Request, res: Response) => {
+export const getBooks = async (req: Request, res: Response) => {
   try {
     const books = await bookService.getAllBooks();
     res.json({ books });
@@ -12,7 +12,7 @@ export const getBooksHandler = async (req: Request, res: Response) => {
 };
 
 // Get a book by ID
-export const getBookWithIdHandler = async (req: Request, res: Response) => {
+export const getBookWithId = async (req: Request, res: Response) => {
   try {
     const bookId = parseInt(req.params.id, 10);
     if (isNaN(bookId)) return res.status(400).json({ error: 'Invalid book ID' });
@@ -26,8 +26,23 @@ export const getBookWithIdHandler = async (req: Request, res: Response) => {
   }
 };
 
+// Create a new book
+export const createBook = async (req: Request, res: Response) => {
+  try {
+    const { name } = req.body;
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required' });
+    }
+
+    const newBook = await bookService.createBook({ name });
+    return res.status(201).json({ book: newBook });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
 // Delete a book by ID
-export const deleteBookHandler = async (req: Request, res: Response) => {
+export const deleteBook = async (req: Request, res: Response) => {
   try {
     const bookId = parseInt(req.params.id, 10);
     if (isNaN(bookId)) return res.status(400).json({ error: 'Invalid book ID' });

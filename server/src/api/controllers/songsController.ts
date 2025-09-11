@@ -2,7 +2,7 @@ import * as songService from '@services/songService';
 import { Request, Response } from 'express';
 
 // Get all songs
-export const getSongsHandler = async (req: Request, res: Response) => {
+export const getSongs = async (req: Request, res: Response) => {
   try {
     const songs = await songService.getAllSongs();
     res.json({ songs });
@@ -12,7 +12,7 @@ export const getSongsHandler = async (req: Request, res: Response) => {
 };
 
 // Delete a song by ID
-export const deleteSongHandler = async (req: Request, res: Response) => {
+export const deleteSong = async (req: Request, res: Response) => {
   try {
     const songId = parseInt(req.params.id, 10);
     if (isNaN(songId)) return res.status(400).json({ error: 'Invalid song ID' });

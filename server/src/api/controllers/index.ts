@@ -1,9 +1,9 @@
-export * from './authController';
-export * from './booksController';
-export * from './eventsController';
-export * from './groupsController';
-export * from './healthController';
-export * from './rolesController';
-export * from './songsController';
-export * from './tagsController';
-export * from './usersController';
+export * as authController from './authController';
+export * as booksController from './booksController';
+export * as eventsController from './eventsController';
+export * as groupsController from './groupsController';
+export * as healthController from './healthController';
+export * as rolesController from './rolesController';
+export * as songsController from './songsController';
+export * as tagsController from './tagsController';
+export * as usersController from './usersController';
