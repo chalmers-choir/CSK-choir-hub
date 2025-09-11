@@ -1,10 +1,5 @@
-import { prisma } from "@db/prisma";
-import type {
-  EventAttendance,
-  EventRegistration,
-  EventType,
-  Prisma,
-} from "@prisma/client";
+import { prisma } from '@db/prisma';
+import type { EventAttendance, EventRegistration, EventType, Prisma } from '@prisma/client';
 
 /**
  * Create a new event.
@@ -27,10 +22,7 @@ export async function findEventById(eventId: number) {
  * @param eventId - The ID of the event.
  * @param updateData - The data to update.
  */
-export async function updateEvent(
-  eventId: number,
-  updateData: Prisma.EventUpdateInput
-) {
+export async function updateEvent(eventId: number, updateData: Prisma.EventUpdateInput) {
   return await prisma.event.update({
     where: { id: eventId },
     data: updateData,

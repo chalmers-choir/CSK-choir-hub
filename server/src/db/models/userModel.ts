@@ -1,12 +1,10 @@
-import type { Choir, Voice } from "@prisma/client";
-
-import { prisma } from "@db";
-import { RegisterInput } from "@services/userService";
+import { prisma } from '@db';
+import type { Choir, Voice } from '@prisma/client';
+import { RegisterInput } from '@services/userService';
 
 // Creates a new user with the provided data.
 export const createUser = async (userData: RegisterInput) => {
-  const { email, password, username, firstName, lastName } =
-    userData;
+  const { email, password, username, firstName, lastName } = userData;
   return prisma.user.create({
     data: {
       email,
@@ -49,7 +47,7 @@ export const updateUser = async (
     lastName: string;
     choirId: number;
     voice: Voice;
-  }>
+  }>,
 ) => {
   return prisma.user.update({
     where: { id },
@@ -69,7 +67,7 @@ export const getUsers = async (
     voice: Voice;
     roleId: number;
     groupId: number;
-  }> = {}
+  }> = {},
 ) => {
   const where: any = {};
   if (filter.choir) where.choir = filter.choir;

@@ -1,8 +1,7 @@
-import { Request, Response } from "express";
-import { z } from "zod";
-
-import * as authService from "@services/authService";
-import * as userService from "@services/userService";
+import * as authService from '@services/authService';
+import * as userService from '@services/userService';
+import { Request, Response } from 'express';
+import { z } from 'zod';
 
 export const registerHandler = async (req: Request, res: Response) => {
   const registerSchema = z.object({
@@ -16,8 +15,7 @@ export const registerHandler = async (req: Request, res: Response) => {
     return res.status(400).json({ errors: z.treeifyError(result.error) });
   }
 
-  const { email, password, username, first_name, last_name } =
-    req.body;
+  const { email, password, username, first_name, last_name } = req.body;
 
   try {
     const token = await userService.registerUser({
@@ -38,19 +36,17 @@ export const loginHandler = async (req: Request, res: Response) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      return res
-        .status(400)
-        .json({ error: "Username / email and password are required" });
+      return res.status(400).json({ error: 'Username / email and password are required' });
     }
 
     // Determine if input is an email
-    const isEmail = username.includes("@");
+    const isEmail = username.includes('@');
 
     // Call the login service to get token
     // token -> authenticator
     const token = await authService.loginUser({
       identifier: username,
-      type: isEmail ? "email" : "username",
+      type: isEmail ? 'email' : 'username',
       password,
     });
 

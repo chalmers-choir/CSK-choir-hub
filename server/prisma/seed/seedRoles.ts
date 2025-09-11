@@ -1,9 +1,12 @@
-import { PrismaClient } from "@prisma/client";
+import { Groups } from './seedGroups';
+import { Users } from './seedUsers';
+import { PrismaClient } from '@prisma/client';
 
-import { Groups } from "./seedGroups";
-import { Users } from "./seedUsers";
-
-export default async function seedRoles(prisma: PrismaClient, groups: Groups, users: Users): Promise<Roles> {
+export default async function seedRoles(
+  prisma: PrismaClient,
+  groups: Groups,
+  users: Users,
+): Promise<Roles> {
   const conductorKK = await prisma.role.create({
     data: {
       name: 'Dirigent för KK',
@@ -159,45 +162,45 @@ export default async function seedRoles(prisma: PrismaClient, groups: Groups, us
     },
   });
 
-    return {
-        conductorKK,
-        conductorDK,
-        conductorMK,
-        concertMaster1,
-        consertMasterKK,
-        consertMasterDK,
-        consertMasterMK,
-        treasurer,
-        president,
-        vicePresident,
-        secretary,
-        prmaster,
-        sexmaster,
-        sexmastress,
-        gigmaster,
-        gigmasterKK,
-        gigmasterDK,
-        gigmasterMK,
-    };
+  return {
+    conductorKK,
+    conductorDK,
+    conductorMK,
+    concertMaster1,
+    consertMasterKK,
+    consertMasterDK,
+    consertMasterMK,
+    treasurer,
+    president,
+    vicePresident,
+    secretary,
+    prmaster,
+    sexmaster,
+    sexmastress,
+    gigmaster,
+    gigmasterKK,
+    gigmasterDK,
+    gigmasterMK,
+  };
 }
 
 export interface Roles {
-    conductorKK: { id: number };
-    conductorDK: { id: number };
-    conductorMK: { id: number };
-    concertMaster1: { id: number };
-    consertMasterKK: { id: number };
-    consertMasterDK: { id: number };
-    consertMasterMK: { id: number };
-    treasurer: { id: number };
-    president: { id: number };
-    vicePresident: { id: number };
-    secretary: { id: number };
-    prmaster: { id: number };
-    sexmaster: { id: number };
-    sexmastress: { id: number };
-    gigmaster: { id: number };
-    gigmasterKK: { id: number };
-    gigmasterDK: { id: number };
-    gigmasterMK: { id: number };
+  conductorKK: { id: number };
+  conductorDK: { id: number };
+  conductorMK: { id: number };
+  concertMaster1: { id: number };
+  consertMasterKK: { id: number };
+  consertMasterDK: { id: number };
+  consertMasterMK: { id: number };
+  treasurer: { id: number };
+  president: { id: number };
+  vicePresident: { id: number };
+  secretary: { id: number };
+  prmaster: { id: number };
+  sexmaster: { id: number };
+  sexmastress: { id: number };
+  gigmaster: { id: number };
+  gigmasterKK: { id: number };
+  gigmasterDK: { id: number };
+  gigmasterMK: { id: number };
 }

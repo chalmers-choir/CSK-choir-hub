@@ -1,25 +1,23 @@
-import { Code } from "@heroui/code";
-import { Link } from "@heroui/link";
-import { Snippet } from "@heroui/snippet";
-import { button as buttonStyles } from "@heroui/theme";
+import { subtitle, title } from '@components/primitives';
 
-import { subtitle, title } from "@components/primitives";
-import { siteConfig } from "@config/site";
-import { Button } from "@heroui/button";
-import DefaultLayout from "@layouts/default";
+import { siteConfig } from '@config/site';
+import { Button } from '@heroui/button';
+import { Code } from '@heroui/code';
+import { Link } from '@heroui/link';
+import { Snippet } from '@heroui/snippet';
+import { button as buttonStyles } from '@heroui/theme';
+import DefaultLayout from '@layouts/default';
 
 export default function IndexPage() {
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <div className="inline-block max-w-lg text-center justify-center">
+        <div className="inline-block max-w-lg justify-center text-center">
           <span className={title()}>Make&nbsp;</span>
-          <span className={title({ color: "violet" })}>beautiful&nbsp;</span>
+          <span className={title({ color: 'violet' })}>beautiful&nbsp;</span>
           <br />
-          <span className={title()}>
-            websites regardless of your design experience.
-          </span>
-          <div className={subtitle({ class: "mt-4" })}>
+          <span className={title()}>websites regardless of your design experience.</span>
+          <div className={subtitle({ class: 'mt-4' })}>
             Beautiful, fast and modern React UI library.
           </div>
         </div>
@@ -28,9 +26,9 @@ export default function IndexPage() {
           <Link
             isExternal
             className={buttonStyles({
-              color: "primary",
-              radius: "full",
-              variant: "shadow",
+              color: 'primary',
+              radius: 'full',
+              variant: 'shadow',
             })}
             href={siteConfig.links.docs}
           >
@@ -42,8 +40,7 @@ export default function IndexPage() {
         <div className="mt-8">
           <Snippet hideCopyButton hideSymbol variant="bordered">
             <span>
-              Get started by editing{" "}
-              <Code color="primary">pages/index.tsx</Code>
+              Get started by editing <Code color="primary">pages/index.tsx</Code>
             </span>
           </Snippet>
         </div>
