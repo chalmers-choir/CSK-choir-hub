@@ -17,7 +17,7 @@ export async function createGroup(data: { name: string; type: GroupType; descrip
  * @param id - The ID of the group to find.
  * @returns The group if found, otherwise null.
  */
-export async function findGroupById(id: number) {
+export async function findById(id: number) {
   return await prisma.group.findUnique({
     where: { id },
   });
@@ -41,7 +41,7 @@ export async function updateGroup(id: number, data: { name?: string; description
  * @param id - The ID of the group to delete.
  * @returns The deleted group.
  */
-export async function deleteGroup(id: number) {
+export async function deleteById(id: number) {
   return await prisma.group.delete({
     where: { id },
   });
@@ -51,7 +51,7 @@ export async function deleteGroup(id: number) {
  * Lists groups, optionally filtered by type or name.
  * @returns An array of groups matching the filters.
  */
-export async function listGroups() {
+export async function findAll() {
   return await prisma.group.findMany();
 }
 

@@ -1,4 +1,4 @@
-import * as eventModel from '@db';
+import { eventModel } from '@db';
 
 export async function getAllEvents() {
   return eventModel.findAll();

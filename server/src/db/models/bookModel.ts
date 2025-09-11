@@ -28,6 +28,15 @@ export async function findAll() {
   });
 }
 
+export async function findById(bookId: number) {
+  return prisma.book.findUnique({
+    where: { id: bookId },
+    include: {
+      songs: true,
+    },
+  });
+}
+
 /**
  * Assign a book to a song.
  * @param bookId Book ID

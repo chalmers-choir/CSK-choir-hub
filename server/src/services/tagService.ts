@@ -1,4 +1,4 @@
-import * as tagModel from '@db';
+import { tagModel } from '@db';
 
 export async function getAllTags() {
   return tagModel.findAll();

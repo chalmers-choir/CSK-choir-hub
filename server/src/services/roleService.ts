@@ -1,4 +1,4 @@
-import * as roleModel from '@db';
+import { roleModel } from '@db';
 
 export async function getAllRoles() {
   return roleModel.findAll();

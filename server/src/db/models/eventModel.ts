@@ -10,10 +10,18 @@ export async function createEvent(eventData: Prisma.EventCreateInput) {
 }
 
 /**
+ * Find all events.
+ * @returns All events in the database.
+ */
+export async function findAll() {
+  return await prisma.event.findMany();
+}
+
+/**
  * Find an event by its ID.
  * @param eventId - The ID of the event.
  */
-export async function findEventById(eventId: number) {
+export async function findById(eventId: number) {
   return await prisma.event.findUnique({ where: { id: eventId } });
 }
 
@@ -22,7 +30,7 @@ export async function findEventById(eventId: number) {
  * @param eventId - The ID of the event.
  * @param updateData - The data to update.
  */
-export async function updateEvent(eventId: number, updateData: Prisma.EventUpdateInput) {
+export async function update(eventId: number, updateData: Prisma.EventUpdateInput) {
   return await prisma.event.update({
     where: { id: eventId },
     data: updateData,
@@ -33,7 +41,7 @@ export async function updateEvent(eventId: number, updateData: Prisma.EventUpdat
  * Delete an event by its ID.
  * @param eventId - The ID of the event.
  */
-export async function deleteEvent(eventId: number) {
+export async function deleteById(eventId: number) {
   return await prisma.event.delete({ where: { id: eventId } });
 }
 

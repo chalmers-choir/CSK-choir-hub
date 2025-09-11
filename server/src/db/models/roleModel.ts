@@ -54,7 +54,7 @@ export async function updateRole(
  * Delete a role by its ID.
  * @param id Role ID
  */
-export async function deleteRole(id: number): Promise<Role> {
+export async function deleteById(id: number): Promise<Role> {
   return prisma.role.delete({
     where: { id },
   });
@@ -63,7 +63,7 @@ export async function deleteRole(id: number): Promise<Role> {
 /**
  * List all roles.
  */
-export async function listRoles(): Promise<Role[]> {
+export async function findAll(): Promise<Role[]> {
   return prisma.role.findMany();
 }
 

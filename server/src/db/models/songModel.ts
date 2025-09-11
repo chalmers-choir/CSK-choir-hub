@@ -9,11 +9,20 @@ export async function createSong(data: Prisma.SongCreateInput) {
   return prisma.song.create({ data });
 }
 
+export async function findAll() {
+  return prisma.song.findMany({
+    include: {
+      books: true,
+      tags: true,
+    },
+  });
+}
+
 /**
  * Find a song by its unique ID.
  * @param id Song ID
  */
-export async function findSongById(songId: number) {
+export async function findById(songId: number) {
   return prisma.song.findUnique({ where: { id: songId } });
 }
 
@@ -33,7 +42,7 @@ export async function updateSong(songId: number, data: Prisma.SongUpdateInput) {
  * Delete a song by its ID.
  * @param id Song ID
  */
-export async function deleteSong(songId: number) {
+export async function deleteById(songId: number) {
   return prisma.song.delete({ where: { id: songId } });
 }
 

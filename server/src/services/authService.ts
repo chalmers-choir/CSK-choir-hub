@@ -1,4 +1,4 @@
-import * as userModel from '@db';
+import { userModel } from '@db';
 import { generateToken } from '@utils/generateToken';
 import bcrypt from 'bcryptjs';
 

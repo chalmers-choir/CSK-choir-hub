@@ -1,4 +1,4 @@
-import * as groupModel from '@db';
+import { groupModel } from '@db';
 
 export async function getAllGroups() {
   return groupModel.findAll();
