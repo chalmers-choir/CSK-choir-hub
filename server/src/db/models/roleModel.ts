@@ -1,16 +1,12 @@
-import type { Role } from "@prisma/client";
-
-import { prisma } from "@db/prisma";
+import { prisma } from '@db/prisma';
+import type { Role } from '@prisma/client';
 
 /**
  * Create a new role.
  * @param name Role name
  * @param description Role description (optional)
  */
-export async function createRole(
-  name: string,
-  description?: string
-): Promise<Role> {
+export async function createRole(name: string, description?: string): Promise<Role> {
   return prisma.role.create({
     data: {
       name,
@@ -46,7 +42,7 @@ export async function findRoleByName(name: string): Promise<Role | null> {
  */
 export async function updateRole(
   id: number,
-  data: Partial<{ name: string; description: string }>
+  data: Partial<{ name: string; description: string }>,
 ): Promise<Role> {
   return prisma.role.update({
     where: { id },

@@ -7,9 +7,9 @@ import { GroupType } from '@prisma/client';
  * @returns The created group.
  */
 export async function createGroup(data: { name: string; type: GroupType; description?: string }) {
-    return await prisma.group.create({
-        data,
-    });
+  return await prisma.group.create({
+    data,
+  });
 }
 
 /**
@@ -18,9 +18,9 @@ export async function createGroup(data: { name: string; type: GroupType; descrip
  * @returns The group if found, otherwise null.
  */
 export async function findGroupById(id: number) {
-    return await prisma.group.findUnique({
-        where: { id },
-    });
+  return await prisma.group.findUnique({
+    where: { id },
+  });
 }
 
 /**
@@ -30,10 +30,10 @@ export async function findGroupById(id: number) {
  * @returns The updated group.
  */
 export async function updateGroup(id: number, data: { name?: string; description?: string }) {
-    return await prisma.group.update({
-        where: { id },
-        data,
-    });
+  return await prisma.group.update({
+    where: { id },
+    data,
+  });
 }
 
 /**
@@ -42,9 +42,9 @@ export async function updateGroup(id: number, data: { name?: string; description
  * @returns The deleted group.
  */
 export async function deleteGroup(id: number) {
-    return await prisma.group.delete({
-        where: { id },
-    });
+  return await prisma.group.delete({
+    where: { id },
+  });
 }
 
 /**
@@ -52,7 +52,7 @@ export async function deleteGroup(id: number) {
  * @returns An array of groups matching the filters.
  */
 export async function listGroups() {
-    return await prisma.group.findMany();
+  return await prisma.group.findMany();
 }
 
 /**
@@ -62,24 +62,24 @@ export async function listGroups() {
  */
 // TODO - users can be member of several subgroups of the same parent group, so we need to deduplicate the users
 export async function listGroupMembers(groupId: number, visited: Set<number> = new Set()) {
-    if (visited.has(groupId)) return [];
-    visited.add(groupId);
+  if (visited.has(groupId)) return [];
+  visited.add(groupId);
 
-    const group = await prisma.group.findUnique({
-        where: { id: groupId },
-        include: { members: true, children: true },
-    });
+  const group = await prisma.group.findUnique({
+    where: { id: groupId },
+    include: { members: true, children: true },
+  });
 
-    if (!group) return [];
+  if (!group) return [];
 
-    const members = group.members;
+  const members = group.members;
 
-    for (const subgroup of group.children) {
-        const subgroupMembers = await listGroupMembers(subgroup.id);
-        members.push(...subgroupMembers);
-    }
+  for (const subgroup of group.children) {
+    const subgroupMembers = await listGroupMembers(subgroup.id);
+    members.push(...subgroupMembers);
+  }
 
-    return members;
+  return members;
 }
 
 /**
@@ -88,8 +88,8 @@ export async function listGroupMembers(groupId: number, visited: Set<number> = n
  * @returns An array of groups the user belongs to.
  */
 export async function findGroupsByUser(userId: number) {
-    return await prisma.group.findMany({
-        where: { members: { some: { id: userId } } },
-        include: { members: true },
-    });
+  return await prisma.group.findMany({
+    where: { members: { some: { id: userId } } },
+    include: { members: true },
+  });
 }

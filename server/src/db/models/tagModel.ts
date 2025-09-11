@@ -1,5 +1,4 @@
 import { prisma } from '@db/prisma';
-
 import { Prisma } from '@prisma/client';
 
 /**
@@ -7,7 +6,7 @@ import { Prisma } from '@prisma/client';
  * @param data Tag creation data (name, etc.)
  */
 export async function create(data: Prisma.TagCreateInput) {
-    return prisma.tag.create({ data });
+  return prisma.tag.create({ data });
 }
 
 /**
@@ -15,14 +14,14 @@ export async function create(data: Prisma.TagCreateInput) {
  * @param id Tag ID
  */
 export async function deleteById(tagId: number) {
-    return prisma.tag.delete({ where: { id: tagId } });
+  return prisma.tag.delete({ where: { id: tagId } });
 }
 
 /**
  * List tags
  */
 export async function findAll() {
-    return prisma.tag.findMany({});
+  return prisma.tag.findMany({});
 }
 
 /**
@@ -31,14 +30,14 @@ export async function findAll() {
  * @param songId Song ID
  */
 export async function assignTagToSong(tagId: number, songId: number) {
-    return prisma.tag.update({
-        where: { id: tagId },
-        data: {
-            songs: {
-                connect: { id: songId },
-            },
-        },
-    });
+  return prisma.tag.update({
+    where: { id: tagId },
+    data: {
+      songs: {
+        connect: { id: songId },
+      },
+    },
+  });
 }
 
 /**
@@ -47,12 +46,12 @@ export async function assignTagToSong(tagId: number, songId: number) {
  * @param songId Song ID
  */
 export async function removeTagFromSong(tagId: number, songId: number) {
-    return prisma.tag.update({
-        where: { id: tagId },
-        data: {
-            songs: {
-                disconnect: { id: songId },
-            },
-        },
-    });
+  return prisma.tag.update({
+    where: { id: tagId },
+    data: {
+      songs: {
+        disconnect: { id: songId },
+      },
+    },
+  });
 }

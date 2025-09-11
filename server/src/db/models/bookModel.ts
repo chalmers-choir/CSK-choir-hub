@@ -1,5 +1,4 @@
 import { prisma } from '@db/prisma';
-
 import { Prisma } from '@prisma/client';
 
 /**
@@ -7,7 +6,7 @@ import { Prisma } from '@prisma/client';
  * @param data Book creation data (title, author, etc.)
  */
 export async function create(data: Prisma.BookCreateInput) {
-    return prisma.book.create({ data });
+  return prisma.book.create({ data });
 }
 
 /**
@@ -15,18 +14,18 @@ export async function create(data: Prisma.BookCreateInput) {
  * @param id Book ID
  */
 export async function deleteById(bookId: number) {
-    return prisma.book.delete({ where: { id: bookId } });
+  return prisma.book.delete({ where: { id: bookId } });
 }
 
 /**
  * List books
  */
 export async function findAll() {
-    return prisma.book.findMany({
-        include: {
-            songs: true,
-        },
-    });
+  return prisma.book.findMany({
+    include: {
+      songs: true,
+    },
+  });
 }
 
 /**
@@ -35,14 +34,14 @@ export async function findAll() {
  * @param songId Song ID
  */
 export async function assignSongToBook(bookId: number, songId: number) {
-    return prisma.book.update({
-        where: { id: bookId },
-        data: {
-            songs: {
-                connect: { id: songId },
-            },
-        },
-    });
+  return prisma.book.update({
+    where: { id: bookId },
+    data: {
+      songs: {
+        connect: { id: songId },
+      },
+    },
+  });
 }
 
 /**
@@ -51,12 +50,12 @@ export async function assignSongToBook(bookId: number, songId: number) {
  * @param songId Song ID
  */
 export async function removeSongFromBook(bookId: number, songId: number) {
-    return prisma.book.update({
-        where: { id: bookId },
-        data: {
-            songs: {
-                disconnect: { id: songId },
-            },
-        },
-    });
+  return prisma.book.update({
+    where: { id: bookId },
+    data: {
+      songs: {
+        disconnect: { id: songId },
+      },
+    },
+  });
 }

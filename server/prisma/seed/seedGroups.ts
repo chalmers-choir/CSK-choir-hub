@@ -1,8 +1,7 @@
-import { GroupType, PrismaClient } from "@prisma/client";
-import { Users } from "./seedUsers";
+import { Users } from './seedUsers';
+import { GroupType, PrismaClient } from '@prisma/client';
 
 export default async function seedGroups(prisma: PrismaClient, users: Users): Promise<Groups> {
-
   const csk = await prisma.group.create({
     data: {
       name: 'Chalmers Sångkör',
@@ -119,7 +118,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
     },
   });
 
-    const t1 = await prisma.group.create({
+  const t1 = await prisma.group.create({
     data: {
       name: 'T1',
       type: GroupType.VOICE,
@@ -128,7 +127,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
     },
   });
 
-    const t2 = await prisma.group.create({
+  const t2 = await prisma.group.create({
     data: {
       name: 'T2',
       type: GroupType.VOICE,
@@ -146,25 +145,25 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
     },
   });
 
-    const b1 = await prisma.group.create({
-      data: {
-        name: 'B1',
-        type: GroupType.VOICE,
-        description: '1Basar i CSK',
-        parents: { connect: [{ id: b.id }] },
-      },
-    });
+  const b1 = await prisma.group.create({
+    data: {
+      name: 'B1',
+      type: GroupType.VOICE,
+      description: '1Basar i CSK',
+      parents: { connect: [{ id: b.id }] },
+    },
+  });
 
-    const b2 = await prisma.group.create({
-      data: {
-        name: 'B2',
-        type: GroupType.VOICE,
-        description: '2Basar i CSK',
-        parents: { connect: [{ id: b.id }] },
-      },
-    });
+  const b2 = await prisma.group.create({
+    data: {
+      name: 'B2',
+      type: GroupType.VOICE,
+      description: '2Basar i CSK',
+      parents: { connect: [{ id: b.id }] },
+    },
+  });
 
-    const kks = await prisma.group.create({
+  const kks = await prisma.group.create({
     data: {
       name: 'KKS',
       type: GroupType.VOICE,
@@ -182,14 +181,14 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
     },
   });
 
-    const kks2 = await prisma.group.create({
-      data: {
-        name: 'KKS2',
-        type: GroupType.VOICE,
-        description: '2Sopraner i KK',
-        parents: { connect: [{ id: kks.id }, { id: s2.id }] },
-      },
-    });
+  const kks2 = await prisma.group.create({
+    data: {
+      name: 'KKS2',
+      type: GroupType.VOICE,
+      description: '2Sopraner i KK',
+      parents: { connect: [{ id: kks.id }, { id: s2.id }] },
+    },
+  });
 
   const kka = await prisma.group.create({
     data: {
@@ -206,19 +205,19 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
       type: GroupType.VOICE,
       description: '1Altor i KK',
       parents: { connect: [{ id: kka.id }, { id: a1.id }] },
-      members: { connect: [{ id: users.rebekka.id }] }
+      members: { connect: [{ id: users.rebekka.id }] },
     },
   });
 
-    const kka2 = await prisma.group.create({
-      data: {
-        name: 'KKA2',
-        type: GroupType.VOICE,
-        description: '2Altor i KK',
-        parents: { connect: [{ id: kka.id }, { id: a2.id }] },
-        members: { connect: [{ id: users.ingrid.id }] }
-      },
-    });
+  const kka2 = await prisma.group.create({
+    data: {
+      name: 'KKA2',
+      type: GroupType.VOICE,
+      description: '2Altor i KK',
+      parents: { connect: [{ id: kka.id }, { id: a2.id }] },
+      members: { connect: [{ id: users.ingrid.id }] },
+    },
+  });
 
   const kkt = await prisma.group.create({
     data: {
@@ -321,7 +320,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
     },
   });
 
-    const mkt2 = await prisma.group.create({
+  const mkt2 = await prisma.group.create({
     data: {
       name: 'MKT2',
       type: GroupType.VOICE,
@@ -336,7 +335,9 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
       type: GroupType.VOICE,
       description: '1Basar i MK',
       parents: { connect: [{ id: mk.id }, { id: b1.id }] },
-      members: { connect: [{ id: users.felix.id }, { id: users.isak.id }, { id: users.robert.id }] }
+      members: {
+        connect: [{ id: users.felix.id }, { id: users.isak.id }, { id: users.robert.id }],
+      },
     },
   });
 
@@ -361,7 +362,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
     data: {
       name: 'Dirigenter',
       type: GroupType.OTHER,
-      description: 'Körens dirigenter'
+      description: 'Körens dirigenter',
     },
   });
 
@@ -394,7 +395,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
       name: 'Webbmästeriet',
       type: GroupType.OTHER,
       description: 'Körens webbmästeri',
-      members: { connect: [{ id: users.liam.id }, { id: users.lucas.id }] }
+      members: { connect: [{ id: users.liam.id }, { id: users.lucas.id }] },
     },
   });
 
@@ -427,7 +428,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
       name: 'Admins',
       type: GroupType.OTHER,
       description: 'Administratörer av systemet',
-      members: { connect: [{ id: users.lucas.id }, { id: users.liam.id }] }
+      members: { connect: [{ id: users.lucas.id }, { id: users.liam.id }] },
     },
   });
 
@@ -479,7 +480,7 @@ export default async function seedGroups(prisma: PrismaClient, users: Users): Pr
     recruiters,
     utantillkommitten,
     sheetfishes,
-    admins
+    admins,
   };
 }
 

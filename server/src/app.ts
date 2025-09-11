@@ -1,11 +1,10 @@
-import cors from "cors";
-import express from "express";
-import rateLimit from "express-rate-limit";
-import helmet from "helmet";
-
-import routes from "@api/routes/routes";
-import { errorHandler } from "@middleware";
-import { logAtLevel } from "@middleware";
+import routes from '@api/routes/routes';
+import { errorHandler } from '@middleware';
+import { logAtLevel } from '@middleware';
+import cors from 'cors';
+import express from 'express';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
 
 const app = express();
 
@@ -27,14 +26,14 @@ app.use(logAtLevel(4));
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "*", // allow from your frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: process.env.CORS_ORIGIN || '*', // allow from your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
-  })
+  }),
 );
 
 /* ---- Routes ---- */
-app.use("/api", routes); // Main API routes
+app.use('/api', routes); // Main API routes
 
 /* ---- Error Handling Middlewares ---- */
 app.use(errorHandler);

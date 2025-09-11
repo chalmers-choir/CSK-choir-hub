@@ -1,4 +1,4 @@
-import * as bookModel from "@db"
+import * as bookModel from '@db';
 
 export async function getAllBooks() {
   return bookModel.findAll();

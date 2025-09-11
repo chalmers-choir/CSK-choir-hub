@@ -11,7 +11,7 @@ export async function addRegistration(
   eventId: number,
   userId: number,
   comments?: string,
-  dietaryPreferences?: string
+  dietaryPreferences?: string,
 ) {
   return await prisma.eventRegistration.create({
     data: { eventId, userId, comments, dietaryPreferences },
@@ -24,9 +24,9 @@ export async function addRegistration(
  * @param eventId - The ID of the event.
  */
 export async function removeUserEventRegistration(userId: number, eventId: number) {
-    return await prisma.eventRegistration.deleteMany({
-      where: { userId: userId, eventId: eventId }
-    });
+  return await prisma.eventRegistration.deleteMany({
+    where: { userId: userId, eventId: eventId },
+  });
 }
 
 /**

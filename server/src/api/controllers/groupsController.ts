@@ -1,5 +1,5 @@
-import { groupService } from "@services";
-import { Request, Response } from "express";
+import { groupService } from '@services';
+import { Request, Response } from 'express';
 
 // Get all groups
 export const getGroupsHandler = async (req: Request, res: Response) => {
@@ -15,8 +15,7 @@ export const getGroupsHandler = async (req: Request, res: Response) => {
 export const deleteGroupHandler = async (req: Request, res: Response) => {
   try {
     const groupId = parseInt(req.params.id, 10);
-    if (isNaN(groupId))
-      return res.status(400).json({ error: "Invalid group ID" });
+    if (isNaN(groupId)) return res.status(400).json({ error: 'Invalid group ID' });
 
     await groupService.deleteGroup(groupId);
     return res.status(204).send();

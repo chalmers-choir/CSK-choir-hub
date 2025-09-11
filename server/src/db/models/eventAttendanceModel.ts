@@ -1,5 +1,4 @@
 import { prisma } from '@db/prisma';
-
 import { AttendanceStatus } from '@prisma/client';
 
 /**
@@ -7,13 +6,17 @@ import { AttendanceStatus } from '@prisma/client';
  * @param eventId - The ID of the event.
  * @param userId - The ID of the user.
  */
-export async function updateUserEventAttendanceStatus(userId: number, eventId: number, status: AttendanceStatus) {
+export async function updateUserEventAttendanceStatus(
+  userId: number,
+  eventId: number,
+  status: AttendanceStatus,
+) {
   return await prisma.eventAttendance.create({
-    data: { 
-        user: { connect: { id: userId } }, 
-        event: { connect: { id: eventId } },
-        status: status
-    }
+    data: {
+      user: { connect: { id: userId } },
+      event: { connect: { id: eventId } },
+      status: status,
+    },
   });
 }
 
@@ -23,7 +26,7 @@ export async function updateUserEventAttendanceStatus(userId: number, eventId: n
  * @param eventId - The ID of the event.
  */
 export async function removeUserEventAttendance(userId: number, eventId: number) {
-    return await prisma.eventAttendance.deleteMany({
-      where: { userId: userId, eventId: eventId }
-    });
+  return await prisma.eventAttendance.deleteMany({
+    where: { userId: userId, eventId: eventId },
+  });
 }

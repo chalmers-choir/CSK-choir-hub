@@ -6,24 +6,29 @@ import { KnowledgeLevel, Voice } from '@prisma/client';
  * @param songId - The ID of the song.
  * @param userId - The ID of the user.
  */
-export async function updateUserSongKnowledgeLevel(userId: number, songId: number, voice: Voice, level: KnowledgeLevel) {
+export async function updateUserSongKnowledgeLevel(
+  userId: number,
+  songId: number,
+  voice: Voice,
+  level: KnowledgeLevel,
+) {
   return await prisma.songKnowledge.upsert({
     where: {
       userId_songId_voice: {
         userId: userId,
         songId: songId,
-        voice: voice
-      }
+        voice: voice,
+      },
     },
     create: {
       user: { connect: { id: userId } },
       song: { connect: { id: songId } },
       voice: voice,
-      level: level
+      level: level,
     },
     update: {
-      level: level
-    }
+      level: level,
+    },
   });
 }
 
@@ -33,7 +38,7 @@ export async function updateUserSongKnowledgeLevel(userId: number, songId: numbe
  * @param songId - The ID of the song.
  */
 export async function removeUserSongKnowledgeLevel(userId: number, songId: number, voice: Voice) {
-    return await prisma.songKnowledge.deleteMany({
-      where: { userId: userId, songId: songId, voice: voice }
-    });
+  return await prisma.songKnowledge.deleteMany({
+    where: { userId: userId, songId: songId, voice: voice },
+  });
 }
