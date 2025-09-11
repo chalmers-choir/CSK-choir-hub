@@ -4,7 +4,7 @@ import { Router } from 'express';
 
 const router = Router();
 
-router.post('/', requireAuth(['admin']), addSongToBook);
-router.delete('/:id', requireAuth(['admin']), removeSongFromBook);
+router.post('/', requireAuth({ roles: ['admin'] }), addSongToBook);
+router.delete('/:id', requireAuth({ roles: ['admin'] }), removeSongFromBook);
 
 export default router;

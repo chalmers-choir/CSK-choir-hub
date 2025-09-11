@@ -8,7 +8,7 @@ const router = Router();
 
 router.get('/', getUsers);
 router.get('/:userId', getUserWithId);
-router.delete('/:userId', requireAuth(['admin']), deleteUser);
+router.delete('/:userId', requireAuth({ roles: ['admin'] }), deleteUser);
 
 router.use('/:userId/group', userGroupRoutes);
 router.use('/:userId/role', userRoleRoutes);

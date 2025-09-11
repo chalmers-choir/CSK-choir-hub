@@ -8,6 +8,6 @@ const router = Router();
 router.use('/tags', tagsRoutes);
 
 router.get('/', getSongs);
-router.delete('/:id', requireAuth(['admin']), deleteSong);
+router.delete('/:id', requireAuth({ roles: ['admin'] }), deleteSong);
 
 export default router;
