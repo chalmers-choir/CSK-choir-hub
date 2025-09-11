@@ -1,4 +1,4 @@
-import { assignUserToRole, removeUserFromRole } from '@api/controllers/usersController';
+import { assignUserToRole, removeUserFromRole } from '@api/controllers/rolesController';
 import { requireAuth } from '@middleware/authMiddleware';
 import { Router } from 'express';
 
