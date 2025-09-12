@@ -14,10 +14,10 @@ const router = Router();
 router.get('/', getEvents);
 router.post('/', requireAuth({ roles: ['admin'] }), createEvent);
 
-router.use('/attendance', requireAuth(), attendanceRoutes);
-router.use('/registration', requireAuth(), registrationRoutes);
-
-router.delete('/:id', requireAuth({ roles: ['admin'] }), deleteEvent);
 router.put('/:id', requireAuth({ roles: ['admin'] }), updateEvent);
+router.delete('/:id', requireAuth({ roles: ['admin'] }), deleteEvent);
+
+router.use('/:id/attendance', requireAuth(), attendanceRoutes);
+router.use('/:id/registration', requireAuth(), registrationRoutes);
 
 export default router;

@@ -1,9 +1,18 @@
-import { roleModel } from '@db';
+import { roleModel, userModel } from '@db';
+import { NotFoundError } from '@utils';
 
+/**
+ * Get all roles in the system.
+ * @returns {Promise<any[]>} - A promise that resolves to an array of all roles.
+ */
 export async function getAllRoles() {
-  return roleModel.findAll();
+  return await roleModel.findAll();
 }
 
+/**
+ * Delete a role by its ID.
+ * @param roleId
+ */
 export async function deleteRole(roleId: number) {
   await roleModel.deleteById(roleId);
 }
@@ -15,6 +24,9 @@ export async function deleteRole(roleId: number) {
  * @returns {Promise<void>}
  */
 export async function assignUser(userId: number, roleId: number): Promise<void> {
+  const user = await userModel.findById(userId);
+  if (!user) throw new NotFoundError('User not found');
+
   await roleModel.assignUser(userId, roleId);
 }
 

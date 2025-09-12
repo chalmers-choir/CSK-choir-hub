@@ -1,13 +1,14 @@
 import tagsRoutes from './tags';
-import { deleteSong, getSongs } from '@api/controllers/songsController';
+import { createSong, deleteSong, getSongs } from '@api/controllers/songsController';
 import { requireAuth } from '@middleware/authMiddleware';
 import { Router } from 'express';
 
 const router = Router();
 
-router.use('/tags', tagsRoutes);
-
 router.get('/', getSongs);
-router.delete('/:id', requireAuth({ roles: ['admin'] }), deleteSong);
+router.post('/', requireAuth({ roles: ['admin'] }), createSong);
+router.delete('/:songId', requireAuth({ roles: ['admin'] }), deleteSong);
+
+router.use('/songId/tags', tagsRoutes);
 
 export default router;

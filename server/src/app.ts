@@ -1,6 +1,5 @@
-import routes from '@api/routes/routes';
-import { errorHandler } from '@middleware';
-import { logAtLevel } from '@middleware';
+import routes from '@api/routes';
+import { errorHandler, logAtLevel } from '@middleware';
 import cors from 'cors';
 import express from 'express';
 import rateLimit from 'express-rate-limit';

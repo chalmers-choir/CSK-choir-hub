@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import { z } from 'zod';
 
 export const registerHandler = async (req: Request, res: Response) => {
+  // TODO: Rules for Registration
   const registerSchema = z.object({
     email: z.email(),
     username: z.string().min(3),
@@ -17,18 +18,15 @@ export const registerHandler = async (req: Request, res: Response) => {
 
   const { email, password, username, first_name, last_name } = req.body;
 
-  try {
-    const token = await userService.registerUser({
-      email,
-      password,
-      username,
-      firstName: first_name,
-      lastName: last_name,
-    });
-    return res.status(201).json({ token });
-  } catch (err: any) {
-    return res.status(400).json({ error: err.message });
-  }
+  const token = await userService.registerUser({
+    email,
+    password,
+    username,
+    firstName: first_name,
+    lastName: last_name,
+  });
+
+  return res.status(201).json({ token });
 };
 
 export const loginHandler = async (req: Request, res: Response) => {

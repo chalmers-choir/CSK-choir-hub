@@ -25,11 +25,28 @@ export async function findAll() {
 }
 
 /**
+ * Find a tag by its ID.
+ * @param id Tag ID
+ */
+export async function findById(tagId: number) {
+  return prisma.tag.findUnique({ where: { id: tagId } });
+}
+
+/**
+ * Update a tag by its ID.
+ * @param id Tag ID
+ * @param data Tag update data (name, etc.)
+ */
+export async function update(tagId: number, data: Prisma.TagUpdateInput) {
+  return prisma.tag.update({ where: { id: tagId }, data });
+}
+
+/**
  * Assign a tag to a song.
  * @param tagId Tag ID
  * @param songId Song ID
  */
-export async function assignTagToSong(tagId: number, songId: number) {
+export async function assignToSong(tagId: number, songId: number) {
   return prisma.tag.update({
     where: { id: tagId },
     data: {
@@ -45,7 +62,7 @@ export async function assignTagToSong(tagId: number, songId: number) {
  * @param tagId Tag ID
  * @param songId Song ID
  */
-export async function removeTagFromSong(tagId: number, songId: number) {
+export async function removeFromSong(tagId: number, songId: number) {
   return prisma.tag.update({
     where: { id: tagId },
     data: {

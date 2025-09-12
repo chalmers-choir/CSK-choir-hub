@@ -4,7 +4,7 @@ import { Router } from 'express';
 
 const router = Router();
 
-router.post('/:id', requireAuth({ roles: ['admin'] }), assignTagToSong);
-router.delete('/:id', requireAuth({ roles: ['admin'] }), removeTagFromSong);
+router.post('/', requireAuth({ roles: ['admin'] }), assignTagToSong);
+router.delete('/', requireAuth({ roles: ['admin'] }), removeTagFromSong);
 
 export default router;
