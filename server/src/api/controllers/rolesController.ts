@@ -7,6 +7,16 @@ export const getRoles = async (req: Request, res: Response) => {
   res.json({ roles });
 };
 
+// Create role
+export const createRole = async (req: Request, res: Response) => {
+  const { name, description } = req.body;
+  if (!name) {
+    return res.status(400).json({ error: 'name not provided' });
+  }
+  const newRole = await roleService.createRole(name, description);
+  return res.status(201).json({ role: newRole });
+};
+
 // Delete a role by ID
 export const deleteRole = async (req: Request, res: Response) => {
   const roleId = parseInt(req.params.id, 10);

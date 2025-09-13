@@ -1,8 +1,9 @@
-import { updateUserAttendance } from '@api/controllers/eventsController';
+import { registerUserForEvent, unregisterUserFromEvent } from '@api/controllers/eventsController';
 import { Router } from 'express';
 
 const router = Router();
 
-router.put('/', updateUserAttendance);
+router.post('/', registerUserForEvent);
+router.delete('/', unregisterUserFromEvent);
 
 export default router;

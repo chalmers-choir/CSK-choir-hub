@@ -9,6 +9,10 @@ export async function getAllRoles() {
   return await roleModel.findAll();
 }
 
+export async function createRole(name: string, description?: string) {
+  return await roleModel.create(name, description);
+}
+
 /**
  * Delete a role by its ID.
  * @param roleId

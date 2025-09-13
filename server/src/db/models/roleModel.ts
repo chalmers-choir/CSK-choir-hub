@@ -6,7 +6,7 @@ import type { Role } from '@prisma/client';
  * @param name Role name
  * @param description Role description (optional)
  */
-export async function createRole(name: string, description?: string): Promise<Role> {
+export async function create(name: string, description?: string): Promise<Role> {
   return prisma.role.create({
     data: {
       name,
@@ -19,7 +19,7 @@ export async function createRole(name: string, description?: string): Promise<Ro
  * Find a role by its ID.
  * @param id Role ID
  */
-export async function findRoleById(id: number): Promise<Role | null> {
+export async function findById(id: number): Promise<Role | null> {
   return prisma.role.findUnique({
     where: { id },
   });
@@ -29,7 +29,7 @@ export async function findRoleById(id: number): Promise<Role | null> {
  * Find a role by its name.
  * @param name Role name
  */
-export async function findRoleByName(name: string): Promise<Role | null> {
+export async function findByName(name: string): Promise<Role | null> {
   return prisma.role.findUnique({
     where: { name },
   });
@@ -40,7 +40,7 @@ export async function findRoleByName(name: string): Promise<Role | null> {
  * @param id Role ID
  * @param data Fields to update
  */
-export async function updateRole(
+export async function update(
   id: number,
   data: Partial<{ name: string; description: string }>,
 ): Promise<Role> {
