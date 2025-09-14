@@ -16,6 +16,12 @@ A full-stack choir management platform built with **TypeScript**, React frontend
 ./setup.sh
 ```
 
+2. **For Windows:**
+
+```batch
+setup.bat
+```
+
 ## Running the Application
 
 Run both frontend and backend simultaneously:
