@@ -1,0 +1,23 @@
+tags:
+  - name: songs
+    description: Operations concerning songs
+
+paths:
+  /songs:
+    get:
+      tags:
+        - songs
+    post:
+      tags:
+        - songs
+  /songs/{songId}:
+    delete:
+      tags:
+        - songs
+  /songs/{songId}/tags:
+    post:
+      tags:
+        - songs
+    delete:
+      tags:
+        - songs

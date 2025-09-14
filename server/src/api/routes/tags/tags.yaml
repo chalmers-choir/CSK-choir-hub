@@ -1,0 +1,12 @@
+paths:
+  /tags:
+    get:
+      tags:
+        - tags
+    post:
+      tags:
+        - tags
+  /tags/{tagId}:
+    delete:
+      tags:
+        - tags

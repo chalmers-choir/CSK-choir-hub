@@ -1,0 +1,13 @@
+paths:
+  /users:
+    get:
+      tags:
+        - users
+
+  /users/{userId}:
+    get:
+      tags:
+        - users
+    delete:
+      tags:
+        - users

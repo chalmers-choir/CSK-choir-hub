@@ -45,11 +45,10 @@ model Group {
   description String?
 
   members User[]
+  roles Role[]
 
   parents  Group[] @relation("GroupHierarchy")
   children Group[] @relation("GroupHierarchy")
-
-  roles Role[]
 }
 
 model Role {
@@ -153,7 +152,7 @@ model Song {
 }
 
 enum KnowledgeLevel {
-  OK
+  PARTY
   GIG
   UTANTILL
 }

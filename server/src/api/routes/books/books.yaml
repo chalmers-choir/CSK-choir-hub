@@ -1,0 +1,167 @@
+paths:
+  /books:
+    get:
+      tags:
+        - books
+      summary: Get all books.
+      description: Gets the full list of all books.
+      operationId: getBooks
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../../docs/openapi.yaml#/components/schemas/Book'
+
+        '400':
+          description: Token missing or access denied.
+
+    post:
+      tags:
+        - books
+      summary: Add a new book.
+      description: Adds a new book to the collection.
+      operationId: addBook
+      requestBody:
+        description: Book to be added to the collection
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../../docs/openapi.yaml#/components/schemas/Book'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '../../docs/openapi.yaml#/components/schemas/Book'
+        '400':
+          description: Token missing or access denied.
+        default:
+          $ref: '../../docs/openapi.yaml#/components/responses/DefaultError'
+
+  /books/{bookId}:
+    get:
+      tags:
+        - books
+      summary: Find book by ID.
+      description: Returns a single book.
+      operationId: getBookById
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of book to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '../../docs/openapi.yaml#/components/schemas/Book'
+            application/xml:
+              schema:
+                $ref: '../../docs/openapi.yaml#/components/schemas/Book'
+        '400':
+          description: Token missing or access denied.
+        default:
+          $ref: '../../docs/openapi.yaml#/components/responses/DefaultError'
+
+    delete:
+      tags:
+        - books
+      summary: Deletes a book.
+      description: Deletes a book by ID.
+      operationId: deleteBook
+      parameters:
+        - name: bookId
+          in: path
+          description: Book id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Successful operation
+        '400':
+          description: Token missing or access denied.
+        default:
+          $ref: '../../docs/openapi.yaml#/components/responses/DefaultError'
+
+  /books/{bookId}/songs:
+    post:
+      tags:
+        - books
+      summary: Add a song to a book.
+      description: Adds a song to the specified book.
+      operationId: addSongToBook
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of the book
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Song to add to book
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                songId:
+                  type: integer
+                  format: int64
+              required:
+                - songId
+      responses:
+        '200':
+          description: Successful operation, returns updated Book
+          content:
+            application/json:
+              schema:
+                $ref: '../../docs/openapi.yaml#/components/schemas/Book'
+        '400':
+          description: Token missing or access denied.
+        default:
+          $ref: '../../docs/openapi.yaml#/components/responses/DefaultError'
+
+  /books/{bookId}/songs/{songId}:
+    delete:
+      tags:
+        - books
+      summary: Remove a song from a book.
+      description: Removes a song from the specified book.
+      operationId: removeSongFromBook
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of the book
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: songId
+          in: path
+          description: ID of the song to remove
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Song removed from book successfully
+        '400':
+          description: Token missing or access denied.
+        default:
+          $ref: '../../docs/openapi.yaml#/components/responses/DefaultError'

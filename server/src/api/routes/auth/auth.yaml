@@ -1,0 +1,35 @@
+paths:
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Register a new user.
+      operationId: registerUser
+      requestBody:
+        $ref: '../../docs/openapi.yaml#/components/requestBodies/RegisterUser'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '../../docs/openapi.yaml#/components/schemas/User'
+
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Login a user.
+      operationId: loginUser
+      requestBody:
+        $ref: '../../docs/openapi.yaml#/components/requestBodies/LoginUser'
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string

@@ -1,0 +1,144 @@
+openapi: 3.0.4
+
+info:
+  title: CSK Choir Hub
+  description: This is the API declaration for CSK Choir Hub.
+  contact:
+    email: webmasters@choir.chs.chalmers.se
+  version: 1.0.0
+
+externalDocs:
+  description: Find out more about CSK
+  url: https://chalmerssangkor.se
+
+servers:
+  - url: https://portal.chalmerssangkor.se/api
+
+paths:
+  /auth/register:
+    $ref: '../routes/auth/auth.yaml#/paths/~1auth~1register'
+
+  /auth/login:
+    $ref: '../routes/auth/auth.yaml#/paths/~1auth~1login'
+
+  /books:
+    $ref: '../routes/books/books.yaml#/paths/~1books'
+
+  /books/{bookId}:
+    $ref: '../routes/books/books.yaml#/paths/~1books~1{bookId}'
+
+  /books/{bookId}/songs:
+    $ref: '../routes/books/books.yaml#/paths/~1books~1{bookId}~1songs'
+
+  /books/{bookId}/songs/{songId}:
+    $ref: '../routes/books/books.yaml#/paths/~1books~1{bookId}~1songs~1{songId}'
+
+  /events:
+    $ref: '../routes/events/events.yaml#/paths/~1events'
+
+  /events/{eventId}:
+    $ref: '../routes/events/events.yaml#/paths/~1events~1{eventId}'
+
+  /events/{eventId}/registration:
+    $ref: '../routes/events/events.yaml#/paths/~1events~1{eventId}~1registration'
+
+  /events/{eventId}/attendance:
+    $ref: '../routes/events/events.yaml#/paths/~1events~1{eventId}~1attendance'
+
+  /groups:
+    $ref: '../routes/groups/groups.yaml#/paths/~1groups'
+
+  /groups/{groupId}:
+    $ref: '../routes/groups/groups.yaml#/paths/~1groups~1{groupId}'
+
+  /groups/{groupId}/users:
+    $ref: '../routes/groups/groups.yaml#/paths/~1groups~1{groupId}~1users'
+
+  /groups/{groupId}/roles:
+    $ref: '../routes/groups/groups.yaml#/paths/~1groups~1{groupId}~1roles'
+
+  /groups/{groupId}/groups:
+    $ref: '../routes/groups/groups.yaml#/paths/~1groups~1{groupId}~1groups'
+
+  /roles:
+    $ref: '../routes/roles/roles.yaml#/paths/~1roles'
+
+  /roles/{roleId}:
+    $ref: '../routes/roles/roles.yaml#/paths/~1roles~1{roleId}'
+
+  /roles/{roleId}/user:
+    $ref: '../routes/roles/roles.yaml#/paths/~1roles~1{roleId}~1user'
+
+  /songs:
+    $ref: '../routes/songs/songs.yaml#/paths/~1songs'
+
+  /songs/{songId}:
+    $ref: '../routes/songs/songs.yaml#/paths/~1songs~1{songId}'
+
+  /songs/{songId}/tags:
+    $ref: '../routes/songs/songs.yaml#/paths/~1songs~1{songId}~1tags'
+
+  /tags:
+    $ref: '../routes/tags/tags.yaml#/paths/~1tags'
+
+  /tags/{tagId}:
+    $ref: '../routes/tags/tags.yaml#/paths/~1tags~1{tagId}'
+
+  /users:
+    $ref: '../routes/users/users.yaml#/paths/~1users'
+
+  /users/{userId}:
+    $ref: '../routes/users/users.yaml#/paths/~1users~1{userId}'
+
+components:
+  schemas:
+    User:
+      $ref: './components.yaml#/components/schemas/User'
+
+    Token:
+      $ref: './components.yaml#/components/schemas/Token'
+
+    Event:
+      $ref: './components.yaml#/components/schemas/Event'
+
+    Attendance:
+      $ref: './components.yaml#/components/schemas/Attendance'
+
+    Registration:
+      $ref: './components.yaml#/components/schemas/Registration'
+
+    Group:
+      $ref: './components.yaml#/components/schemas/Group'
+
+    Role:
+      $ref: './components.yaml#/components/schemas/Role'
+
+    Book:
+      $ref: './components.yaml#/components/schemas/Book'
+
+    Song:
+      $ref: './components.yaml#/components/schemas/Song'
+
+    Tag:
+      $ref: './components.yaml#/components/schemas/Tag'
+
+    SongKnowledge:
+      $ref: './components.yaml#/components/schemas/SongKnowledge'
+
+    Error:
+      $ref: './components.yaml#/components/schemas/Error'
+
+  responses:
+    DefaultError:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: './components.yaml#/components/schemas/Error'
+
+  requestBodies:
+    RegisterUser:
+      $ref: './components.yaml#/components/requestBodies/RegisterUser'
+
+    LoginUser:
+      $ref: './components.yaml#/components/requestBodies/LoginUser'
