@@ -12,7 +12,7 @@ export default async function seedSongKnowledges(
       {
         userId: users.alice.id,
         songId: songs.island.id,
-        level: KnowledgeLevel.OK,
+        level: KnowledgeLevel.PARTY,
         voice: Voice.A,
       },
       {
@@ -30,13 +30,13 @@ export default async function seedSongKnowledges(
       {
         userId: users.bob.id,
         songId: songs.bastu.id,
-        level: KnowledgeLevel.OK,
+        level: KnowledgeLevel.PARTY,
         voice: Voice.S,
       },
       {
         userId: users.charles.id,
         songId: songs.bastu.id,
-        level: KnowledgeLevel.OK,
+        level: KnowledgeLevel.PARTY,
         voice: Voice.S,
       },
       {
