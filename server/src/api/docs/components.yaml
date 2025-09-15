@@ -1,355 +1,354 @@
-components:
-  schemas:
-    User:
-      type: object
-      properties:
-        id:
+schemas:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+        example: concertmasterkkb1
+      firstName:
+        type: string
+        example: Liam
+      lastName:
+        type: string
+        example: Cotton
+      email:
+        type: string
+        example: liam@cotton.com
+      groups:
+        type: array
+        items:
           type: integer
           format: int64
-        username:
-          type: string
-          example: concertmasterkkb1
-        firstName:
-          type: string
-          example: Liam
-        lastName:
-          type: string
-          example: Cotton
-        email:
-          type: string
-          example: liam@cotton.com
-        groups:
-          type: array
-          items:
-            type: integer
-            format: int64
-        roles:
-          type: array
-          items:
-            type: integer
-            format: int64
-        songKnowledge:
-          type: array
-          items:
-            $ref: '#/components/schemas/SongKnowledge'
-      required:
-        - id
-        - username
-        - firstName
-        - lastName
-        - email
-        - groups
-        - roles
-        - songKnowledge
+      roles:
+        type: array
+        items:
+          type: integer
+          format: int64
+      songKnowledge:
+        type: array
+        items:
+          $ref: '#/schemas/SongKnowledge'
+    required:
+      - id
+      - username
+      - firstName
+      - lastName
+      - email
+      - groups
+      - roles
+      - songKnowledge
 
-    SongKnowledge:
-      type: object
-      properties:
-        songId:
-          type: integer
-          format: int64
-        title:
-          type: string
-          example: Island
-        voice:
-          type: string
-          enum: [S, A, T, B, S1, S2, A1, A2, T1, T2, B1, B2]
-          example: B1
-        level:
-          type: string
-          enum: [PARTY, GIG, UTANTILL]
-          example: UTANTILL
-      required:
-        - songId
-        - title
-        - voice
-        - level
+  SongKnowledge:
+    type: object
+    properties:
+      songId:
+        type: integer
+        format: int64
+      title:
+        type: string
+        example: Island
+      voice:
+        type: string
+        enum: [S, A, T, B, S1, S2, A1, A2, T1, T2, B1, B2]
+        example: B1
+      level:
+        type: string
+        enum: [PARTY, GIG, UTANTILL]
+        example: UTANTILL
+    required:
+      - songId
+      - title
+      - voice
+      - level
 
-    Role:
-      type: object
-      properties:
-        id:
+  Role:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+        example: ADMIN
+      description:
+        type: string
+        example: Administrator with full access
+      groups:
+        type: array
+        items:
           type: integer
           format: int64
-        name:
-          type: string
-          example: ADMIN
-        description:
-          type: string
-          example: Administrator with full access
-        groups:
-          type: array
-          items:
+      user:
+        type: object
+        nullable: true
+        properties:
+          userId:
             type: integer
             format: int64
-        user:
+          name:
+            type: string
+            example: Liam Cotton
+    required:
+      - id
+      - name
+      - groups
+      - user
+
+  Group:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+        example: Tenor
+      type:
+        type: string
+        enum: [VOICE, CHOIR, COMMITTEE, OTHER]
+        example: VOICE
+      description:
+        type: string
+        example: Tenor section of the choir
+      members:
+        type: array
+        items:
+          type: integer
+          format: int64
+      roles:
+        type: array
+        items:
+          type: integer
+          format: int64
+      parents:
+        type: array
+        items:
+          type: integer
+          format: int64
+      children:
+        type: array
+        items:
+          type: integer
+          format: int64
+    required:
+      - id
+      - name
+      - type
+      - members
+      - roles
+      - parents
+      - children
+
+  Token:
+    type: object
+    properties:
+      token:
+        type: string
+
+  Book:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      title:
+        type: string
+        example: Utantill
+      songs:
+        type: array
+        items:
           type: object
-          nullable: true
           properties:
-            userId:
+            id:
               type: integer
               format: int64
-            name:
+            title:
               type: string
-              example: Liam Cotton
-      required:
-        - id
-        - name
-        - groups
-        - user
+              example: Island
+            page:
+              type: integer
+              example: 50
+    required:
+      - id
+      - title
+      - songs
 
-    Group:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
+  Song:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      title:
+        type: string
+        example: Island
+      page:
+        type: integer
+        example: 50
+      startingTones:
+        type: string
+        example: A3
+      tags:
+        type: array
+        items:
           type: string
-          example: Tenor
-        type:
-          type: string
-          enum: [VOICE, CHOIR, COMMITTEE, OTHER]
-          example: VOICE
-        description:
-          type: string
-          example: Tenor section of the choir
-        members:
-          type: array
-          items:
-            type: integer
-            format: int64
-        roles:
-          type: array
-          items:
-            type: integer
-            format: int64
-        parents:
-          type: array
-          items:
-            type: integer
-            format: int64
-        children:
-          type: array
-          items:
-            type: integer
-            format: int64
-      required:
-        - id
-        - name
-        - type
-        - members
-        - roles
-        - parents
-        - children
+    required:
+      - id
+      - title
 
-    Token:
-      type: object
-      properties:
-        token:
-          type: string
+  Event:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+        example: Rep KK
+      type:
+        type: string
+        enum: [REHEARSAL, CONCERT, GIG, PARTY, MEETING, OTHER]
+        example: REHEARSAL
+      dateStart:
+        type: string
+        format: date-time
+        example: 2023-12-24T18:00:00Z
+      dateEnd:
+        type: string
+        format: date-time
+        example: 2023-12-24T21:00:00Z
+      place:
+        type: string
+        example: St. Paul's Church
+      description:
+        type: string
+        example: Annual Christmas concert
+      requiresAttendance:
+        type: boolean
+        example: true
+      requiresRegistration:
+        type: boolean
+        example: false
+      attendances:
+        type: array
+        items:
+          $ref: '#/schemas/Attendance'
+      registrations:
+        type: array
+        items:
+          $ref: '#/schemas/Registration'
+    required:
+      - id
+      - name
+      - type
+      - dateStart
+      - place
+      - requiresAttendance
+      - requiresRegistration
+      - attendances
+      - registrations
 
-    Book:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        title:
-          type: string
-          example: Utantill
-        songs:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: integer
-                format: int64
-              title:
-                type: string
-                example: Island
-              page:
-                type: integer
-                example: 50
-      required:
-        - id
-        - title
-        - songs
+  Attendance:
+    type: object
+    properties:
+      userId:
+        type: integer
+        format: int64
+      name:
+        type: string
+        example: Liam Cotton
+      status:
+        type: string
+        enum: [PRESENT, ABSENT]
+        example: PRESENT
+    required:
+      - userId
+      - name
+      - status
 
-    Song:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        title:
-          type: string
-          example: Island
-        page:
-          type: integer
-          example: 50
-        startingTones:
-          type: string
-          example: A3
-        tags:
-          type: array
-          items:
-            type: string
-      required:
-        - id
-        - title
+  Registration:
+    type: object
+    properties:
+      userId:
+        type: integer
+        format: int64
+      name:
+        type: string
+        example: Liam Cotton
+    required:
+      - userId
+      - name
 
-    Event:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-          example: Rep KK
-        type:
-          type: string
-          enum: [REHEARSAL, CONCERT, GIG, PARTY, MEETING, OTHER]
-          example: REHEARSAL
-        dateStart:
-          type: string
-          format: date-time
-          example: 2023-12-24T18:00:00Z
-        dateEnd:
-          type: string
-          format: date-time
-          example: 2023-12-24T21:00:00Z
-        place:
-          type: string
-          example: St. Paul's Church
-        description:
-          type: string
-          example: Annual Christmas concert
-        requiresAttendance:
-          type: boolean
-          example: true
-        requiresRegistration:
-          type: boolean
-          example: false
-        attendances:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attendance'
-        registrations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Registration'
-      required:
-        - id
-        - name
-        - type
-        - dateStart
-        - place
-        - requiresAttendance
-        - requiresRegistration
-        - attendances
-        - registrations
+  Tag:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+        example: Lucia
+    required:
+      - id
+      - name
 
-    Attendance:
-      type: object
-      properties:
-        userId:
-          type: integer
-          format: int64
-        name:
-          type: string
-          example: Liam Cotton
-        status:
-          type: string
-          enum: [PRESENT, ABSENT]
-          example: PRESENT
-      required:
-        - userId
-        - name
-        - status
+  Error:
+    type: object
+    properties:
+      message:
+        type: string
+      code:
+        type: string
+    required:
+      - message
 
-    Registration:
-      type: object
-      properties:
-        userId:
-          type: integer
-          format: int64
-        name:
-          type: string
-          example: Liam Cotton
-      required:
-        - userId
-        - name
+requestBodies:
+  RegisterUser:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 50
+      username:
+        type: string
+        example: concertmasterkkb1
+      firstName:
+        type: string
+        example: Liam
+      lastName:
+        type: string
+        example: Cotton
+      email:
+        type: string
+        example: liam@cotton.com
+      password:
+        type: string
+        example: 'jagkansjunga'
+    required:
+      - firstName
+      - lastName
+      - email
+      - username
+      - password
 
-    Tag:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-          example: Lucia
-      required:
-        - id
-        - name
-
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-      required:
-        - message
-
-  requestBodies:
-    RegisterUser:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 50
-        username:
-          type: string
-          example: concertmasterkkb1
-        firstName:
-          type: string
-          example: Liam
-        lastName:
-          type: string
-          example: Cotton
-        email:
-          type: string
-          example: liam@cotton.com
-        password:
-          type: string
-          example: 'jagkansjunga'
-      required:
-        - firstName
-        - lastName
-        - email
-        - username
-        - password
-
-    LoginUser:
-      description: User credentials
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              username:
-                type: string
-                example: concertmasterkkb1
-              password:
-                type: string
-                example: 'jagkansjunga'
-            required:
-              - username
-              - password
+  LoginUser:
+    description: User credentials
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            username:
+              type: string
+              example: concertmasterkkb1
+            password:
+              type: string
+              example: 'jagkansjunga'
+          required:
+            - username
+            - password

@@ -12,7 +12,10 @@ externalDocs:
   url: https://chalmerssangkor.se
 
 servers:
+  - url: http://localhost:5000/api
+    description: Local development server
   - url: https://portal.chalmerssangkor.se/api
+    description: Production server
 
 paths:
   /auth/register:
@@ -93,40 +96,40 @@ paths:
 components:
   schemas:
     User:
-      $ref: './components.yaml#/components/schemas/User'
+      $ref: './components.yaml#/schemas/User'
 
     Token:
-      $ref: './components.yaml#/components/schemas/Token'
+      $ref: './components.yaml#/schemas/Token'
 
     Event:
-      $ref: './components.yaml#/components/schemas/Event'
+      $ref: './components.yaml#/schemas/Event'
 
     Attendance:
-      $ref: './components.yaml#/components/schemas/Attendance'
+      $ref: './components.yaml#/schemas/Attendance'
 
     Registration:
-      $ref: './components.yaml#/components/schemas/Registration'
+      $ref: './components.yaml#/schemas/Registration'
 
     Group:
-      $ref: './components.yaml#/components/schemas/Group'
+      $ref: './components.yaml#/schemas/Group'
 
     Role:
-      $ref: './components.yaml#/components/schemas/Role'
+      $ref: './components.yaml#/schemas/Role'
 
     Book:
-      $ref: './components.yaml#/components/schemas/Book'
+      $ref: './components.yaml#/schemas/Book'
 
     Song:
-      $ref: './components.yaml#/components/schemas/Song'
+      $ref: './components.yaml#/schemas/Song'
 
     Tag:
-      $ref: './components.yaml#/components/schemas/Tag'
+      $ref: './components.yaml#/schemas/Tag'
 
     SongKnowledge:
-      $ref: './components.yaml#/components/schemas/SongKnowledge'
+      $ref: './components.yaml#/schemas/SongKnowledge'
 
     Error:
-      $ref: './components.yaml#/components/schemas/Error'
+      $ref: './components.yaml#/schemas/Error'
 
   responses:
     DefaultError:
@@ -134,11 +137,11 @@ components:
       content:
         application/json:
           schema:
-            $ref: './components.yaml#/components/schemas/Error'
+            $ref: './components.yaml#/schemas/Error'
 
   requestBodies:
     RegisterUser:
-      $ref: './components.yaml#/components/requestBodies/RegisterUser'
+      $ref: './components.yaml#/requestBodies/RegisterUser'
 
     LoginUser:
-      $ref: './components.yaml#/components/requestBodies/LoginUser'
+      $ref: './components.yaml#/requestBodies/LoginUser'
