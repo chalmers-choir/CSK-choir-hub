@@ -2,12 +2,12 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
-export const generateToken = (id: number): string => {
-  return jwt.sign({ id }, JWT_SECRET, { expiresIn: '1h' });
+export const generateToken = (userId: number): string => {
+  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: '1h' });
 };
 
-export const generateTokenWithRole = (id: number, role: string): string => {
-  return jwt.sign({ id, role }, JWT_SECRET, { expiresIn: '1h' });
+export const generateTokenWithRole = (userId: number, role: string): string => {
+  return jwt.sign({ userId, role }, JWT_SECRET, { expiresIn: '1h' });
 };
 
 export const verifyToken = (token: string): any | null => {

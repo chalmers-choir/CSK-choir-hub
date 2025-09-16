@@ -56,7 +56,7 @@ export async function getUsers(filters: { groupId?: number }): Promise<any[]> {
 }
 
 export async function getUser(userId: number) {
-  return userModel.findById(userId);
+  return userModel.findByIdWithRolesAndGroups(userId);
 }
 
 /**
@@ -85,6 +85,7 @@ export const getUserIdFromToken = async (token: string) => {
   const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
     userId: number;
   };
+
   const userId = decoded.userId;
 
   return userId;

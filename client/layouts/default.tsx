@@ -13,11 +13,11 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
         <Link
           isExternal
           className="flex items-center gap-1 text-current"
-          href="https://www.heroui.com"
-          title="heroui.com homepage"
+          href="https://github.com/chalmers-choir"
+          title="webmästariets github"
         >
           <span className="text-default-600">Powered by</span>
-          <p className="text-primary">HeroUI</p>
+          <p className="text-primary">Chalmers Sångkörs Webbmästeri</p>
         </Link>
       </footer>
     </div>
