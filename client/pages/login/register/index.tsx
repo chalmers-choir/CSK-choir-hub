@@ -1,5 +1,6 @@
 'use client';
 
+import { siteConfig } from '@/config/site';
 import { useAuth } from '@/contexts/AuthContext';
 import DefaultLayout from '@/layouts/default';
 import { Button } from '@heroui/button';
@@ -86,7 +87,10 @@ export default function RegisterPage() {
         >
           Register
         </Button>
-        <Link href="/login" className="mt-4 inline-block w-full text-center text-sm text-blue-500">
+        <Link
+          href={siteConfig.links.login}
+          className="mt-4 inline-block w-full text-center text-sm text-blue-500"
+        >
           Already have an account? Login
         </Link>
       </form>

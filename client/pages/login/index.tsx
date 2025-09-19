@@ -1,12 +1,15 @@
 'use client';
 
-import { useAuth } from '@/contexts/AuthContext';
-import DefaultLayout from '@/layouts/default';
+import { useState } from 'react';
+
 import { Button } from '@heroui/button';
 import { Input } from '@heroui/input';
 import { Link } from '@heroui/link';
 import { button as buttonStyles } from '@heroui/theme';
-import { useState } from 'react';
+
+import { siteConfig } from '@/config/site';
+import { useAuth } from '@/contexts/AuthContext';
+import DefaultLayout from '@/layouts/default';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -49,7 +52,7 @@ export default function LoginPage() {
           Login
         </Button>
         <Link
-          href="/login/register"
+          href={siteConfig.links.register}
           className="mt-4 inline-block w-full text-center text-sm text-blue-500"
         >
           Don't have an account? Register
