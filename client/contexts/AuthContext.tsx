@@ -1,6 +1,7 @@
 'use client';
 
 import { AuthContextType, AuthenticatedUser, RegisterForm } from '../types/auth';
+import { siteConfig } from '@/config/site';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
@@ -16,7 +17,7 @@ export const useAuth = (): AuthContextType => {
 };
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: siteConfig.apiBaseUrl,
   withCredentials: true,
 });
 
@@ -32,7 +33,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const res = await api.get('/api/auth/authenticate');
+      const res = await api.get('/authenticate');
       setUser(res.data.user);
     } catch {
       setUser(null);
@@ -46,19 +47,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const login = async (username: string, password: string) => {
-    await api.post('/api/auth/login', { username, password });
+    await api.post('/login', { username, password });
     await fetchUser();
     router.push('/');
   };
 
   const register = async (userData: Omit<RegisterForm, 'confirmPassword'>) => {
-    await api.post('/api/auth/register', userData);
+    await api.post('/register', userData);
     await fetchUser();
     router.push('/login');
   };
 
   const logout = async () => {
-    await api.post('/api/auth/logout');
+    await api.post('/logout');
     setUser(null);
     router.push('/');
   };
