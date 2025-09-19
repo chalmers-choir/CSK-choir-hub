@@ -26,14 +26,14 @@ export const findByUsername = async (username: string) => {
   return prisma.user.findUnique({ where: { username } });
 };
 
-// Finds a user by their ID.
-export const findById = async (id: number) => {
-  return prisma.user.findUnique({ where: { id } });
-};
-
-// Finds a user by their ID, including their roles and groups.
-export const findByIdWithRolesAndGroups = async (id: number) => {
-  return prisma.user.findUnique({ where: { id }, include: { roles: true, groups: true } });
+/**
+ * Finds a user by their ID.
+ * @param id
+ * @param param optional include parameters
+ * @returns A user object or null if not found.
+ */
+export const findById = async (id: number, param?: any) => {
+  return prisma.user.findUnique({ where: { id }, include: { ...param } });
 };
 
 // Updates user fields by ID. Provide an object with fields to update.

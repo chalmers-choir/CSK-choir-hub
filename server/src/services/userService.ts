@@ -56,7 +56,7 @@ export async function getUsers(filters: { groupId?: number }): Promise<any[]> {
 }
 
 export async function getUser(userId: number) {
-  return userModel.findByIdWithRolesAndGroups(userId);
+  return userModel.findById(userId, { roles: true, groups: true });
 }
 
 /**
