@@ -42,14 +42,12 @@ export interface AuthResponse {
 
 // Context types
 export interface AuthContextType {
-  user: User | null;
-  token: string | null;
+  user: AuthenticatedUser | null;
   loading: boolean;
-  login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  register: (
-    userData: Omit<RegisterForm, 'confirmPassword'>,
-  ) => Promise<{ success: boolean; error?: string }>;
-  logout: () => void;
+  login: (username: string, password: string) => Promise<void>;
+  register: (userData: Omit<RegisterForm, 'confirmPassword'>) => Promise<void>;
+  logout: () => Promise<void>;
   isAuthenticated: boolean;
   isAdmin: boolean;
 }
+A;

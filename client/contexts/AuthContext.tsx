@@ -1,6 +1,6 @@
 'use client';
 
-import { AuthContextType, AuthResponse, AuthenticatedUser, RegisterForm } from '../types/auth';
+import { AuthContextType, AuthenticatedUser, RegisterForm } from '../types/auth';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
@@ -15,6 +15,11 @@ export const useAuth = (): AuthContextType => {
   return context;
 };
 
+const api = axios.create({
+  baseURL: 'http://localhost:5000',
+  withCredentials: true,
+});
+
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -22,114 +27,50 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<AuthenticatedUser | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [token, setToken] = useState<string | null>(null);
 
   const router = useRouter();
 
-  const api = axios.create();
-
-  // Attach token to request headers if token is set
-  api.interceptors.request.use((config) => {
-    if (token && config.headers) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+  const fetchUser = async () => {
+    try {
+      const res = await api.get('/api/auth/authenticate');
+      setUser(res.data.user);
+    } catch {
+      setUser(null);
+    } finally {
+      setLoading(false);
     }
-    return config;
-  });
+  };
 
-  // Load token from localStorage after mount (to be SSR safe)
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-    }
-    setLoading(false);
+    fetchUser();
   }, []);
 
-  // Fetch user data when token changes
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (!token) {
-        setUser(null);
-        return;
-      }
-      try {
-        const response = await api.get<{ user: AuthenticatedUser }>(
-          'http://localhost:5000/api/auth/authenticate',
-        );
-        setUser(response.data.user);
-        router.push('/');
-      } catch (error: any) {
-        if (error.response?.status === 401) {
-          logout();
-        } else {
-          console.error('Failed to authenticate user:', error);
-        }
-        setUser(null);
-      }
-    };
-    fetchUser();
-  }, [token]);
-
-  const login = async (
-    username: string,
-    password: string,
-  ): Promise<{ success: boolean; error?: string }> => {
-    try {
-      const response = await api.post<AuthResponse>('http://localhost:5000/api/auth/login', {
-        username,
-        password,
-      });
-
-      const { token: authToken } = response.data;
-
-      setToken(authToken);
-      document.cookie = `token=${authToken}; path=/; max-age=86400`; // 1 day
-
-      return { success: true };
-    } catch (error: any) {
-      const message = error.response?.data?.error || 'Login failed';
-      return { success: false, error: message };
-    }
+  const login = async (username: string, password: string) => {
+    await api.post('/api/auth/login', { username, password });
+    await fetchUser();
+    router.push('/');
   };
 
-  const register = async (
-    userData: Omit<RegisterForm, 'confirmPassword'>,
-  ): Promise<{ success: boolean; error?: string }> => {
-    try {
-      const response = await api.post<AuthResponse>(
-        'http://localhost:5000/api/auth/register',
-        userData,
-      );
-
-      const { user: newUser, token: authToken } = response.data;
-
-      setUser(newUser);
-      setToken(authToken);
-      document.cookie = `token=${authToken}; path=/; max-age=86400`; // 1 day
-
-      return { success: true };
-    } catch (error: any) {
-      const message = error.response?.data?.error || 'Registration failed';
-      return { success: false, error: message };
-    }
-  };
-
-  const logout = (): void => {
-    setUser(null);
-    setToken(null);
-    document.cookie = 'token=; path=/; max-age=0';
+  const register = async (userData: Omit<RegisterForm, 'confirmPassword'>) => {
+    await api.post('/api/auth/register', userData);
+    await fetchUser();
     router.push('/login');
+  };
+
+  const logout = async () => {
+    await api.post('/api/auth/logout');
+    setUser(null);
+    router.push('/');
   };
 
   const value: AuthContextType = {
     user,
-    token,
     loading,
     login,
     register,
     logout,
     isAuthenticated: !!user,
-    isAdmin: (user?.roles ?? []).some((role) => role.name === 'admin'),
+    isAdmin: user?.roles.some((role) => role.name === 'admin') || false,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

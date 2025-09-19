@@ -2,6 +2,7 @@ import { Link } from '@heroui/link';
 import { button as buttonStyles } from '@heroui/theme';
 
 import { subtitle, title } from '@/components/primitives';
+import { siteConfig } from '@/config/site';
 import { useAuth } from '@/contexts/AuthContext';
 import DefaultLayout from '@/layouts/default';
 
@@ -27,13 +28,13 @@ export default function IndexPage() {
           <div className="flex gap-3">
             <Link
               className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
-              href="/login"
+              href={siteConfig.links.login}
             >
               Login
             </Link>
             <Link
               className={buttonStyles({ variant: 'bordered', radius: 'full' })}
-              href="/register"
+              href={siteConfig.links.register}
             >
               Register
             </Link>

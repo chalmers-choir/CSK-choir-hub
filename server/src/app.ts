@@ -1,5 +1,6 @@
 import routes from '@api/routes';
 import { errorHandler, logAtLevel } from '@middleware';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
@@ -15,6 +16,8 @@ const limiter = rateLimit({
   max: 1000, // max 1000 requests per IP
 });
 app.use(limiter);
+
+app.use(cookieParser());
 
 /* ---- Utility Middlewares ---- */
 app.use(express.json());
