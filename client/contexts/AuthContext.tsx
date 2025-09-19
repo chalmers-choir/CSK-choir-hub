@@ -17,7 +17,7 @@ export const useAuth = (): AuthContextType => {
 };
 
 const api = axios.create({
-  baseURL: siteConfig.apiBaseUrl,
+  baseURL: siteConfig.apiBaseUrl + '/auth',
   withCredentials: true,
 });
 

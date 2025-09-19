@@ -49,7 +49,7 @@ export default function LoginPage() {
           Login
         </Button>
         <Link
-          href="/register"
+          href="/login/register"
           className="mt-4 inline-block w-full text-center text-sm text-blue-500"
         >
           Don't have an account? Register
