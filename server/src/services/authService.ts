@@ -1,4 +1,5 @@
 import { userModel } from '@db';
+import { NotFoundError } from '@utils/errors';
 import { generateToken } from '@utils/generateToken';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -16,13 +17,13 @@ export const loginUser = async ({ identifier, type, password }: LoginInput) => {
       : await userModel.findByUsername(identifier);
 
   if (!user) {
-    throw new Error('User not found');
+    throw new NotFoundError('User and password do not match');
   }
 
   // Compare hashed password
   const isMatch = await bcrypt.compare(password, user.passwordHash);
   if (!isMatch) {
-    throw new Error('Invalid password');
+    throw new NotFoundError('User and password do not match');
   }
 
   return generateToken(user.id);

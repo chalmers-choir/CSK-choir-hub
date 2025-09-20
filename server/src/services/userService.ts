@@ -1,4 +1,5 @@
 import * as userModel from '@db/models/userModel';
+import { NotFoundError, UnauthorizedError } from '@utils';
 import { generateToken } from '@utils/generateToken';
 import logger from '@utils/logger';
 import bcrypt from 'bcryptjs';
@@ -69,4 +70,20 @@ export const getUserIdFromToken = async (token: string) => {
   const userId = decoded.userId;
 
   return userId;
+};
+
+export const getUserFromToken = async (token: string) => {
+  if (!token) throw new UnauthorizedError('No token provided');
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      userId: number;
+    };
+    const userId = decoded.userId;
+    const user = await userModel.findById(userId, { roles: true, groups: true });
+    if (!user) throw new NotFoundError('User not found');
+    return user;
+  } catch (err) {
+    throw new UnauthorizedError('Invalid token');
+  }
 };
