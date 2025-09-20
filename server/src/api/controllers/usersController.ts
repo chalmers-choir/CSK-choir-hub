@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 
 // Get all users
 export const getUsers = async (req: Request, res: Response) => {
-  const users = await userService.getAllUsers();
+  const users = await userService.getUsers();
   res.json({ users });
 };
 

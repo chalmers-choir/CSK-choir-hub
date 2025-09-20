@@ -48,35 +48,15 @@ export async function deleteUser(userId: number): Promise<void> {
 
 /**
  * List users with optional filters for choir, voice, or role.
- * @param {object} filters - Filter options: choir, voice, role, group.
+ * @param {object} filters - Filter options: group.
  * @returns {Promise<any[]>} List of users.
  */
-export async function getUsers(filters: { groupId?: number }): Promise<any[]> {
+export async function getUsers(filters?: { groupId?: number }) {
   return userModel.getUsers(filters);
 }
 
 export async function getUser(userId: number) {
   return userModel.findById(userId, { roles: true, groups: true });
-}
-
-/**
- * Fetch all roles for a user.
- * @param {number} userId - The user ID.
- * @returns {Promise<any[]>} List of roles.
- */
-export async function getUserRoles(userId: number): Promise<any[]> {
-  // return userModel.getUserRoles(userId);
-  return [];
-}
-
-/**
- * Fetch all groups for a user.
- * @param {number} userId - The user ID.
- * @returns {Promise<any[]>} List of groups.
- */
-export async function getUserGroups(userId: number): Promise<any[]> {
-  // return userModel.getUserGroups(userId);
-  return []; // Placeholder until implemented
 }
 
 export const getUserIdFromToken = async (token: string) => {
@@ -89,9 +69,4 @@ export const getUserIdFromToken = async (token: string) => {
   const userId = decoded.userId;
 
   return userId;
-};
-
-export const getAllUsers = async () => {
-  const users = await getUsers({});
-  return users;
 };

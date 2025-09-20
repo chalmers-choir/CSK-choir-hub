@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { z } from 'zod';
 
 export const register = async (req: Request, res: Response) => {
-  // TODO: Rules for Registration
+  // TODO: Rules for Registration in frontend
   const registerSchema = z.object({
     email: z.email(),
     username: z.string().min(3),
@@ -39,11 +39,10 @@ export const login = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Username / email and password are required' });
     }
 
-    // Determine if input is an email
-    const isEmail = username.includes('@');
+    // Determine if input is an email using zod
+    const isEmail = z.email().safeParse(username).success;
 
     // Call the login service to get token
-    // token -> authenticator
     const token = await authService.loginUser({
       identifier: username,
       type: isEmail ? 'email' : 'username',
@@ -65,7 +64,14 @@ export const login = async (req: Request, res: Response) => {
       path: '/',
     });
 
-    return res.json({ token });
+    const userId = await userService.getUserIdFromToken(token);
+    if (!userId) {
+      return res.status(401).json({ error: 'Invalid token' });
+    }
+
+    const user = await userService.getUser(userId);
+
+    return res.json({ user });
   } catch (err: any) {
     return res.status(401).json({ error: err.message });
   }
