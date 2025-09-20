@@ -32,7 +32,12 @@ export const findByUsername = async (username: string) => {
  * @param param optional include parameters
  * @returns A user object or null if not found.
  */
-export const findById = async (id: number, param?: any) => {
+
+type IncludeParams = {
+  roles?: boolean;
+  groups?: boolean;
+};
+export const findById = async (id: number, param?: IncludeParams) => {
   return prisma.user.findUnique({ where: { id }, include: { ...param } });
 };
 
