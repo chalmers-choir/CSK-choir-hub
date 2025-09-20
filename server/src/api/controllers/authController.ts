@@ -9,6 +9,8 @@ export const register = async (req: Request, res: Response) => {
     email: z.email(),
     username: z.string().min(3),
     password: z.string().min(6),
+    firstName: z.string().min(1),
+    lastName: z.string().min(1),
   });
 
   const result = registerSchema.safeParse(req.body);
@@ -17,12 +19,6 @@ export const register = async (req: Request, res: Response) => {
   }
 
   const { email, password, username, firstName, lastName } = req.body;
-
-  if (!email || !password || !username || !firstName || !lastName) {
-    return res
-      .status(400)
-      .json({ error: 'Email, username, password, first name and last name are required' });
-  }
 
   const token = await userService.registerUser({
     email,
@@ -54,6 +50,13 @@ export const login = async (req: Request, res: Response) => {
       password,
     });
 
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+    });
+
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // require HTTPS in prod
@@ -79,17 +82,23 @@ export const logout = async (req: Request, res: Response) => {
 };
 
 export const authenticate = async (req: Request, res: Response) => {
-  const token = req.cookies.token; // TODO: requires cookie-parser middleware
+  const token = req.cookies.token;
   if (!token) {
     return res.status(401).json({ error: 'Not authenticated' });
   }
 
-  const userId = await userService.getUserIdFromToken(token);
-  if (!userId) {
-    return res.status(401).json({ error: 'Invalid or expired token' });
+  try {
+    const userId = await userService.getUserIdFromToken(token);
+    if (!userId) {
+      return res.status(401).json({ error: 'Invalid or expired token' });
+    }
+
+    const user = await userService.getUser(userId);
+    return res.json({ user });
+  } catch (err: any) {
+    if (err.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expired' });
+    }
+    return res.status(401).json({ error: 'Invalid token' });
   }
-
-  const user = await userService.getUser(userId);
-
-  return res.json({ user });
 };
