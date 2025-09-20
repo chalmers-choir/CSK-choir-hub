@@ -48,7 +48,6 @@ export const Navbar = () => {
         <NavbarBrand className="max-w-fit gap-3">
           <NextLink className="flex items-center justify-start gap-1" href="/">
             <Logo />
-            <p className="font-bold text-inherit">CSK</p>
           </NextLink>
         </NavbarBrand>
         <div className="ml-2 hidden justify-start gap-4 lg:flex">
