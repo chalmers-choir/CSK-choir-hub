@@ -27,16 +27,18 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<AuthenticatedUser | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
 
   const fetchUser = async () => {
+    setLoading(true);
     try {
       const res = await api.get('/authenticate');
       setUser(res.data.user);
     } catch {
       setUser(null);
+      router.push('/');
     } finally {
       setLoading(false);
     }
@@ -47,21 +49,41 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const login = async (username: string, password: string) => {
-    await api.post('/login', { username, password });
-    await fetchUser();
-    router.push('/');
+    setLoading(true);
+    try {
+      const res = await api.post('/login', { username, password });
+      setUser(res.data.user);
+      router.push('/');
+    } catch (error) {
+      console.error('Login failed:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const register = async (userData: Omit<RegisterForm, 'confirmPassword'>) => {
-    await api.post('/register', userData);
-    await fetchUser();
-    router.push('/login');
+    setLoading(true);
+    try {
+      await api.post('/register', userData);
+      router.push('/login');
+    } catch (error) {
+      console.error('Registration failed:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = async () => {
-    await api.post('/logout');
-    setUser(null);
-    router.push('/');
+    setLoading(true);
+    try {
+      await api.post('/logout');
+      setUser(null);
+      router.push('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const value: AuthContextType = {

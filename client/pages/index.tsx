@@ -7,7 +7,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import DefaultLayout from '@/layouts/default';
 
 export default function IndexPage() {
-  const { isAuthenticated, user } = useAuth();
+  const { user, loading, isAuthenticated } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <DefaultLayout>
