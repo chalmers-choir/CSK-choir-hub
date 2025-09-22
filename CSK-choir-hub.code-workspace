@@ -1,12 +1,10 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"prettier.documentSelectors": [
-			"**/*.{ts,tsx,js,jsx,json,css,md}"
-		]
-	}
+  "folders": [
+    {
+      "path": ".",
+    },
+  ],
+  "settings": {
+    "prettier.documentSelectors": ["**/*.{ts,tsx,js,jsx,json,css,md}"],
+  },
 }

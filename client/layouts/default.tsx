@@ -1,6 +1,7 @@
+import { Link } from '@heroui/link';
+
 import { Head } from './head';
 import { Navbar } from '@/components/navbar';
-import { Link } from '@heroui/link';
 
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   return (
