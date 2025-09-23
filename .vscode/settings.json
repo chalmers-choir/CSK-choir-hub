@@ -2,7 +2,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.organizeImports": false,
+    "source.organizeImports": "never",
     "source.fixAll.eslint": "always"
   },
   "eslint.validate": ["javascript"],
