@@ -1,11 +1,12 @@
-import { GithubIcon } from '@/components/icons';
-import { subtitle, title } from '@/components/primitives';
-import { siteConfig } from '@/config/site';
-import DefaultLayout from '@/layouts/default';
 import { Code } from '@heroui/code';
 import { Link } from '@heroui/link';
 import { Snippet } from '@heroui/snippet';
 import { button as buttonStyles } from '@heroui/theme';
+
+import { GithubIcon } from '@/components/icons';
+import { subtitle, title } from '@/components/primitives';
+import { siteConfig } from '@/config/site';
+import DefaultLayout from '@/layouts/default';
 
 export default function IndexPage() {
   return (

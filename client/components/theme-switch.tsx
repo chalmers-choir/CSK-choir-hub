@@ -1,9 +1,12 @@
-import { MoonFilledIcon, SunFilledIcon } from '@/components/icons';
-import { SwitchProps, useSwitch } from '@heroui/switch';
-import { VisuallyHidden } from '@react-aria/visually-hidden';
-import clsx from 'clsx';
-import { useTheme } from 'next-themes';
 import { FC, useEffect, useState } from 'react';
+
+import clsx from 'clsx';
+
+import { SwitchProps, useSwitch } from '@heroui/switch';
+
+import { MoonFilledIcon, SunFilledIcon } from '@/components/icons';
+import { VisuallyHidden } from '@react-aria/visually-hidden';
+import { useTheme } from 'next-themes';
 
 export interface ThemeSwitchProps {
   className?: string;

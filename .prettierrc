@@ -6,7 +6,18 @@
   "trailingComma": "all",
   "arrowParens": "always",
   "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
-  "importOrder": ["^@server/(.*)$", "^@client/(.*)$", "^@components/(.*)$", "^@pages/(.*)$", ""],
+  "importOrder": [
+    "^react$",
+    "^next/link$",
+    "^next(/.*)?$",
+    "^clsx$",
+    "^@heroui/(.*)$",
+    "^@server/(.*)$",
+    "^@client/(.*)$",
+    "^@components/(.*)$",
+    "^@pages/(.*)$",
+    ""
+  ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
   "overrides": [
