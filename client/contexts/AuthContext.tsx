@@ -40,8 +40,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const res = await api.get('/authenticate');
       setUser(res.data.user);
-    } catch {
+    } catch (error: any) {
       setUser(null);
+      // Log 401 errors for debugging but don't redirect
+      if (error.response?.status === 401) {
+        console.log('Authentication failed:', error.response.data.error);
+      }
       // Remove automatic redirect - let pages handle their own routing
     } finally {
       setLoading(false);
@@ -58,8 +62,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const res = await api.post('/login', { username, password });
       setUser(res.data.user);
       router.push('/');
-    } catch (error) {
-      console.error('Login failed:', error);
+    } catch (error: any) {
+      console.log('Login error details:', {
+        response: error.response,
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message,
+      });
+
+      // Handle axios errors properly
+      if (error.response) {
+        // Server responded with an error status
+        const message = error.response.data?.error || error.response.data?.message;
+        if (error.response.status === 401) {
+          throw new Error(message || 'Invalid username/email or password');
+        } else if (error.response.status === 400) {
+          throw new Error(message || 'Please check your input');
+        } else {
+          throw new Error(message || `Server error (${error.response.status})`);
+        }
+      } else if (error.request) {
+        // Network error
+        throw new Error('Unable to connect to server. Please check your connection.');
+      } else {
+        // Something else
+        throw new Error(error.message || 'An unexpected error occurred');
+      }
     } finally {
       setLoading(false);
     }

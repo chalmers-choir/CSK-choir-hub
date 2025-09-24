@@ -46,28 +46,37 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+  try {
+    const { username, password } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).json({ error: 'Username / email and password are required' });
+    if (!username || !password) {
+      return res.status(400).json({ error: 'Username / email and password are required' });
+    }
+
+    // Determine if input is an email using zod
+    const isEmail = z.email().safeParse(username).success;
+
+    // Call the login service to get token
+    const token = await authService.loginUser({
+      identifier: username,
+      type: isEmail ? 'email' : 'username',
+      password,
+    });
+
+    res.clearCookie('token', COOKIE_OPTIONS);
+    res.cookie('token', token, { ...COOKIE_OPTIONS, maxAge: 24 * 60 * 60 * 1000 });
+
+    const user = await userService.getUserFromToken(token);
+
+    return res.json({ user });
+  } catch (error: any) {
+    // Handle authentication errors properly
+    if (error.name === 'NotFoundError') {
+      return res.status(401).json({ error: 'Invalid username/email or password' });
+    }
+    // Re-throw other errors to be handled by error middleware
+    throw error;
   }
-
-  // Determine if input is an email using zod
-  const isEmail = z.email().safeParse(username).success;
-
-  // Call the login service to get token
-  const token = await authService.loginUser({
-    identifier: username,
-    type: isEmail ? 'email' : 'username',
-    password,
-  });
-
-  res.clearCookie('token', COOKIE_OPTIONS);
-  res.cookie('token', token, { ...COOKIE_OPTIONS, maxAge: 24 * 60 * 60 * 1000 });
-
-  const user = await userService.getUserFromToken(token);
-
-  return res.json({ user });
 };
 
 export const logout = async (req: Request, res: Response) => {
@@ -76,12 +85,21 @@ export const logout = async (req: Request, res: Response) => {
 };
 
 export const authenticate = async (req: Request, res: Response) => {
-  const token = req.cookies.token;
+  try {
+    const token = req.cookies.token;
 
-  if (!token) {
-    return res.status(401).json({ error: 'Not authenticated' });
+    if (!token) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
+
+    const user = await userService.getUserFromToken(token);
+    return res.json({ user });
+  } catch (error: any) {
+    // Handle invalid token errors
+    if (error.name === 'UnauthorizedError') {
+      return res.status(401).json({ error: 'Invalid or expired token' });
+    }
+    // Re-throw other errors to be handled by error middleware
+    throw error;
   }
-
-  const user = await userService.getUserFromToken(token);
-  return res.json({ user });
 };
