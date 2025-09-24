@@ -20,6 +20,8 @@
     "@heroui/switch": "2.2.23",
     "@heroui/system": "2.4.22",
     "@heroui/theme": "2.4.22",
+    "@heroui/toast": "^2.0.16",
+    "@material-design-icons/svg": "^0.14.15",
     "@react-aria/visually-hidden": "3.8.27",
     "axios": "^1.12.2",
     "clsx": "2.1.1",

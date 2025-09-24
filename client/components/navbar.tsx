@@ -2,6 +2,7 @@ import NextLink from 'next/link';
 
 import clsx from 'clsx';
 
+import { Button } from '@heroui/button';
 import { Input } from '@heroui/input';
 import { Kbd } from '@heroui/kbd';
 import { Link } from '@heroui/link';
@@ -19,6 +20,7 @@ import { link as linkStyles } from '@heroui/theme';
 import { Logo, SearchIcon } from '@/components/icons';
 import { ThemeSwitch } from '@/components/theme-switch';
 import { siteConfig } from '@/config/site';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const Navbar = () => {
   const searchInput = (
@@ -40,6 +42,12 @@ export const Navbar = () => {
       }
       type="search"
     />
+  );
+  const { isAuthenticated, logout } = useAuth();
+  const logoutButton = (
+    <Button type="submit" color="danger" size="sm" variant="light" onPress={logout}>
+      Logout
+    </Button>
   );
 
   return (
@@ -72,6 +80,7 @@ export const Navbar = () => {
         <NavbarItem className="hidden gap-2 sm:flex">
           <ThemeSwitch />
         </NavbarItem>
+        <NavbarItem className="hidden sm:flex">{isAuthenticated && logoutButton}</NavbarItem>
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
       </NavbarContent>
 
@@ -81,6 +90,7 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarMenu>
+        {logoutButton}
         {searchInput}
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navMenuItems.map((item, index) => (

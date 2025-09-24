@@ -1,10 +1,14 @@
 'use client';
 
+import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+
+import { addToast } from '@heroui/toast';
+
 import { AuthContextType, AuthenticatedUser, RegisterForm } from '../types/auth';
 import { siteConfig } from '@/config/site';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -38,7 +42,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(res.data.user);
     } catch {
       setUser(null);
-      router.push('/');
+      // Remove automatic redirect - let pages handle their own routing
     } finally {
       setLoading(false);
     }
@@ -83,6 +87,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.error('Logout failed:', error);
     } finally {
       setLoading(false);
+      addToast({
+        title: 'You have been logged out.',
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+        color: 'danger',
+      });
     }
   };
 
