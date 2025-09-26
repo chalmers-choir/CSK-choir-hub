@@ -17,16 +17,10 @@ import {
 } from '@heroui/navbar';
 import { link as linkStyles } from '@heroui/theme';
 
-import {
-  DiscordIcon,
-  GithubIcon,
-  HeartFilledIcon,
-  Logo,
-  SearchIcon,
-  TwitterIcon,
-} from '@/components/icons';
+import { Logo, SearchIcon } from '@/components/icons';
 import { ThemeSwitch } from '@/components/theme-switch';
 import { siteConfig } from '@/config/site';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const Navbar = () => {
   const searchInput = (
@@ -49,6 +43,12 @@ export const Navbar = () => {
       type="search"
     />
   );
+  const { isAuthenticated, logout } = useAuth();
+  const logoutButton = (
+    <Button type="submit" color="danger" size="sm" variant="light" onPress={logout}>
+      Logout
+    </Button>
+  );
 
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
@@ -56,7 +56,6 @@ export const Navbar = () => {
         <NavbarBrand className="max-w-fit gap-3">
           <NextLink className="flex items-center justify-start gap-1" href="/">
             <Logo />
-            <p className="font-bold text-inherit">ACME</p>
           </NextLink>
         </NavbarBrand>
         <div className="ml-2 hidden justify-start gap-4 lg:flex">
@@ -79,41 +78,19 @@ export const Navbar = () => {
 
       <NavbarContent className="hidden basis-1/5 sm:flex sm:basis-full" justify="end">
         <NavbarItem className="hidden gap-2 sm:flex">
-          <Link isExternal href={siteConfig.links.twitter} title="Twitter">
-            <TwitterIcon className="text-default-500" />
-          </Link>
-          <Link isExternal href={siteConfig.links.discord} title="Discord">
-            <DiscordIcon className="text-default-500" />
-          </Link>
-          <Link isExternal href={siteConfig.links.github} title="GitHub">
-            <GithubIcon className="text-default-500" />
-          </Link>
           <ThemeSwitch />
         </NavbarItem>
+        <NavbarItem className="hidden sm:flex">{isAuthenticated && logoutButton}</NavbarItem>
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
-        <NavbarItem className="hidden md:flex">
-          <Button
-            isExternal
-            as={Link}
-            className="text-default-600 bg-default-100 text-sm font-normal"
-            href={siteConfig.links.sponsor}
-            startContent={<HeartFilledIcon className="text-danger" />}
-            variant="flat"
-          >
-            Sponsor
-          </Button>
-        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent className="basis-1 pl-4 sm:hidden" justify="end">
-        <Link isExternal href={siteConfig.links.github}>
-          <GithubIcon className="text-default-500" />
-        </Link>
         <ThemeSwitch />
         <NavbarMenuToggle />
       </NavbarContent>
 
       <NavbarMenu>
+        {logoutButton}
         {searchInput}
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navMenuItems.map((item, index) => (

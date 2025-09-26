@@ -40,7 +40,7 @@ export const requireAuth = (rules?: AccessRules) => {
     try {
       const token = authHeader.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-      const user = await userModel.findByIdWithRolesAndGroups(decoded.id);
+      const user = await userModel.findById(decoded.id, { roles: true, groups: true });
 
       if (!user) {
         throw new UnauthorizedError('User not found');

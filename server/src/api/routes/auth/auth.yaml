@@ -33,3 +33,21 @@ paths:
                 properties:
                   token:
                     type: string
+
+  /auth/authenticate:
+    get:
+      tags:
+        - auth
+      summary: Authenticate a user.
+      operationId: authenticateUser
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [success, failure]

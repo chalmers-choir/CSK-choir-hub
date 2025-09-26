@@ -80,7 +80,10 @@ if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
     rm -rf server/prisma/migrations
     echo "⏳ Running database migrations (Local)..."
     pushd server >/dev/null
+    echo "🗑️ Resetting database schema..."
+    npx prisma migrate reset --force --skip-seed
     npx prisma migrate dev --name init
+    echo "🌱 Seeding database..."
     npx prisma db seed
     popd >/dev/null
   fi

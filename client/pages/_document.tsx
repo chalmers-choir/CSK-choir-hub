@@ -6,7 +6,7 @@ import { fontSans } from '@/config/fonts';
 
 export default function Document() {
   return (
-    <Html lang="en">
+    <Html lang="sv">
       <Head />
       <body className={clsx('bg-background min-h-screen font-sans antialiased', fontSans.variable)}>
         <Main />

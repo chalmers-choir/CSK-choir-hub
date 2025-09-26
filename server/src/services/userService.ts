@@ -1,4 +1,5 @@
 import * as userModel from '@db/models/userModel';
+import { NotFoundError, UnauthorizedError } from '@utils';
 import { generateToken } from '@utils/generateToken';
 import logger from '@utils/logger';
 import bcrypt from 'bcryptjs';
@@ -48,35 +49,15 @@ export async function deleteUser(userId: number): Promise<void> {
 
 /**
  * List users with optional filters for choir, voice, or role.
- * @param {object} filters - Filter options: choir, voice, role, group.
+ * @param {object} filters - Filter options: group.
  * @returns {Promise<any[]>} List of users.
  */
-export async function getUsers(filters: { groupId?: number }): Promise<any[]> {
+export async function getUsers(filters?: { groupId?: number }) {
   return userModel.getUsers(filters);
 }
 
 export async function getUser(userId: number) {
-  return userModel.findById(userId);
-}
-
-/**
- * Fetch all roles for a user.
- * @param {number} userId - The user ID.
- * @returns {Promise<any[]>} List of roles.
- */
-export async function getUserRoles(userId: number): Promise<any[]> {
-  // return userModel.getUserRoles(userId);
-  return [];
-}
-
-/**
- * Fetch all groups for a user.
- * @param {number} userId - The user ID.
- * @returns {Promise<any[]>} List of groups.
- */
-export async function getUserGroups(userId: number): Promise<any[]> {
-  // return userModel.getUserGroups(userId);
-  return []; // Placeholder until implemented
+  return userModel.findById(userId, { roles: true, groups: true });
 }
 
 export const getUserIdFromToken = async (token: string) => {
@@ -85,12 +66,24 @@ export const getUserIdFromToken = async (token: string) => {
   const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
     userId: number;
   };
+
   const userId = decoded.userId;
 
   return userId;
 };
 
-export const getAllUsers = async () => {
-  const users = await getUsers({});
-  return users;
+export const getUserFromToken = async (token: string) => {
+  if (!token) throw new UnauthorizedError('No token provided');
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      userId: number;
+    };
+    const userId = decoded.userId;
+    const user = await userModel.findById(userId, { roles: true, groups: true });
+    if (!user) throw new NotFoundError('User not found');
+    return user;
+  } catch (err) {
+    throw new UnauthorizedError('Invalid token');
+  }
 };
