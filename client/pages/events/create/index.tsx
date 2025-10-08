@@ -60,6 +60,7 @@ export default function CreateEventPage() {
         {isAuthenticated ? (
           <form onSubmit={handleSubmit} className="mx-auto mt-20 flex max-w-sm flex-col gap-2">
             <h2 className="w-full text-center text-lg font-semibold">Skapa nytt evenemang</h2>
+
             <Input
               type="text"
               placeholder="Namn"
@@ -67,6 +68,7 @@ export default function CreateEventPage() {
               onChange={(e) => setName(e.target.value)}
               required
             />
+
             <Dropdown>
               <DropdownTrigger>
                 <Button variant="flat">{type ? swedishName[type] : 'Välj typ'}</Button>
@@ -82,7 +84,7 @@ export default function CreateEventPage() {
             </Dropdown>
 
             <Input
-              type="description"
+              type="text"
               placeholder="Beskrivning"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -90,7 +92,7 @@ export default function CreateEventPage() {
             />
 
             <Input
-              type="dateStart"
+              type="text"
               placeholder="Datum och tid"
               value={dateStart}
               onChange={(e) => setDateStart(e.target.value)}
@@ -98,7 +100,7 @@ export default function CreateEventPage() {
             />
 
             <Input
-              type="place"
+              type="text"
               placeholder="Plats"
               value={place}
               onChange={(e) => setPlace(e.target.value)}
