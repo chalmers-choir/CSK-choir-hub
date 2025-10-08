@@ -45,7 +45,7 @@ export default function CreateEventPage() {
     }
   };
 
-  const swedishName: Record<string, string> = {
+  const eventTypeNames: Record<string, string> = {
     REHEARSAL: 'Repetition',
     CONCERT: 'Konsert',
     GIG: 'Gig',
@@ -71,15 +71,13 @@ export default function CreateEventPage() {
 
             <Dropdown>
               <DropdownTrigger>
-                <Button variant="flat">{type ? swedishName[type] : 'Välj typ'}</Button>
+                <Button variant="flat">{type ? eventTypeNames[type] : 'Välj typ'}</Button>
               </DropdownTrigger>
-              <DropdownMenu onAction={(key) => setType(key.toString())}>
-                <DropdownItem key="REHEARSAL">Repetition</DropdownItem>
-                <DropdownItem key="CONCERT">Konsert</DropdownItem>
-                <DropdownItem key="GIG">Gig</DropdownItem>
-                <DropdownItem key="PARTY">Fest</DropdownItem>
-                <DropdownItem key="MEETING">Möte</DropdownItem>
-                <DropdownItem key="OTHER">Annat</DropdownItem>
+              <DropdownMenu
+                items={Object.entries(eventTypeNames)}
+                onAction={(key) => setType(key.toString())}
+              >
+                {(item) => <DropdownItem key={item[0]}>{item[1]}</DropdownItem>}
               </DropdownMenu>
             </Dropdown>
 
