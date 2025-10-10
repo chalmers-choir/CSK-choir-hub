@@ -18,6 +18,15 @@ import { useAuth } from '@/contexts/AuthContext';
 import DefaultLayout from '@/layouts/default';
 import axios from 'axios';
 
+type HeroUiColor =
+  | 'default'
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | undefined;
+
 const api = axios.create({
   baseURL: siteConfig.apiBaseUrl,
   withCredentials: true,
@@ -29,6 +38,7 @@ export default function CreateEventPage() {
   // name, type, description, dateStart, place
   const [name, setName] = useState('');
   const [type, setType] = useState('');
+  const [typeDropdownColor, setTypeDropdownColor] = useState<HeroUiColor>('default');
   const [description, setDescription] = useState('');
   const [dateStart, setDateStart] = useState('');
   const [place, setPlace] = useState('');
@@ -39,6 +49,10 @@ export default function CreateEventPage() {
     e.preventDefault();
     const eventData = { name, type, description, dateStart, place };
     try {
+      if (!type) {
+        setTypeDropdownColor('danger');
+        throw new Error('Vänligen välj typ.');
+      }
       await api.post('/events', eventData);
     } catch (err: any) {
       setError(err.message);
@@ -46,7 +60,7 @@ export default function CreateEventPage() {
   };
 
   const eventTypeNames: Record<string, string> = {
-    REHEARSAL: 'Repetition',
+    REHEARSAL: 'Rep',
     CONCERT: 'Konsert',
     GIG: 'Gig',
     PARTY: 'Fest',
@@ -71,7 +85,13 @@ export default function CreateEventPage() {
 
             <Dropdown>
               <DropdownTrigger>
-                <Button variant="flat">{type ? eventTypeNames[type] : 'Välj typ'}</Button>
+                <Button
+                  variant="flat"
+                  color={typeDropdownColor}
+                  onPress={() => setTypeDropdownColor('default')}
+                >
+                  {type ? eventTypeNames[type] : 'Välj typ'}
+                </Button>
               </DropdownTrigger>
               <DropdownMenu
                 items={Object.entries(eventTypeNames)}
