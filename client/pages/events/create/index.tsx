@@ -16,6 +16,7 @@ import RequestLogin from '@/components/request-login';
 import { siteConfig } from '@/config/site';
 import { useAuth } from '@/contexts/AuthContext';
 import DefaultLayout from '@/layouts/default';
+import { DateValue } from '@internationalized/date';
 import axios from 'axios';
 
 type HeroUiColor =
@@ -26,6 +27,13 @@ type HeroUiColor =
   | 'warning'
   | 'danger'
   | undefined;
+
+interface ResultData {
+  type: 'success' | 'error';
+  message: string;
+}
+
+type Result = ResultData | undefined;
 
 const api = axios.create({
   baseURL: siteConfig.apiBaseUrl,
@@ -40,23 +48,29 @@ export default function CreateEventPage() {
   const [type, setType] = useState('');
   const [typeDropdownColor, setTypeDropdownColor] = useState<HeroUiColor>('default');
   const [description, setDescription] = useState('');
-  const [dateStart, setDateStart] = useState('');
+  const [dateStart, setDateStart] = useState<DateValue | null>(null);
   const [place, setPlace] = useState('');
 
-  const [error, setError] = useState('');
+  const [result, setResult] = useState<Result>(undefined);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const eventData = { name, type, description, dateStart, place };
+    const eventData = { name, type, description, dateStart: dateStart?.toString(), place };
     try {
       if (!type) {
         setTypeDropdownColor('danger');
         throw new Error('Vänligen välj typ.');
       }
       await api.post('/events', eventData);
-      setError('');
+      setName('');
+      setType('');
+      setTypeDropdownColor('default');
+      setDescription('');
+      setDateStart(null);
+      setPlace('');
+      setResult({ type: 'success', message: 'Event successfully posted!' });
     } catch (err: any) {
-      setError(err.message);
+      setResult({ type: 'error', message: err.message });
     }
   };
 
@@ -117,8 +131,9 @@ export default function CreateEventPage() {
               isRequired
               label="Datum och tid"
               granularity="minute"
-              onChange={(e) => e && setDateStart(e.toString())}
-            ></DatePicker>
+              value={dateStart}
+              onChange={(e) => e && setDateStart(e)}
+            />
 
             <Input
               type="text"
@@ -128,7 +143,11 @@ export default function CreateEventPage() {
               required
             />
 
-            {error && <p className="text-red-500">{error}</p>}
+            {result && (
+              <p className={result.type == 'success' ? 'text-green-500' : 'text-red-500'}>
+                {result.message}
+              </p>
+            )}
 
             <Button
               type="submit"
