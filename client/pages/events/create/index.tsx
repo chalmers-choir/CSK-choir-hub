@@ -83,6 +83,8 @@ export default function CreateEventPage() {
     OTHER: 'Annat',
   };
 
+  const defaultVariant = 'bordered';
+
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -96,6 +98,7 @@ export default function CreateEventPage() {
             <Input
               type="text"
               label="Namn"
+              variant={defaultVariant}
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -104,7 +107,7 @@ export default function CreateEventPage() {
             <Dropdown>
               <DropdownTrigger>
                 <Button
-                  variant="flat"
+                  variant={defaultVariant}
                   color={typeDropdownColor}
                   onPress={() => setTypeDropdownColor('default')}
                 >
@@ -122,6 +125,7 @@ export default function CreateEventPage() {
             <Textarea
               type="text"
               label="Beskrivning"
+              variant={defaultVariant}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
@@ -130,6 +134,7 @@ export default function CreateEventPage() {
             <DatePicker
               isRequired
               label="Datum och tid"
+              variant={defaultVariant}
               granularity="minute"
               value={dateStart}
               onChange={(e) => e && setDateStart(e)}
@@ -138,6 +143,7 @@ export default function CreateEventPage() {
             <Input
               type="text"
               label="Plats"
+              variant={defaultVariant}
               value={place}
               onChange={(e) => setPlace(e.target.value)}
               required
