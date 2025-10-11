@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { Button } from '@heroui/button';
+import { DatePicker } from '@heroui/date-picker';
 import {
   Dropdown,
   DropdownItem,
@@ -9,7 +10,6 @@ import {
   DropdownTrigger,
 } from '@heroui/dropdown';
 import { Input } from '@heroui/input';
-import { Link } from '@heroui/link';
 import { button as buttonStyles } from '@heroui/theme';
 
 import RequestLogin from '@/components/request-login';
@@ -110,13 +110,12 @@ export default function CreateEventPage() {
               required
             />
 
-            <Input
-              type="text"
-              placeholder="Datum och tid"
-              value={dateStart}
-              onChange={(e) => setDateStart(e.target.value)}
-              required
-            />
+            <DatePicker
+              isRequired
+              label="Datum och tid"
+              granularity="minute"
+              onChange={(e) => e && setDateStart(e.toString())}
+            ></DatePicker>
 
             <Input
               type="text"
