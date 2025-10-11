@@ -77,7 +77,7 @@ export default function CreateEventPage() {
 
             <Input
               type="text"
-              placeholder="Namn"
+              label="Namn"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -103,7 +103,7 @@ export default function CreateEventPage() {
 
             <Input
               type="text"
-              placeholder="Beskrivning"
+              label="Beskrivning"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
@@ -119,7 +119,7 @@ export default function CreateEventPage() {
 
             <Input
               type="text"
-              placeholder="Plats"
+              label="Plats"
               value={place}
               onChange={(e) => setPlace(e.target.value)}
               required
