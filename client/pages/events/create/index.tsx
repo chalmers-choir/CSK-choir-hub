@@ -9,7 +9,7 @@ import {
   DropdownSection,
   DropdownTrigger,
 } from '@heroui/dropdown';
-import { Input } from '@heroui/input';
+import { Input, Textarea } from '@heroui/input';
 import { button as buttonStyles } from '@heroui/theme';
 
 import RequestLogin from '@/components/request-login';
@@ -73,7 +73,10 @@ export default function CreateEventPage() {
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         {isAuthenticated ? (
-          <form onSubmit={handleSubmit} className="mx-auto mt-20 flex max-w-sm flex-col gap-2">
+          <form
+            onSubmit={handleSubmit}
+            className="w-md mx-auto mt-20 flex max-w-full flex-col gap-2"
+          >
             <h2 className="w-full text-center text-lg font-semibold">Skapa nytt evenemang</h2>
 
             <Input
@@ -102,7 +105,7 @@ export default function CreateEventPage() {
               </DropdownMenu>
             </Dropdown>
 
-            <Input
+            <Textarea
               type="text"
               label="Beskrivning"
               value={description}
