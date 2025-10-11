@@ -54,6 +54,7 @@ export default function CreateEventPage() {
         throw new Error('Vänligen välj typ.');
       }
       await api.post('/events', eventData);
+      setError('');
     } catch (err: any) {
       setError(err.message);
     }
