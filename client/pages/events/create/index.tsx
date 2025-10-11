@@ -33,7 +33,7 @@ const api = axios.create({
 });
 
 export default function CreateEventPage() {
-  const { isAuthenticated } = useAuth();
+  const { loading, isAdmin } = useAuth();
 
   // name, type, description, dateStart, place
   const [name, setName] = useState('');
@@ -72,7 +72,7 @@ export default function CreateEventPage() {
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        {isAuthenticated ? (
+        {isAdmin ? (
           <form
             onSubmit={handleSubmit}
             className="w-md mx-auto mt-20 flex max-w-full flex-col gap-2"
@@ -137,8 +137,10 @@ export default function CreateEventPage() {
               Skapa
             </Button>
           </form>
+        ) : loading ? (
+          <>Loading...</>
         ) : (
-          <RequestLogin>Vänligen logga in för att skapa evenemang.</RequestLogin>
+          <RequestLogin>Vänligen logga in som administratör för att skapa evenemang.</RequestLogin>
         )}
       </section>
     </DefaultLayout>
