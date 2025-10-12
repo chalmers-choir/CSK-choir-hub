@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { Autocomplete, AutocompleteItem } from '@heroui/autocomplete';
 import { Button } from '@heroui/button';
 import { DatePicker } from '@heroui/date-picker';
 import {
@@ -35,6 +36,24 @@ interface ResultData {
 
 type Result = ResultData | undefined;
 
+const eventTypeDbKeyToName: Record<string, string> = {
+  REHEARSAL: 'Rep',
+  CONCERT: 'Konsert',
+  GIG: 'Gig',
+  PARTY: 'Fest',
+  MEETING: 'Möte',
+  OTHER: 'Annat',
+};
+
+const autocompletePlaceNames: Record<string, string> = {
+  klok: 'Klok',
+  scania: 'Scaniasalen',
+  kårres: 'Kårrestaurangen',
+  palmstedt: 'Palmstedtsalen',
+  maskin: 'ML11',
+  sbm500: 'SB-M500',
+};
+
 const api = axios.create({
   baseURL: siteConfig.apiBaseUrl,
   withCredentials: true,
@@ -49,7 +68,19 @@ export default function CreateEventPage() {
   const [typeDropdownColor, setTypeDropdownColor] = useState<HeroUiColor>('default');
   const [description, setDescription] = useState('');
   const [dateStart, setDateStart] = useState<DateValue | null>(null);
+  const [datePickerIsInvalid, setDatePickerIsInvalid] = useState(false);
   const [place, setPlace] = useState('');
+  const [placeIsInvalid, setPlaceIsInvalid] = useState(false);
+  const resetState = () => {
+    setName('');
+    setType('');
+    setTypeDropdownColor('default');
+    setDescription('');
+    setDateStart(null);
+    setDatePickerIsInvalid(false);
+    setPlace('');
+    setPlaceIsInvalid(false);
+  };
 
   const [result, setResult] = useState<Result>(undefined);
 
@@ -61,26 +92,20 @@ export default function CreateEventPage() {
         setTypeDropdownColor('danger');
         throw new Error('Vänligen välj typ.');
       }
+      if (!dateStart) {
+        setDatePickerIsInvalid(true);
+        throw new Error('Vänligen välj datum och tid.');
+      }
+      if (!place) {
+        setPlaceIsInvalid(true);
+        throw new Error('Vänligen välj plats.');
+      }
       await api.post('/events', eventData);
-      setName('');
-      setType('');
-      setTypeDropdownColor('default');
-      setDescription('');
-      setDateStart(null);
-      setPlace('');
+      resetState();
       setResult({ type: 'success', message: 'Event successfully posted!' });
     } catch (err: any) {
       setResult({ type: 'error', message: err.message });
     }
-  };
-
-  const eventTypeNames: Record<string, string> = {
-    REHEARSAL: 'Rep',
-    CONCERT: 'Konsert',
-    GIG: 'Gig',
-    PARTY: 'Fest',
-    MEETING: 'Möte',
-    OTHER: 'Annat',
   };
 
   const defaultVariant = 'bordered';
@@ -97,7 +122,7 @@ export default function CreateEventPage() {
 
             <Input
               type="text"
-              label="Namn"
+              label="Namn på evenemanget"
               variant={defaultVariant}
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -111,11 +136,11 @@ export default function CreateEventPage() {
                   color={typeDropdownColor}
                   onPress={() => setTypeDropdownColor('default')}
                 >
-                  {type ? eventTypeNames[type] : 'Välj typ'}
+                  {type ? eventTypeDbKeyToName[type] : 'Välj typ'}
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
-                items={Object.entries(eventTypeNames)}
+                items={Object.entries(eventTypeDbKeyToName)}
                 onAction={(key) => setType(key.toString())}
               >
                 {(item) => <DropdownItem key={item[0]}>{item[1]}</DropdownItem>}
@@ -132,22 +157,28 @@ export default function CreateEventPage() {
             />
 
             <DatePicker
-              isRequired
+              classNames={{ label: 'after:content-none' }}
               label="Datum och tid"
               variant={defaultVariant}
+              isInvalid={datePickerIsInvalid}
               granularity="minute"
               value={dateStart}
               onChange={(e) => e && setDateStart(e)}
+              onFocus={() => setDatePickerIsInvalid(false)}
             />
 
-            <Input
-              type="text"
-              label="Plats"
+            <Autocomplete
+              allowsCustomValue
+              label="Plats (välj från listan eller skriv egen)"
               variant={defaultVariant}
-              value={place}
-              onChange={(e) => setPlace(e.target.value)}
-              required
-            />
+              isInvalid={placeIsInvalid}
+              inputValue={place}
+              onInputChange={(e) => setPlace(e)}
+              onFocus={() => setPlaceIsInvalid(false)}
+              items={Object.entries(autocompletePlaceNames)}
+            >
+              {(item) => <AutocompleteItem key={item[0]}>{item[1]}</AutocompleteItem>}
+            </Autocomplete>
 
             {result && (
               <p className={result.type == 'success' ? 'text-green-500' : 'text-red-500'}>
