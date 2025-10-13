@@ -65,19 +65,19 @@ export default function CreateEventPage() {
   // name, type, description, dateStart, place
   const [name, setName] = useState('');
   const [type, setType] = useState('');
-  const [typeDropdownColor, setTypeDropdownColor] = useState<HeroUiColor>('default');
+  const [typeIsInvalid, setTypeIsInvalid] = useState(false);
   const [description, setDescription] = useState('');
   const [dateStart, setDateStart] = useState<DateValue | null>(null);
-  const [datePickerIsInvalid, setDatePickerIsInvalid] = useState(false);
+  const [dateIsInvalid, setDateIsInvalid] = useState(false);
   const [place, setPlace] = useState('');
   const [placeIsInvalid, setPlaceIsInvalid] = useState(false);
   const resetState = () => {
     setName('');
     setType('');
-    setTypeDropdownColor('default');
+    setTypeIsInvalid(false);
     setDescription('');
     setDateStart(null);
-    setDatePickerIsInvalid(false);
+    setDateIsInvalid(false);
     setPlace('');
     setPlaceIsInvalid(false);
   };
@@ -89,20 +89,20 @@ export default function CreateEventPage() {
     const eventData = { name, type, description, dateStart: dateStart?.toString(), place };
     try {
       if (!type) {
-        setTypeDropdownColor('danger');
-        throw new Error('Vänligen välj typ.');
+        setTypeIsInvalid(true);
       }
       if (!dateStart) {
-        setDatePickerIsInvalid(true);
-        throw new Error('Vänligen välj datum och tid.');
+        setDateIsInvalid(true);
       }
       if (!place) {
         setPlaceIsInvalid(true);
-        throw new Error('Vänligen välj plats.');
+      }
+      if (!type || !dateStart || !place) {
+        throw new Error('Vänligen fyll i alla fält.');
       }
       await api.post('/events', eventData);
       resetState();
-      setResult({ type: 'success', message: 'Event successfully posted!' });
+      setResult({ type: 'success', message: 'Evenemanget har lagts upp!' });
     } catch (err: any) {
       setResult({ type: 'error', message: err.message });
     }
@@ -133,8 +133,8 @@ export default function CreateEventPage() {
               <DropdownTrigger>
                 <Button
                   variant={defaultVariant}
-                  color={typeDropdownColor}
-                  onPress={() => setTypeDropdownColor('default')}
+                  color={typeIsInvalid ? 'danger' : 'default'}
+                  onPress={() => setTypeIsInvalid(false)}
                 >
                   {type ? eventTypeDbKeyToName[type] : 'Välj typ'}
                 </Button>
@@ -160,11 +160,11 @@ export default function CreateEventPage() {
               classNames={{ label: 'after:content-none' }}
               label="Datum och tid"
               variant={defaultVariant}
-              isInvalid={datePickerIsInvalid}
+              isInvalid={dateIsInvalid}
               granularity="minute"
               value={dateStart}
               onChange={(e) => e && setDateStart(e)}
-              onFocus={() => setDatePickerIsInvalid(false)}
+              onFocus={() => setDateIsInvalid(false)}
             />
 
             <Autocomplete
