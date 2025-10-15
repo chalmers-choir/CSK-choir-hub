@@ -23,6 +23,10 @@ export const siteConfig = {
       href: '/dashboard',
     },
     {
+      label: 'Events',
+      href: '/events',
+    },
+    {
       label: 'Settings',
       href: '/settings',
     },

@@ -110,6 +110,30 @@ export default async function seedUsers(prisma: PrismaClient): Promise<Events> {
     },
   });
 
+  const gig3 = await prisma.event.create({
+    data: {
+      name: 'Mock gig',
+      description: 'Det här är ett mock gig',
+      dateStart: new Date('2025-10-15T19:00:00Z'),
+      dateEnd: new Date('2025-10-15T20:00:00Z'),
+      place: 'Mockplats',
+      type: EventType.GIG,
+      requiresRegistration: true,
+    },
+  });
+
+  const gig4 = await prisma.event.create({
+    data: {
+      name: 'Mock gig 2',
+      description: 'Det här är ett mock gig samma dag som ett annat',
+      dateStart: new Date('2025-10-15T19:00:00Z'),
+      dateEnd: new Date('2025-10-15T20:00:00Z'),
+      place: 'Mockplats',
+      type: EventType.GIG,
+      requiresRegistration: true,
+    },
+  });
+
   return {
     rehearsal1,
     rehearsal2,
