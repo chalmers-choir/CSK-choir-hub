@@ -6,8 +6,8 @@ import { Router } from 'express';
 const router = Router();
 
 router.get('/', getSongs);
-router.post('/', requireAuth({ roles: ['admin'] }), createSong);
-router.delete('/:songId', requireAuth({ roles: ['admin'] }), deleteSong);
+router.post('/', requireAuth({ groups: ['Admins'] }), createSong);
+router.delete('/:songId', requireAuth({ groups: ['Admins'] }), deleteSong);
 
 router.use('/songId/tags', tagsRoutes);
 

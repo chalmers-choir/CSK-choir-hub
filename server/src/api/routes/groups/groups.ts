@@ -13,12 +13,12 @@ import { Router } from 'express';
 const router = Router();
 
 router.get('/', getGroups);
-router.post('/', requireAuth({ roles: ['admin'] }), createGroup);
-router.put('/:groupId', requireAuth({ roles: ['admin'] }), updateGroup);
-router.delete('/:groupId', requireAuth({ roles: ['admin'] }), deleteGroup);
+router.post('/', requireAuth({ groups: ['Admins'] }), createGroup);
+router.put('/:groupId', requireAuth({ groups: ['Admins'] }), updateGroup);
+router.delete('/:groupId', requireAuth({ groups: ['Admins'] }), deleteGroup);
 
-router.use('/:groupId/groups', requireAuth({ roles: ['admin'] }), groupsRouter);
-router.use('/:groupId/roles', requireAuth({ roles: ['admin'] }), rolesRouter);
-router.use('/:groupId/users', requireAuth({ roles: ['admin'] }), usersRouter);
+router.use('/:groupId/groups', requireAuth({ groups: ['Admins'] }), groupsRouter);
+router.use('/:groupId/roles', requireAuth({ groups: ['Admins'] }), rolesRouter);
+router.use('/:groupId/users', requireAuth({ groups: ['Admins'] }), usersRouter);
 
 export default router;

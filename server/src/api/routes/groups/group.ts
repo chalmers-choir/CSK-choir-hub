@@ -4,7 +4,7 @@ import express from 'express';
 
 const router = express.Router();
 
-router.post('/', requireAuth({ roles: ['admin'] }), addGroupToGroup);
-router.delete('/:groupId', requireAuth({ roles: ['admin'] }), removeGroupFromGroup);
+router.post('/', requireAuth({ groups: ['Admins'] }), addGroupToGroup);
+router.delete('/:groupId', requireAuth({ groups: ['Admins'] }), removeGroupFromGroup);
 
 export default router;

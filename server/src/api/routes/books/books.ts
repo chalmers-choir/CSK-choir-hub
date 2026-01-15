@@ -6,10 +6,10 @@ import { Router } from 'express';
 const router = Router();
 
 router.get('/', getBooks);
-router.post('/', requireAuth({ roles: ['admin'] }), createBook);
+router.post('/', requireAuth({ groups: ['Admins'] }), createBook);
 
 router.get('/:bookId', getBookWithId);
-router.delete('/:bookId', requireAuth({ roles: ['admin'] }), deleteBook);
+router.delete('/:bookId', requireAuth({ groups: ['Admins'] }), deleteBook);
 
 router.use('/:bookId/songs', songsRouter);
 

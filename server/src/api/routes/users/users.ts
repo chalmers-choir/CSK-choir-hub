@@ -6,6 +6,6 @@ const router = Router();
 
 router.get('/', getUsers);
 router.get('/:userId', getUserWithId);
-router.delete('/:userId', requireAuth({ roles: ['admin'] }), deleteUser);
+router.delete('/:userId', requireAuth({ groups: ['Admins'] }), deleteUser);
 
 export default router;

@@ -5,7 +5,7 @@ import { Router } from 'express';
 const router = Router();
 
 router.get('/', getTags);
-router.post('/', requireAuth({ roles: ['admin'] }), createTag);
-router.delete('/:id', requireAuth({ roles: ['admin'] }), deleteTag);
+router.post('/', requireAuth({ groups: ['Admins'] }), createTag);
+router.delete('/:id', requireAuth({ groups: ['Admins'] }), deleteTag);
 
 export default router;

@@ -12,10 +12,10 @@ import { Router } from 'express';
 const router = Router();
 
 router.get('/', getEvents);
-router.post('/', requireAuth({ roles: ['admin'] }), createEvent);
+router.post('/', requireAuth({ groups: ['Admins'] }), createEvent);
 
-router.put('/:id', requireAuth({ roles: ['admin'] }), updateEvent);
-router.delete('/:id', requireAuth({ roles: ['admin'] }), deleteEvent);
+router.put('/:id', requireAuth({ groups: ['Admins'] }), updateEvent);
+router.delete('/:id', requireAuth({ groups: ['Admins'] }), deleteEvent);
 
 router.use('/:id/attendance', requireAuth(), attendanceRoutes);
 router.use('/:id/registration', requireAuth(), registrationRoutes);

@@ -7,8 +7,8 @@ const router = Router();
 
 router.get('/', getRoles);
 router.post('/', createRole);
-router.delete('/:roleId', requireAuth({ roles: ['admin'] }), deleteRole);
+router.delete('/:roleId', requireAuth({ groups: ['Admins'] }), deleteRole);
 
-router.use('/:roleId/user', requireAuth({ roles: ['admin'] }), roleUserRoutes);
+router.use('/:roleId/user', requireAuth({ groups: ['Admins'] }), roleUserRoutes);
 
 export default router;
