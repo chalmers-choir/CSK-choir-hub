@@ -13,6 +13,8 @@ export default function IndexPage() {
   const { id } = query;
 
   const [event, setEvent] = useState<CSKEvent | null>(null);
+  const [attendees, setAttendees] = useState<Array<any>>([]);
+  const [registrations, setRegistrations] = useState<Array<any>>([]);
 
   useEffect(() => {
     if (!id) return; // wait until id is available
@@ -24,6 +26,8 @@ export default function IndexPage() {
 
         const data = await res.json();
         setEvent(data.event);
+        setAttendees(data.attendees);
+        setRegistrations(data.registrations);
       } catch (err: any) {
         console.log(err.message || 'Failed to fetch event');
       }
@@ -34,7 +38,7 @@ export default function IndexPage() {
 
   return (
     <DefaultLayout>
-      <EventDetailCard event={event} />
+      <EventDetailCard event={event} attendees={attendees} registrations={registrations} />
     </DefaultLayout>
   );
 }

@@ -31,6 +31,7 @@ export async function getEvent(eventId: number) {
     firstName: r.user.firstName,
     lastName: r.user.lastName,
     comments: r.comments,
+    dietaryPreferences: r.dietaryPreferences,
   }));
 
   return {

@@ -19,7 +19,7 @@ router.get('/:id', getEventDetail);
 router.put('/:id', requireAuth({ groups: ['Admins'] }), updateEvent);
 router.delete('/:id', requireAuth({ groups: ['Admins'] }), deleteEvent);
 
-router.use('/:id/attendance', requireAuth(), attendanceRoutes);
+router.use('/:id/attendance', attendanceRoutes);
 router.use('/:id/registration', requireAuth(), registrationRoutes);
 
 export default router;

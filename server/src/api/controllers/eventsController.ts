@@ -84,7 +84,7 @@ export const updateUserAttendance = async (req: Request, res: Response, next: Ne
   if (isNaN(eventId)) return next(new BadRequestError('Invalid event ID'));
 
   const { userId, status } = req.body;
-  if (!userId || !status) return next(new BadRequestError('User ID and status are required'));
+  if (!userId) return next(new BadRequestError('User ID and status are required'));
 
   try {
     const updatedAttendance = await eventService.updateUserAttendance(eventId, userId, status);

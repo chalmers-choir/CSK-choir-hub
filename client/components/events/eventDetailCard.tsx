@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { Accordion, AccordionItem } from '@heroui/accordion';
 import { Button } from '@heroui/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
 import { Checkbox } from '@heroui/checkbox';
+import { addToast } from '@heroui/toast';
 
-import { CSKEvent, CSKEventType } from '@/types/event';
-import { IoCheckmarkCircle, IoClose, IoCloseCircle, IoEllipseOutline } from 'react-icons/io5';
+import { EventUserEntry, EventUserListAccordion } from './EventUserListAccordion';
+import { useAuth } from '@/contexts/AuthContext';
+import { CSKEvent, CSKEventAttendee, CSKEventRegistration, CSKEventType } from '@/types/event';
+import { IoClose } from 'react-icons/io5';
 
 const formatDate = (isoString?: string) => {
   if (!isoString) return 'N/A';
@@ -32,6 +34,8 @@ const formatTime = (isoString?: string) => {
 
 interface EventDetailCardProps {
   event: CSKEvent | null;
+  attendees?: Array<CSKEventAttendee>;
+  registrations?: Array<CSKEventRegistration>;
 }
 
 const CSKEventTypeString: Record<CSKEventType, string> = {
@@ -43,52 +47,11 @@ const CSKEventTypeString: Record<CSKEventType, string> = {
   [CSKEventType.OTHER]: 'Övrigt',
 };
 
-type MagicalUser = {
-  name: string;
-  status?: boolean | null; // true: present/registered, false: absent, null/undefined: not set
-};
-
-type MagicalUserListAccordionProps = {
-  users: MagicalUser[];
-};
-
-const MagicalUserListAccordion = ({ users }: MagicalUserListAccordionProps) => {
-  const count = users.length;
-
-  const renderStatusIcon = (status: boolean | null | undefined) => {
-    if (status === true) return <IoCheckmarkCircle className="text-success" size={18} />;
-    if (status === false) return <IoCloseCircle className="text-danger" size={18} />;
-    return <IoEllipseOutline className="text-default-400" size={18} />;
-  };
-
-  return (
-    <Accordion isCompact>
-      <AccordionItem
-        key="registered"
-        aria-label="Registrerade"
-        title={
-          <div className="text-default-500 flex w-full items-center gap-2">
-            <span className="text-default-400 text-small font-semibold">{count}</span>
-            <span className="text-default-500 text-small font-semibold">Registrerade</span>
-            <span className="text-default-400 text-tiny">(tryck för att visa)</span>
-          </div>
-        }
-      >
-        <ul className="list-inside list-disc">
-          {users.map(({ name, status }) => (
-            <li key={name} className="flex items-center gap-2">
-              {renderStatusIcon(status)}
-              <span>{name}</span>
-            </li>
-          ))}
-          {users.length === 0 && <li className="text-default-400">Inga registrerade ännu</li>}
-        </ul>
-      </AccordionItem>
-    </Accordion>
-  );
-};
-
-export default function EventDetailCard({ event }: EventDetailCardProps) {
+export default function EventDetailCard({
+  event,
+  attendees = [],
+  registrations = [],
+}: EventDetailCardProps) {
   // Extract data from event prop when available
 
   if (!event) {
@@ -101,10 +64,32 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
     );
   }
 
+  const { user } = useAuth();
+
   type AttendanceChoice = 'yes' | 'no' | null;
-  const oldEventAttendance: AttendanceChoice = null; // TODO: Fetch user's previous attendance status
-  const [newEventAttendance, setNewEventAttendance] =
-    useState<AttendanceChoice>(oldEventAttendance);
+  const statusToChoice = (status?: string | null): AttendanceChoice =>
+    status === 'PRESENT' ? 'yes' : status === 'ABSENT' ? 'no' : null;
+  const choiceToStatus = (choice: AttendanceChoice) =>
+    choice === 'yes' ? 'PRESENT' : choice === 'no' ? 'ABSENT' : null;
+
+  const userAttendanceStatus = useMemo(() => {
+    if (!user) return null;
+    const entry = attendees.find((a) => a.id === user.id);
+    return entry?.status ?? null;
+  }, [attendees, user]);
+
+  const [oldEventAttendance, setOldEventAttendance] = useState<AttendanceChoice>(
+    statusToChoice(userAttendanceStatus),
+  );
+  const [newEventAttendance, setNewEventAttendance] = useState<AttendanceChoice>(
+    statusToChoice(userAttendanceStatus),
+  );
+
+  useEffect(() => {
+    const choice = statusToChoice(userAttendanceStatus);
+    setOldEventAttendance(choice);
+    setNewEventAttendance(choice);
+  }, [userAttendanceStatus]);
 
   const handleYesChange = (selected: boolean) => {
     setNewEventAttendance(selected ? 'yes' : null);
@@ -127,8 +112,82 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
   const attendanceRecorded = event.requiresAttendance;
   const hasAttendanceChanges = oldEventAttendance !== newEventAttendance;
 
+  // Decide which list to show (events are either attendance-based or registration-based, not both)
+  const isAttendanceMode = attendanceRecorded;
+  const baseUsersForList: EventUserEntry[] = isAttendanceMode
+    ? attendees.map(({ firstName, lastName, status }) => ({
+        name: `${firstName} ${lastName}`,
+        status: status === 'ABSENT' ? false : status === 'PRESENT' ? true : null,
+      }))
+    : registrations.map(({ firstName, lastName }) => ({
+        name: `${firstName} ${lastName}`,
+        status: true,
+      }));
+
+  const usersForList = useMemo(() => {
+    if (!isAttendanceMode || !user) return baseUsersForList;
+    const displayName = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
+    if (!displayName) return baseUsersForList;
+    return baseUsersForList.map((entry) =>
+      entry.name === displayName
+        ? {
+            ...entry,
+            status:
+              choiceToStatus(newEventAttendance) === 'PRESENT'
+                ? true
+                : choiceToStatus(newEventAttendance) === 'ABSENT'
+                  ? false
+                  : null,
+          }
+        : entry,
+    );
+  }, [baseUsersForList, isAttendanceMode, newEventAttendance, user]);
+
+  const listTitle = isAttendanceMode ? 'Närvaro' : 'Registrerade';
+
   const handleResetAttendance = () => {
     setNewEventAttendance(oldEventAttendance);
+  };
+
+  const handleSaveAttendance = async () => {
+    if (!user) return;
+    const status = choiceToStatus(newEventAttendance);
+
+    try {
+      const res = await fetch(`http://localhost:5050/api/events/${event.id}/attendance`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          status,
+        }),
+        credentials: 'include',
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `Request failed: ${res.status}`);
+      }
+
+      setOldEventAttendance(newEventAttendance);
+      addToast({
+        title: 'Närvaro sparad',
+        timeout: 2000,
+        color: 'success',
+      });
+
+      // Reload to reflect updated lists/state
+      window.location.reload();
+    } catch (err: any) {
+      addToast({
+        title: 'Kunde inte spara närvaro',
+        description: err.message || 'Något gick fel',
+        timeout: 4000,
+        color: 'danger',
+      });
+    }
   };
 
   return (
@@ -168,7 +227,7 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
                 Nej
               </Checkbox>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               {hasAttendanceChanges && (
                 <Button
                   isIconOnly
@@ -180,7 +239,11 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
                   <IoClose size={18} />
                 </Button>
               )}
-              <Button color={oldEventAttendance == newEventAttendance ? 'default' : 'primary'}>
+              <Button
+                disabled={!hasAttendanceChanges}
+                onPress={handleSaveAttendance}
+                color={oldEventAttendance == newEventAttendance ? 'default' : 'primary'}
+              >
                 <span className="text-small font-semibold">Spara</span>
               </Button>
             </div>
@@ -189,14 +252,7 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
       )}
 
       <CardFooter>
-        <MagicalUserListAccordion
-          users={[
-            { name: 'Anna Andersson', status: true },
-            { name: 'Björn Berg', status: false },
-            { name: 'Cecilia Carlsson', status: null },
-            { name: 'David Dahl', status: undefined },
-          ]}
-        />
+        <EventUserListAccordion users={usersForList} title={listTitle} />
       </CardFooter>
     </Card>
   );
