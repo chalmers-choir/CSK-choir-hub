@@ -12,6 +12,17 @@ export const getEvents = async (req: Request, res: Response, next: NextFunction)
   }
 };
 
+// Get event details by ID
+export const getEventDetail = async (req: Request, res: Response) => {
+  const eventId = parseInt(req.params.id, 10);
+  if (isNaN(eventId)) return res.status(400).json({ error: 'Invalid event ID' });
+
+  const event = await eventService.getEvent(eventId);
+  if (!event) return res.status(404).json({ error: 'Event not found' });
+
+  return res.json({ ...event });
+};
+
 // Delete an event by ID
 export const deleteEvent = async (req: Request, res: Response, next: NextFunction) => {
   const eventId = parseInt(req.params.id, 10);

@@ -28,7 +28,9 @@ export async function findAll() {
  * @param eventId - The ID of the event.
  */
 export async function findById(eventId: number) {
-  return await prisma.event.findUnique({ where: { id: eventId } });
+  return await prisma.event.findUnique({
+    where: { id: eventId },
+  });
 }
 
 /**
@@ -70,7 +72,34 @@ export async function listEvents(filters?: { type?: EventType }) {
 export async function listAttendees(eventId: number) {
   return await prisma.eventAttendance.findMany({
     where: { eventId },
-    include: { user: true },
+    include: {
+      user: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+  });
+}
+
+/**
+ * List registrations for an event.
+ * @param eventId - The ID of the event.
+ */
+export async function listRegistrations(eventId: number) {
+  return await prisma.eventRegistration.findMany({
+    where: { eventId },
+    include: {
+      user: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
   });
 }
 

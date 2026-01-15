@@ -10,6 +10,36 @@ export async function getAllEvents() {
   return await eventModel.findAll();
 }
 
+/** Get an event by ID.
+ * @param eventId - The ID of the event to retrieve.
+ * @returns The event with the specified ID, or null if not found.
+ */
+export async function getEvent(eventId: number) {
+  const event = await eventModel.findById(eventId);
+  // Fetch names of users attending the event
+  if (!event) return null;
+
+  const attendees = (await eventModel.listAttendees(eventId)).map((a) => ({
+    id: a.user.id,
+    firstName: a.user.firstName,
+    lastName: a.user.lastName,
+    status: a.status,
+  }));
+
+  const registrations = (await eventModel.listRegistrations(eventId)).map((r) => ({
+    id: r.user.id,
+    firstName: r.user.firstName,
+    lastName: r.user.lastName,
+    comments: r.comments,
+  }));
+
+  return {
+    event,
+    attendees,
+    registrations,
+  };
+}
+
 /**
  * Delete an event by ID.
  * @param eventId - The ID of the event to delete.
