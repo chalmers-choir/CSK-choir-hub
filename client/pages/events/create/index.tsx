@@ -3,13 +3,7 @@ import { useState } from 'react';
 import { Autocomplete, AutocompleteItem } from '@heroui/autocomplete';
 import { Button } from '@heroui/button';
 import { DatePicker } from '@heroui/date-picker';
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownSection,
-  DropdownTrigger,
-} from '@heroui/dropdown';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/dropdown';
 import { Input, Textarea } from '@heroui/input';
 import { button as buttonStyles } from '@heroui/theme';
 
@@ -18,16 +12,8 @@ import { siteConfig } from '@/config/site';
 import { useAuth } from '@/contexts/AuthContext';
 import DefaultLayout from '@/layouts/default';
 import { DateValue } from '@internationalized/date';
+import { I18nProvider } from '@react-aria/i18n';
 import axios from 'axios';
-
-type HeroUiColor =
-  | 'default'
-  | 'primary'
-  | 'secondary'
-  | 'success'
-  | 'warning'
-  | 'danger'
-  | undefined;
 
 interface ResultData {
   type: 'success' | 'error';
@@ -156,16 +142,18 @@ export default function CreateEventPage() {
               required
             />
 
-            <DatePicker
-              classNames={{ label: 'after:content-none' }}
-              label="Datum och tid"
-              variant={defaultVariant}
-              isInvalid={dateIsInvalid}
-              granularity="minute"
-              value={dateStart}
-              onChange={(e) => e && setDateStart(e)}
-              onFocus={() => setDateIsInvalid(false)}
-            />
+            <I18nProvider locale="sv-SE">
+              <DatePicker
+                classNames={{ label: 'after:content-none' }}
+                label="Datum och tid"
+                variant={defaultVariant}
+                isInvalid={dateIsInvalid}
+                granularity="minute"
+                value={dateStart}
+                onChange={(e) => e && setDateStart(e)}
+                onFocus={() => setDateIsInvalid(false)}
+              />
+            </I18nProvider>
 
             <Autocomplete
               allowsCustomValue
