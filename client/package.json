@@ -9,6 +9,11 @@
     "lint": "eslint --fix"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.19",
+    "@fullcalendar/daygrid": "^6.1.19",
+    "@fullcalendar/react": "^6.1.19",
+    "@fullcalendar/timegrid": "^6.1.19",
+    "@fullcalendar/interaction": "^6.1.19",
     "@heroui/button": "^2.2.29",
     "@heroui/input": "^2.4.30",
     "@heroui/kbd": "^2.2.23",
