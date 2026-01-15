@@ -74,6 +74,7 @@ export const requireAuth = (rules?: AccessRules) => {
 
       return next();
     } catch (err) {
+      console.log(err);
       return res.status(401).json({ success: false, message: 'Invalid token' });
     }
   };
