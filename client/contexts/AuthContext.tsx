@@ -14,9 +14,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
+
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
+
   return context;
 };
 
@@ -38,13 +40,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const fetchUser = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/authenticate');
-      setUser(res.data.user);
+      const res = await fetch(`${siteConfig.apiBaseUrl}/auth/authenticate`, {
+        credentials: 'include',
+      });
+
+      if (!res.ok) {
+        throw new Error('Not authenticated');
+      }
+      const data = await res.json();
+
+      setUser(data.user);
     } catch (error: any) {
       setUser(null);
       // Log 401 errors for debugging but don't redirect
-      if (error.response?.status === 401) {
-        console.log('Authentication failed:', error.response.data.error);
+      if (error?.response?.status === 401) {
+        console.log('Authentication failed:', error.response?.data?.error);
       }
       // Remove automatic redirect - let pages handle their own routing
     } finally {
@@ -74,6 +84,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (error.response) {
         // Server responded with an error status
         const message = error.response.data?.error || error.response.data?.message;
+
         if (error.response.status === 401) {
           throw new Error(message || 'Invalid username/email or password');
         } else if (error.response.status === 400) {
