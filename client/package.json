@@ -6,10 +6,12 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --fix"
+    "lint": "eslint --fix",
+    "api:generate": "openapi --input ../server/src/api/docs/openapi.yaml --output ./lib/api-client --client fetch --useOptions --useUnionTypes"
   },
   "dependencies": {
     "@heroui/button": "^2.2.29",
+    "@heroui/card": "^2.2.27",
     "@heroui/input": "^2.4.30",
     "@heroui/kbd": "^2.2.23",
     "@heroui/link": "^2.2.25",
@@ -51,6 +53,7 @@
     "eslint-plugin-react-hooks": "5.2.0",
     "eslint-plugin-unused-imports": "4.1.4",
     "globals": "16.0.0",
+    "openapi-typescript-codegen": "^0.30.0",
     "postcss": "8.5.6",
     "prettier": "3.5.3",
     "tailwind-variants": "3.1.1",
