@@ -101,17 +101,17 @@ const EventCard = ({ event }: { event: Event }) => {
       href={`/events/${event.id}`}
     >
       <Card className="border-default-100/80 bg-content1/70 hover:border-primary/40 border shadow-sm backdrop-blur transition hover:-translate-y-[1px] hover:shadow-md">
-        <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className={`rounded-full px-3 py-1 text-xs font-semibold ${badge.color}`}>
-              {badge.label}
-            </span>
+        <CardHeader className="flex flex-col gap-1">
+          <div className="flex w-full flex-wrap items-center justify-between">
             <span className="bg-default-100 text-default-500 rounded-full px-3 py-1 text-xs font-medium">
               {event.place}
             </span>
-          </div>
-          <div className="text-default-500 text-right text-sm">
             <div className="text-default-700 font-semibold">{formatDate(event.dateStart)}</div>
+          </div>
+          <div className="text-default-500 flex w-full flex-wrap justify-between text-sm">
+            <span className={`rounded-full px-3 py-1 text-xs font-semibold ${badge.color}`}>
+              {badge.label}
+            </span>
             <div>{formatTimeRange(event.dateStart, event.dateEnd)}</div>
           </div>
         </CardHeader>
