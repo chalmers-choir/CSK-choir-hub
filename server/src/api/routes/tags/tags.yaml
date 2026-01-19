@@ -3,10 +3,63 @@ paths:
     get:
       tags:
         - tags
+      summary: List tags
+      operationId: getTags
+      responses:
+        '200':
+          description: Tags fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tags:
+                    type: array
+                    items:
+                      $ref: '../../docs/openapi.yaml#/components/schemas/Tag'
     post:
       tags:
         - tags
+      summary: Create tag
+      description: Creates a new tag (Admins only).
+      operationId: createTag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        '201':
+          description: Tag created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tag:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/Tag'
+
   /tags/{tagId}:
+    parameters:
+      - name: tagId
+        in: path
+        required: true
+        description: ID of the tag
+        schema:
+          type: integer
+          format: int64
     delete:
       tags:
         - tags
+      summary: Delete tag
+      description: Deletes a tag (Admins only).
+      operationId: deleteTag
+      responses:
+        '204':
+          description: Tag deleted

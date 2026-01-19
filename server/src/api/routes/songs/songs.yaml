@@ -1,23 +1,114 @@
-tags:
-  - name: songs
-    description: Operations concerning songs
-
 paths:
   /songs:
     get:
       tags:
         - songs
+      summary: List songs
+      operationId: getSongs
+      responses:
+        '200':
+          description: Songs fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  songs:
+                    type: array
+                    items:
+                      $ref: '../../docs/openapi.yaml#/components/schemas/Song'
     post:
       tags:
         - songs
+      summary: Create song
+      description: Creates a new song (Admins only).
+      operationId: createSong
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        '201':
+          description: Song created
+          content:
+            application/json:
+              schema:
+                $ref: '../../docs/openapi.yaml#/components/schemas/Song'
+
   /songs/{songId}:
+    parameters:
+      - name: songId
+        in: path
+        required: true
+        description: ID of the song
+        schema:
+          type: integer
+          format: int64
     delete:
       tags:
         - songs
+      summary: Delete song
+      description: Deletes a song (Admins only).
+      operationId: deleteSong
+      responses:
+        '204':
+          description: Song deleted
+
   /songs/{songId}/tags:
+    parameters:
+      - name: songId
+        in: path
+        required: true
+        description: ID of the song
+        schema:
+          type: integer
+          format: int64
     post:
       tags:
         - songs
+      summary: Assign tag to song
+      description: Assigns an existing tag to a song (Admins only).
+      operationId: assignTagToSong
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tagId:
+                  type: integer
+                  format: int64
+              required:
+                - tagId
+      responses:
+        '204':
+          description: Tag assigned
     delete:
       tags:
         - songs
+      summary: Remove tag from song
+      description: Removes a tag from a song (Admins only).
+      operationId: removeTagFromSong
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tagId:
+                  type: integer
+                  format: int64
+              required:
+                - tagId
+      responses:
+        '204':
+          description: Tag removed

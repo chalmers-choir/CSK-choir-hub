@@ -1,0 +1,17 @@
+paths:
+  /health:
+    get:
+      tags:
+        - health
+      summary: Health check
+      operationId: health
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string

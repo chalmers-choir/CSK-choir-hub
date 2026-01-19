@@ -3,51 +3,65 @@ paths:
     post:
       tags:
         - auth
-      summary: Register a new user.
+      summary: Register a new user
       operationId: registerUser
       requestBody:
         $ref: '../../docs/openapi.yaml#/components/requestBodies/RegisterUser'
       responses:
         '201':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/User'
-
-  /auth/login:
-    post:
-      tags:
-        - auth
-      summary: Login a user.
-      operationId: loginUser
-      requestBody:
-        $ref: '../../docs/openapi.yaml#/components/requestBodies/LoginUser'
-      responses:
-        '200':
-          description: Successful login
+          description: User registered
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   token:
-                    type: string
+                    $ref: '../../docs/openapi.yaml#/components/schemas/Token'
 
-  /auth/authenticate:
-    get:
+  /auth/login:
+    post:
       tags:
         - auth
-      summary: Authenticate a user.
-      operationId: authenticateUser
+      summary: Login a user
+      operationId: loginUser
+      requestBody:
+        $ref: '../../docs/openapi.yaml#/components/requestBodies/LoginUser'
       responses:
         '200':
-          description: Successful authentication
+          description: Login successful
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: string
-                    enum: [success, failure]
+                  user:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/User'
+
+  /auth/logout:
+    post:
+      tags:
+        - auth
+      summary: Logout current user
+      operationId: logoutUser
+      responses:
+        '200':
+          description: Session cleared
+
+  /auth/authenticate:
+    get:
+      tags:
+        - auth
+      summary: Validate session
+      operationId: authenticateUser
+      responses:
+        '200':
+          description: Current authenticated user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/User'
+        '401':
+          description: Not authenticated
