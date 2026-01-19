@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "concurrently -k -n api,web \"npm run api:watch\" \"npm run dev:app\"",
+    "dev:app": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint --fix",
-    "api:generate": "openapi --input ../server/src/api/docs/openapi.yaml --output ./lib/api-client --client fetch --useOptions --useUnionTypes"
+    "api:generate": "openapi --input ../server/src/api/docs/openapi.yaml --output ./lib/api-client --client fetch --useOptions --useUnionTypes",
+    "api:watch": "chokidar \"../server/src/api/docs/**/*.yaml\" -c \"npm run api:generate\""
   },
   "dependencies": {
     "@heroui/button": "^2.2.29",
@@ -43,6 +45,8 @@
     "@types/react-dom": "18.3.0",
     "@typescript-eslint/eslint-plugin": "8.34.1",
     "@typescript-eslint/parser": "8.34.1",
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.2.1",
     "eslint": "9.25.1",
     "eslint-config-prettier": "10.1.5",
     "eslint-plugin-import": "2.32.0",
