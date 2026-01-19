@@ -139,7 +139,7 @@ const EventCard = ({ event }: { event: Event }) => {
 };
 
 export default function IndexPage() {
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, isAdmin, loading: authLoading } = useAuth();
 
   const [events, setEvents] = useState<Event[]>([]);
   const [eventsLoading, setEventsLoading] = useState(false);
@@ -244,9 +244,21 @@ export default function IndexPage() {
     <DefaultLayout>
       <RequireAuth>
         <section className="mx-auto flex max-w-3xl flex-col gap-6 py-8 md:py-10">
-          <div className="text-center">
-            <h1 className="text-default-900 text-3xl font-bold">Evenemang</h1>
-            <p className="text-default-500 mt-1">Översikt över kommande rep, konserter och gig.</p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="text-center sm:text-left">
+              <h1 className="text-default-900 text-3xl font-bold">Evenemang</h1>
+              <p className="text-default-500 mt-1">
+                Översikt över kommande rep, konserter och gig.
+              </p>
+            </div>
+            {isAuthenticated && isAdmin && (
+              <Link
+                className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
+                href="/events/create"
+              >
+                Skapa evenemang
+              </Link>
+            )}
           </div>
 
           {authLoading ? (
