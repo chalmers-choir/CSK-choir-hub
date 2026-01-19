@@ -1,5 +1,5 @@
 import attendanceRoutes from './attendance';
-import registrationRoutes from './registration';
+import registrationRoutes from './registrations';
 import {
   createEvent,
   deleteEvent,
@@ -19,7 +19,7 @@ router.get('/:id', getEventDetail);
 router.put('/:id', requireAuth({ groups: ['Admins'] }), updateEvent);
 router.delete('/:id', requireAuth({ groups: ['Admins'] }), deleteEvent);
 
-router.use('/:id/attendance', attendanceRoutes);
-router.use('/:id/registration', requireAuth(), registrationRoutes);
+router.use('/:id/attendances', attendanceRoutes);
+router.use('/:id/registrations', registrationRoutes);
 
 export default router;

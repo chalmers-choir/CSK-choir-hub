@@ -111,6 +111,10 @@ export default function EventDetailCard({
   const registrationRequired = event.requiresRegistration;
   const attendanceRecorded = event.requiresAttendance;
   const hasAttendanceChanges = oldEventAttendance !== newEventAttendance;
+  const isRegistered = useMemo(() => {
+    if (!user) return false;
+    return registrations.some((r) => r.id === user.id);
+  }, [registrations, user]);
 
   // Decide which list to show (events are either attendance-based or registration-based, not both)
   const isAttendanceMode = attendanceRecorded;
@@ -143,6 +147,79 @@ export default function EventDetailCard({
     );
   }, [baseUsersForList, isAttendanceMode, newEventAttendance, user]);
 
+  const handleRegistration = async () => {
+    if (!user) return;
+    try {
+      const res = await fetch(`http://localhost:5050/api/events/${event.id}/registrations`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+        }),
+        credentials: 'include',
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `Request failed: ${res.status}`);
+      }
+
+      addToast({
+        title: 'Anmäld till evenemanget',
+        timeout: 2000,
+        color: 'success',
+      });
+
+      // Reload to reflect updated lists/state
+      window.location.reload();
+    } catch (err: any) {
+      addToast({
+        title: 'Kunde inte anmäla till evenemanget',
+        description: err.message || 'Något gick fel',
+        timeout: 4000,
+        color: 'danger',
+      });
+    }
+  };
+
+  const handleUnregister = async () => {
+    if (!user) return;
+    try {
+      const res = await fetch(`http://localhost:5050/api/events/${event.id}/registrations`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+        }),
+        credentials: 'include',
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `Request failed: ${res.status}`);
+      }
+
+      addToast({
+        title: 'Avanmäld från evenemanget',
+        timeout: 2000,
+        color: 'success',
+      });
+
+      window.location.reload();
+    } catch (err: any) {
+      addToast({
+        title: 'Kunde inte avanmäla',
+        description: err.message || 'Något gick fel',
+        timeout: 4000,
+        color: 'danger',
+      });
+    }
+  };
+
   const listTitle = isAttendanceMode ? 'Närvaro' : 'Registrerade';
 
   const handleResetAttendance = () => {
@@ -154,7 +231,7 @@ export default function EventDetailCard({
     const status = choiceToStatus(newEventAttendance);
 
     try {
-      const res = await fetch(`http://localhost:5050/api/events/${event.id}/attendance`, {
+      const res = await fetch(`http://localhost:5050/api/events/${event.id}/attendances`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -208,12 +285,28 @@ export default function EventDetailCard({
 
       <CardBody className="px-4">
         <p className="mx-auto mb-4">{eventDescription}</p>
-        {registrationRequired && (
-          <Button color="success">
-            <span className="text-small font-semibold">Anmäl dig här!</span>
-          </Button>
-        )}
       </CardBody>
+
+      {registrationRequired && (
+        <CardFooter className="w-full px-4">
+          <div className="mx-auto flex items-center gap-3">
+            <Button
+              color={isRegistered ? 'default' : 'success'}
+              isDisabled={isRegistered}
+              onPress={handleRegistration}
+            >
+              <span className="text-small font-semibold">
+                {isRegistered ? 'Redan registrerad' : 'Anmäl dig här!'}
+              </span>
+            </Button>
+            {isRegistered && (
+              <Button color="danger" variant="flat" onPress={handleUnregister}>
+                <span className="text-small font-semibold">Avanmäl</span>
+              </Button>
+            )}
+          </div>
+        </CardFooter>
+      )}
 
       {attendanceRecorded && (
         <CardFooter className="flex-col items-start px-4 pb-0 pt-2">
