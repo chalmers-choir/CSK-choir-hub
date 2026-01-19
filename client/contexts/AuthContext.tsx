@@ -6,9 +6,8 @@ import { useRouter } from 'next/navigation';
 
 import { addToast } from '@heroui/toast';
 
-import { AuthContextType, AuthenticatedUser, RegisterForm } from '../types/auth';
-import { siteConfig } from '@/config/site';
-import axios from 'axios';
+import { AuthContextType, RegisterForm } from '../types/auth';
+import { AuthService, User } from '@/lib/apiClient';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -22,17 +21,12 @@ export const useAuth = (): AuthContextType => {
   return context;
 };
 
-const api = axios.create({
-  baseURL: siteConfig.apiBaseUrl + '/auth',
-  withCredentials: true,
-});
-
 interface AuthProviderProps {
   children: ReactNode;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<AuthenticatedUser | null>(null);
+  const [user, setUser] = useState<User | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
 
   const router = useRouter();
@@ -51,7 +45,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       setUser(data.user);
     } catch (error: any) {
-      setUser(null);
+      setUser(undefined);
       // Log 401 errors for debugging but don't redirect
       if (error?.response?.status === 401) {
         console.log('Authentication failed:', error.response?.data?.error);
@@ -69,8 +63,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (username: string, password: string) => {
     setLoading(true);
     try {
-      const res = await api.post('/login', { username, password });
-      setUser(res.data.user);
+      const res = await AuthService.loginUser({ requestBody: { username, password } });
+      setUser(res.user);
       router.push('/');
     } catch (error: any) {
       console.log('Login error details:', {
@@ -107,7 +101,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (userData: Omit<RegisterForm, 'confirmPassword'>) => {
     setLoading(true);
     try {
-      await api.post('/register', userData);
+      await AuthService.registerUser({ requestBody: userData });
       router.push('/login');
     } catch (error) {
       console.error('Registration failed:', error);
@@ -119,8 +113,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = async () => {
     setLoading(true);
     try {
-      await api.post('/logout');
-      setUser(null);
+      await fetch('/api/logout', { method: 'POST' });
+      setUser(undefined);
       router.push('/');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -142,7 +136,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     register,
     logout,
     isAuthenticated: !!user,
-    isAdmin: user?.roles?.some((role) => role.name === 'admin') ?? false,
+    isAdmin: user?.groups?.some((group) => group.name === 'Admins') ?? false,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
