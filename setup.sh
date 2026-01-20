@@ -2,9 +2,9 @@ echo "🚀 Setting up Project..."
 
 # Clean up any existing node_modules and lock files
 echo "🧹 Cleaning up existing dependencies..."
-rm -rf node_modules package-lock.json
-rm -rf server/node_modules server/package-lock.json
-rm -rf client/node_modules client/package-lock.json
+rm -rf node_modules
+rm -rf server/node_modules
+rm -rf client/node_modules
 
 # Install root dependencies
 echo "📦 Installing root dependencies..."
