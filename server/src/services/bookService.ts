@@ -7,9 +7,7 @@ export async function getAllBooks() {
 
 export async function getBookById(bookId: number) {
   const book = await bookModel.findById(bookId);
-  if (!book) {
-    throw new NotFoundError('Book not found');
-  }
+  if (!book) throw new NotFoundError('Book not found');
   return book;
 }
 
@@ -22,12 +20,6 @@ export async function deleteBook(bookId: number) {
 }
 
 export async function addSongToBook(bookId: number, songId: number) {
-  const song = await songModel.findById(songId);
-  const book = await bookModel.findById(bookId);
-  if (!song || !book) {
-    throw new NotFoundError('Either the song or the book was not found');
-  }
-
   return await bookModel.addSong(bookId, songId);
 }
 

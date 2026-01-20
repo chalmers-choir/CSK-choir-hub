@@ -20,11 +20,14 @@ export interface RegisterInput {
  * @throws {Error} If email or username is already used.
  */
 export const registerUser = async (newUser: RegisterInput): Promise<string> => {
-  const { email, password } = newUser;
+  const { email, username, password } = newUser;
 
   // Check if user already exists
-  const existing = await userModel.findByEmail(email);
-  if (existing) throw new Error('User already exists');
+  const emailExists = await userModel.findByEmail(email);
+  if (emailExists) throw new Error('User with this email already exists');
+
+  const usernameExists = await userModel.findByUsername(username);
+  if (usernameExists) throw new Error('Username already taken');
 
   // Hash password
   const passwordHash = await bcrypt.hash(password, 10);

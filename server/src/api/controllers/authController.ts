@@ -1,6 +1,7 @@
 import * as authService from '@services/authService';
 import * as userService from '@services/userService';
-import { Request, Response } from 'express';
+import { BadRequestError, UnauthorizedError } from '@utils';
+import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
 type CookieOptions = {
@@ -17,7 +18,7 @@ const COOKIE_OPTIONS: CookieOptions = {
   path: '/',
 };
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response, next: NextFunction) => {
   // TODO: Rules for Registration in frontend
   const registerSchema = z.object({
     email: z.email(),
@@ -28,34 +29,34 @@ export const register = async (req: Request, res: Response) => {
   });
 
   const result = registerSchema.safeParse(req.body);
-  if (!result.success) {
-    return res.status(400).json({ errors: z.treeifyError(result.error) });
-  }
+  if (!result.success) return next(new BadRequestError('Invalid registration data'));
 
   const { email, password, username, firstName, lastName } = req.body;
 
-  const token = await userService.registerUser({
-    email,
-    password,
-    username,
-    firstName,
-    lastName,
-  });
-
-  return res.status(201).json({ token });
+  try {
+    const token = await userService.registerUser({
+      email,
+      password,
+      username,
+      firstName,
+      lastName,
+    });
+    return res.status(201).json({ token });
+  } catch (error: any) {
+    return next(error);
+  }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response, next: NextFunction) => {
+  const { username, password } = req.body;
+
+  if (!username || !password)
+    return next(new BadRequestError('Username / email and password are required'));
+
+  // Determine if input is an email using zod
+  const isEmail = z.email().safeParse(username).success;
+
   try {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-      return res.status(400).json({ error: 'Username / email and password are required' });
-    }
-
-    // Determine if input is an email using zod
-    const isEmail = z.email().safeParse(username).success;
-
     // Call the login service to get token
     const token = await authService.loginUser({
       identifier: username,
@@ -70,36 +71,27 @@ export const login = async (req: Request, res: Response) => {
 
     return res.json({ user });
   } catch (error: any) {
-    // Handle authentication errors properly
-    if (error.name === 'NotFoundError') {
-      return res.status(401).json({ error: 'Invalid username/email or password' });
-    }
-    // Re-throw other errors to be handled by error middleware
-    throw error;
+    return next(error);
   }
 };
 
-export const logout = async (req: Request, res: Response) => {
-  res.clearCookie('token', COOKIE_OPTIONS);
-  return res.sendStatus(200);
+export const logout = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.clearCookie('token', COOKIE_OPTIONS);
+    return res.sendStatus(200);
+  } catch (error: any) {
+    return next(error);
+  }
 };
 
-export const authenticate = async (req: Request, res: Response) => {
+export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+  const token = req.cookies.token;
+  if (!token) return next(new UnauthorizedError('Not authenticated'));
+
   try {
-    const token = req.cookies.token;
-
-    if (!token) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
-
     const user = await userService.getUserFromToken(token);
     return res.json({ user });
   } catch (error: any) {
-    // Handle invalid token errors
-    if (error.name === 'UnauthorizedError') {
-      return res.status(401).json({ error: 'Invalid or expired token' });
-    }
-    // Re-throw other errors to be handled by error middleware
-    throw error;
+    return next(error);
   }
 };

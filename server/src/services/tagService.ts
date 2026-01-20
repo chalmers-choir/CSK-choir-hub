@@ -1,5 +1,4 @@
 import { tagModel } from '@db';
-import { NotFoundError } from '@utils';
 
 /**
  * Get all tags from the database.
@@ -33,8 +32,5 @@ export async function deleteTag(tagId: number) {
  * @returns The updated tag
  */
 export async function updateTag(tagId: number, tagData: { name: string }) {
-  const tag = await tagModel.findById(tagId);
-  if (!tag) throw new NotFoundError('Tag not found');
-
   return await tagModel.update(tagId, tagData);
 }

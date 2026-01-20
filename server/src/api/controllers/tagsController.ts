@@ -1,37 +1,55 @@
 import * as tagService from '@services/tagService';
-import { Request, Response } from 'express';
+import { BadRequestError } from '@utils/errors';
+import { NextFunction, Request, Response } from 'express';
 
 // Get all tags
-export const getTags = async (req: Request, res: Response) => {
-  const tags = await tagService.getAllTags();
-  res.json({ tags });
+export const getTags = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const tags = await tagService.getAllTags();
+    res.json({ tags });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // Create a new tag
-export const createTag = async (req: Request, res: Response) => {
+export const createTag = async (req: Request, res: Response, next: NextFunction) => {
   const { name } = req.body;
-  if (!name) return res.status(400).json({ error: 'Tag name is required' });
+  if (!name) return next(new BadRequestError('Tag name is required'));
 
-  const newTag = await tagService.createTag(name);
-  return res.status(201).json({ tag: newTag });
+  try {
+    const newTag = await tagService.createTag(name);
+    return res.status(201).json({ tag: newTag });
+  } catch (error) {
+    return next(error);
+  }
 };
 
 // Delete a tag by ID
-export const deleteTag = async (req: Request, res: Response) => {
+export const deleteTag = async (req: Request, res: Response, next: NextFunction) => {
   const tagId = parseInt(req.params.id, 10);
-  if (isNaN(tagId)) return res.status(400).json({ error: 'Invalid tag ID' });
+  if (isNaN(tagId)) return next(new BadRequestError('Invalid tag ID'));
 
-  await tagService.deleteTag(tagId);
-  return res.status(204).send();
+  try {
+    await tagService.deleteTag(tagId);
+    return res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
 };
 
 // Rename tag with ID
-export const updateTag = async (req: Request, res: Response) => {
+export const updateTag = async (req: Request, res: Response, next: NextFunction) => {
   const tagId = parseInt(req.params.id, 10);
-  const { name } = req.body;
-  if (isNaN(tagId)) return res.status(400).json({ error: 'Invalid tag ID' });
-  if (!name) return res.status(400).json({ error: 'Tag name is required' });
+  if (isNaN(tagId)) return next(new BadRequestError('Invalid tag ID'));
 
-  const updatedTag = await tagService.updateTag(tagId, name);
-  return res.json({ tag: updatedTag });
+  const { name } = req.body;
+  if (!name) return next(new BadRequestError('Tag name is required'));
+
+  try {
+    const updatedTag = await tagService.updateTag(tagId, name);
+    return res.json({ tag: updatedTag });
+  } catch (error) {
+    next(error);
+  }
 };

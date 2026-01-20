@@ -1,5 +1,4 @@
 import { songModel, tagModel } from '@db';
-import { NotFoundError } from '@utils';
 
 /**
  * Gets all songs in the database.
@@ -42,9 +41,6 @@ export async function getSongById(songId: number) {
  * @returns The result of the operation.
  */
 export async function addTag(songId: number, tagId: number) {
-  const tag = await tagModel.findById(tagId);
-  if (!tag) throw new NotFoundError('Tag not found');
-
   return await tagModel.assignToSong(tagId, songId);
 }
 
