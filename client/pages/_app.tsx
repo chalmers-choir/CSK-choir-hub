@@ -9,13 +9,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   return (
-    // <AuthProvider>
-    //   <HeroUIProvider navigate={router.push}>
-    //     <NextThemesProvider attribute="class" defaultTheme="light">
-    //       <Component {...pageProps} />
-    //     </NextThemesProvider>
-    //   </HeroUIProvider>
-    // </AuthProvider>
     <Providers>
       <Component {...pageProps} />
     </Providers>
