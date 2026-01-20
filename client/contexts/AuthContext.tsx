@@ -4,8 +4,6 @@ import React, { ReactNode, createContext, useContext, useEffect, useState } from
 
 import { useRouter } from 'next/navigation';
 
-import { addToast } from '@heroui/toast';
-
 import { AuthContextType, RegisterForm } from '../types/auth';
 import { AuthService, User } from '@/lib/apiClient';
 
@@ -38,7 +36,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(res.user);
     } catch (error: any) {
       setUser(undefined);
-      console.error('Failed to fetch authenticated user:', error);
     } finally {
       setLoading(false);
     }
@@ -55,7 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(res.user);
       router.push('/');
     } catch (error: any) {
-      console.error('Login failed:', error);
+      setUser(undefined);
     } finally {
       setLoading(false);
     }
@@ -68,7 +65,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       await AuthService.registerUser({ requestBody: userData });
       router.push('/login');
     } catch (error) {
-      console.error('Registration failed:', error);
+      setUser(undefined);
     } finally {
       setLoading(false);
     }
@@ -82,15 +79,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(undefined);
       router.push('/');
     } catch (error) {
-      console.error('Logout failed:', error);
+      setUser(undefined);
     } finally {
       setLoading(false);
-      addToast({
-        title: 'You have been logged out.',
-        timeout: 3000,
-        shouldShowTimeoutProgress: true,
-        color: 'danger',
-      });
     }
   };
 

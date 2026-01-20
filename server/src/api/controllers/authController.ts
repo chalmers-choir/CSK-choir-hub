@@ -11,10 +11,13 @@ type CookieOptions = {
   path: string;
 };
 
+const CROSS_SITE_COOKIES = process.env.CROSS_SITE_COOKIES === 'true';
+const isProduction = process.env.NODE_ENV === 'production';
+
 const COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'strict',
+  secure: isProduction || CROSS_SITE_COOKIES,
+  sameSite: CROSS_SITE_COOKIES ? 'none' : 'lax',
   path: '/',
 };
 
