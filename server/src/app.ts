@@ -25,7 +25,7 @@ app.use(express.json());
 /* ---- Logging Middleware ---- */
 app.use(logAtLevel(4));
 
-// CORS configuration
+/* ---- CORS configuration ---- */
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || '*', // allow from your frontend URL

@@ -31,14 +31,16 @@ interface AccessRules {
  */
 export const requireAuth = (rules?: AccessRules) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader?.startsWith('Bearer ')) {
-      return res.status(401).json({ success: false, message: 'No token provided' });
-    }
-
     try {
-      const token = authHeader.split(' ')[1];
+      const bearer = req.headers.authorization?.startsWith('Bearer ')
+        ? req.headers.authorization.split(' ')[1]
+        : undefined;
+      const token = req.cookies?.token ?? bearer;
+
+      if (!token) {
+        return res.status(401).json({ success: false, message: 'No token provided' });
+      }
+
       const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
       const user = await userModel.findById(decoded.id, { roles: true, groups: true });
 

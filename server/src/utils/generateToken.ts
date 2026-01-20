@@ -6,10 +6,6 @@ export const generateToken = (userId: number): string => {
   return jwt.sign({ userId }, JWT_SECRET, { expiresIn: '1h' });
 };
 
-export const generateTokenWithRole = (userId: number, role: string): string => {
-  return jwt.sign({ userId, role }, JWT_SECRET, { expiresIn: '1h' });
-};
-
 export const verifyToken = (token: string): any | null => {
   try {
     return jwt.verify(token, JWT_SECRET);

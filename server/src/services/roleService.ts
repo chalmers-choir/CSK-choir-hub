@@ -1,5 +1,4 @@
-import { roleModel, userModel } from '@db';
-import { NotFoundError } from '@utils';
+import { roleModel } from '@db';
 
 /**
  * Get all roles in the system.
@@ -9,6 +8,12 @@ export async function getAllRoles() {
   return await roleModel.findAll();
 }
 
+/**
+ * Create a new role.
+ * @param name - The name of the role.
+ * @param description - The description of the role.
+ * @returns The created role.
+ */
 export async function createRole(name: string, description?: string) {
   return await roleModel.create(name, description);
 }
@@ -28,9 +33,6 @@ export async function deleteRole(roleId: number) {
  * @returns {Promise<void>}
  */
 export async function assignUser(userId: number, roleId: number): Promise<void> {
-  const user = await userModel.findById(userId);
-  if (!user) throw new NotFoundError('User not found');
-
   await roleModel.assignUser(userId, roleId);
 }
 

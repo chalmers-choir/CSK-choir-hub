@@ -37,8 +37,6 @@ export async function updateGroup(
   groupId: number,
   data: { name?: string; type?: GroupType; description?: string },
 ) {
-  const group = await groupModel.findById(groupId);
-  if (!group) throw new NotFoundError('Group not found');
   return await groupModel.update(groupId, data);
 }
 
@@ -54,6 +52,7 @@ export async function addGroup(parentGroupId: number, subgroupId: number) {
 
   const subgroup = await groupModel.findById(subgroupId);
   if (!subgroup) throw new NotFoundError('Subgroup not found');
+
   return await groupModel.addGroup(parentGroupId, subgroupId);
 }
 

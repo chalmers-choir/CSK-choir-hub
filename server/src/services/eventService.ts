@@ -64,16 +64,6 @@ export async function updateUserAttendance(
   userId: number,
   status?: AttendanceStatus,
 ) {
-  const event = await eventModel.findById(eventId);
-  if (!event) {
-    throw new NotFoundError('Event not found');
-  }
-
-  const user = await userModel.findById(userId);
-  if (!user) {
-    throw new NotFoundError('User not found');
-  }
-
   if (status) {
     return await eventModel.updateUserAttendance(eventId, userId, status);
   } else {
@@ -88,10 +78,12 @@ export async function updateUserAttendance(
  * @returns {Promise<void>}
  */
 export async function registerUser(eventId: number, userId: number) {
-  const user = userModel.findById(userId);
-  if (!user) {
-    throw new NotFoundError('User not Found');
-  }
+  const user = await userModel.findById(userId);
+  if (!user) throw new NotFoundError('User not Found');
+
+  const event = await eventModel.findById(eventId);
+  if (!event) throw new NotFoundError('Event not Found');
+
   return await eventModel.registerUser(eventId, userId);
 }
 
