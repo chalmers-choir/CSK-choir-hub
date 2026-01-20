@@ -34,16 +34,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const fetchUser = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${siteConfig.apiBaseUrl}/auth/authenticate`, {
-        credentials: 'include',
-      });
-
-      if (!res.ok) {
-        throw new Error('Not authenticated');
-      }
-      const data = await res.json();
-
-      setUser(data.user);
+      const res = await AuthService.authenticate();
+      setUser(res.user);
     } catch (error: any) {
       setUser(undefined);
       // Log 401 errors for debugging but don't redirect

@@ -20,6 +20,7 @@ cd ..
 echo "📦 Installing client dependencies..."
 cd client
 npm install
+npm run api:generate
 cd ..
 
 # Build TypeScript

@@ -52,7 +52,7 @@ paths:
       tags:
         - auth
       summary: Validate session
-      operationId: authenticateUser
+      operationId: authenticate
       responses:
         '200':
           description: Current authenticated user

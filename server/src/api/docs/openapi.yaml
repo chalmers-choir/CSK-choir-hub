@@ -24,6 +24,12 @@ paths:
   /auth/login:
     $ref: '../routes/auth/auth.yaml#/paths/~1auth~1login'
 
+  /auth/logout:
+    $ref: '../routes/auth/auth.yaml#/paths/~1auth~1logout'
+
+  /auth/authenticate:
+    $ref: '../routes/auth/auth.yaml#/paths/~1auth~1authenticate'
+
   /books:
     $ref: '../routes/books/books.yaml#/paths/~1books'
 
