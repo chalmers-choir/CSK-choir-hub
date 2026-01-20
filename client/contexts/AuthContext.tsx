@@ -38,11 +38,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(res.user);
     } catch (error: any) {
       setUser(undefined);
-      // Log 401 errors for debugging but don't redirect
-      if (error?.response?.status === 401) {
-        console.log('Authentication failed:', error.response?.data?.error);
-      }
-      // Remove automatic redirect - let pages handle their own routing
+      console.error('Failed to fetch authenticated user:', error);
     } finally {
       setLoading(false);
     }
@@ -59,32 +55,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(res.user);
       router.push('/');
     } catch (error: any) {
-      console.log('Login error details:', {
-        response: error.response,
-        status: error.response?.status,
-        data: error.response?.data,
-        message: error.message,
-      });
-
-      // Handle axios errors properly
-      if (error.response) {
-        // Server responded with an error status
-        const message = error.response.data?.error || error.response.data?.message;
-
-        if (error.response.status === 401) {
-          throw new Error(message || 'Invalid username/email or password');
-        } else if (error.response.status === 400) {
-          throw new Error(message || 'Please check your input');
-        } else {
-          throw new Error(message || `Server error (${error.response.status})`);
-        }
-      } else if (error.request) {
-        // Network error
-        throw new Error('Unable to connect to server. Please check your connection.');
-      } else {
-        // Something else
-        throw new Error(error.message || 'An unexpected error occurred');
-      }
+      console.error('Login failed:', error);
     } finally {
       setLoading(false);
     }
@@ -92,6 +63,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const register = async (userData: Omit<RegisterForm, 'confirmPassword'>) => {
     setLoading(true);
+
     try {
       await AuthService.registerUser({ requestBody: userData });
       router.push('/login');
@@ -104,8 +76,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = async () => {
     setLoading(true);
+
     try {
-      await fetch('/api/logout', { method: 'POST' });
+      await AuthService.logout();
       setUser(undefined);
       router.push('/');
     } catch (error) {

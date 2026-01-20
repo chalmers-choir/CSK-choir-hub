@@ -42,7 +42,7 @@ paths:
       tags:
         - auth
       summary: Logout current user
-      operationId: logoutUser
+      operationId: logout
       responses:
         '200':
           description: Session cleared
