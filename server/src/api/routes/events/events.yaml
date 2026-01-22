@@ -18,6 +18,8 @@ paths:
                     type: array
                     items:
                       $ref: '../../docs/openapi.yaml#/components/schemas/CSKEvent'
+                required:
+                  - events
     post:
       tags:
         - events
@@ -66,6 +68,8 @@ paths:
                 properties:
                   event:
                     $ref: '../../docs/openapi.yaml#/components/schemas/CSKEvent'
+                required:
+                  - event
 
   /events/{eventId}:
     parameters:
@@ -92,6 +96,8 @@ paths:
                 properties:
                   event:
                     $ref: '../../docs/openapi.yaml#/components/schemas/CSKEvent'
+                required:
+                  - event
     put:
       tags:
         - events
@@ -183,6 +189,8 @@ paths:
                 properties:
                   registration:
                     $ref: '../../docs/openapi.yaml#/components/schemas/Registration'
+                required:
+                  - registration
 
     delete:
       tags:
@@ -248,3 +256,5 @@ paths:
                 properties:
                   attendance:
                     $ref: '../../docs/openapi.yaml#/components/schemas/Attendance'
+                required:
+                  - attendance

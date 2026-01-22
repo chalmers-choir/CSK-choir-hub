@@ -83,13 +83,10 @@ export default function CreateEventPage() {
       const eventData = { name, type, description, dateStart: dateStart?.toString(), place };
 
       const { event: newEvent } = await EventsService.addEvent({ requestBody: eventData }); // Invalidate cache
-      const eventId = newEvent?.id;
-
-      if (eventId) {
-        resetState();
-        setResult({ type: 'success', message: 'Evenemang skapat!' });
-        window.location.href = `/events/${eventId}`;
-      }
+      const eventId = newEvent.id;
+      resetState();
+      setResult({ type: 'success', message: 'Evenemang skapat!' });
+      window.location.href = `/events/${eventId}`;
     } catch (err: any) {
       setResult({ type: 'error', message: err.message });
     }
