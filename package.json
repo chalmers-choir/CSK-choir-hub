@@ -5,7 +5,7 @@
   "main": "server/dist/index.js",
   "scripts": {
     "prisma:generate": "cd server && npx prisma generate",
-    "dev": "npm run docker:up && concurrently \"npm run server\" \"npm run client\"",
+    "dev": "npm run docker:start && concurrently \"npm run server\" \"npm run client\"",
     "dev:local": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd server && npm run dev",
     "client": "cd client && npm run dev",
@@ -18,6 +18,7 @@
     "docker:logs": "cd server && docker-compose logs -f",
     "docker:ps": "cd server && docker-compose ps",
     "docker:restart": "cd server && docker-compose down && docker-compose up -d",
+    "docker:start": "cd server && docker-compose start db",
     "format": "prettier . --write",
     "format:check": "prettier . --check"
   },
