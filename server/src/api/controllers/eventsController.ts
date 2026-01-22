@@ -15,6 +15,7 @@ export const getEvents = async (req: Request, res: Response, next: NextFunction)
 // Delete an event by ID
 export const deleteEvent = async (req: Request, res: Response, next: NextFunction) => {
   const eventId = parseInt(req.params.id, 10);
+
   if (isNaN(eventId)) return next(new BadRequestError('Invalid event ID'));
 
   try {
@@ -27,11 +28,15 @@ export const deleteEvent = async (req: Request, res: Response, next: NextFunctio
 
 // Create a new event
 export const createEvent = async (req: Request, res: Response, next: NextFunction) => {
-  const { name, type, description, dateStart, place } = req.body;
-  if (!name || !dateStart || !place)
+  const { name, type, description, dateStart: _dateStart, place } = req.body;
+  if (!name || !_dateStart || !place)
     return next(new BadRequestError('Name, start date, and place are required'));
 
   try {
+    const dateStart = new Date(_dateStart);
+    if (isNaN(dateStart.getTime())) {
+      return next(new BadRequestError('Invalid date format: expected ISO-8601 string'));
+    }
     const newEvent = await eventService.createEvent({ name, type, description, dateStart, place });
     return res.status(201).json({ event: newEvent });
   } catch (error) {
