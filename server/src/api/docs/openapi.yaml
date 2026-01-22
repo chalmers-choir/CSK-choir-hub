@@ -48,11 +48,11 @@ paths:
   /events/{eventId}:
     $ref: '../routes/events/events.yaml#/paths/~1events~1{eventId}'
 
-  /events/{eventId}/registration:
-    $ref: '../routes/events/events.yaml#/paths/~1events~1{eventId}~1registration'
+  /events/{eventId}/registrations:
+    $ref: '../routes/events/events.yaml#/paths/~1events~1{eventId}~1registrations'
 
-  /events/{eventId}/attendance:
-    $ref: '../routes/events/events.yaml#/paths/~1events~1{eventId}~1attendance'
+  /events/{eventId}/attendances:
+    $ref: '../routes/events/events.yaml#/paths/~1events~1{eventId}~1attendances'
 
   /groups:
     $ref: '../routes/groups/groups.yaml#/paths/~1groups'

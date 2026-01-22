@@ -20,14 +20,14 @@ export async function getEvent(eventId: number) {
   if (!event) return null;
 
   const attendees = (await eventModel.listAttendees(eventId)).map((a) => ({
-    id: a.user.id,
+    userId: a.user.id,
     firstName: a.user.firstName,
     lastName: a.user.lastName,
     status: a.status,
   }));
 
   const registrations = (await eventModel.listRegistrations(eventId)).map((r) => ({
-    id: r.user.id,
+    userId: r.user.id,
     firstName: r.user.firstName,
     lastName: r.user.lastName,
     comments: r.comments,
@@ -35,9 +35,11 @@ export async function getEvent(eventId: number) {
   }));
 
   return {
-    event,
-    attendees,
-    registrations,
+    event: {
+      ...event,
+      attendees,
+      registrations,
+    },
   };
 }
 

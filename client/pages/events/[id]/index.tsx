@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import RequireAuth from '@/components/RequireAuth';
-import EventDetailCard from '@/components/events/eventDetailCard';
+import EventDetailCard from '@/components/events/EventDetailCard';
 import DefaultLayout from '@/layouts/default';
 import { CSKEvent, EventsService } from '@/lib/api-client';
 

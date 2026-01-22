@@ -145,7 +145,7 @@ paths:
         '204':
           description: Event deleted
 
-  /events/{eventId}/registration:
+  /events/{eventId}/registrations:
     parameters:
       - name: eventId
         in: path
@@ -207,7 +207,7 @@ paths:
         '204':
           description: Registration removed
 
-  /events/{eventId}/attendance:
+  /events/{eventId}/attendances:
     parameters:
       - name: eventId
         in: path
@@ -238,7 +238,6 @@ paths:
                   enum: [PRESENT, ABSENT]
               required:
                 - userId
-                - status
       responses:
         '200':
           description: Attendance updated

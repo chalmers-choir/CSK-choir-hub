@@ -7,7 +7,7 @@ import { addToast } from '@heroui/toast';
 
 import { EventUserEntry, EventUserListAccordion } from './EventUserListAccordion';
 import { useAuth } from '@/contexts/AuthContext';
-import { CSKEvent, CSKEventType } from '@/lib/api-client';
+import { CSKEvent, CSKEventType, EventsService } from '@/lib/api-client';
 import { IoClose } from 'react-icons/io5';
 
 const formatDate = (isoString?: string) => {
@@ -46,31 +46,19 @@ const CSKEventTypeString: Record<CSKEventType, string> = {
 };
 
 export default function EventDetailCard({ event }: EventDetailCardProps) {
-  // Extract data from event prop when available
-
-  if (!event) {
-    return (
-      <Card>
-        <CardBody>
-          <p>Loading event details...</p>
-        </CardBody>
-      </Card>
-    );
-  }
-
   const { user } = useAuth();
 
-  type AttendanceChoice = 'yes' | 'no' | null;
+  type AttendanceChoice = 'yes' | 'no' | undefined;
   const statusToChoice = (status?: string | null): AttendanceChoice =>
-    status === 'PRESENT' ? 'yes' : status === 'ABSENT' ? 'no' : null;
+    status === 'PRESENT' ? 'yes' : status === 'ABSENT' ? 'no' : undefined;
   const choiceToStatus = (choice: AttendanceChoice) =>
-    choice === 'yes' ? 'PRESENT' : choice === 'no' ? 'ABSENT' : null;
+    choice === 'yes' ? 'PRESENT' : choice === 'no' ? 'ABSENT' : undefined;
 
   const userAttendanceStatus = useMemo(() => {
-    if (!user) return null;
-    const entry = event?.attendances?.find((a) => a.userId === user.id);
-    return entry?.status ?? null;
-  }, [event?.attendances, user]);
+    if (!user || !event?.attendees) return undefined;
+    const entry = event.attendees.find((a) => a.userId === user.id);
+    return entry?.status ?? undefined;
+  }, [event?.attendees, user]);
 
   const [oldEventAttendance, setOldEventAttendance] = useState<AttendanceChoice>(
     statusToChoice(userAttendanceStatus),
@@ -86,41 +74,42 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
   }, [userAttendanceStatus]);
 
   const handleYesChange = (selected: boolean) => {
-    setNewEventAttendance(selected ? 'yes' : null);
+    setNewEventAttendance(selected ? 'yes' : undefined);
   };
 
   const handleNoChange = (selected: boolean) => {
-    setNewEventAttendance(selected ? 'no' : null);
+    setNewEventAttendance(selected ? 'no' : undefined);
   };
 
-  const eventType = CSKEventTypeString[event.type] ?? event.type;
-  const eventName = event.name;
-  const eventPlace = event.place;
-  const eventDescription = event.description ?? 'No description available.';
-  const eventDate = formatDate(event.dateStart);
-  const eventStartTime = formatTime(event.dateStart);
-  const eventEndTime = formatTime(event.dateEnd);
+  const eventType = event ? (CSKEventTypeString[event.type] ?? event.type) : '...';
+  const eventName = event?.name ?? 'Loading event...';
+  const eventPlace = event?.place ?? '';
+  const eventDescription = event?.description ?? 'No description available.';
+  const eventDate = formatDate(event?.dateStart);
+  const eventStartTime = formatTime(event?.dateStart);
+  const eventEndTime = formatTime(event?.dateEnd);
   const eventTimeRange =
     eventEndTime !== 'N/A' ? `${eventStartTime} - ${eventEndTime}` : eventStartTime;
-  const registrationRequired = event.requiresRegistration;
-  const attendanceRecorded = event.requiresAttendance;
+  const registrationRequired = !!event?.requiresRegistration;
+  const attendanceRecorded = !!event?.requiresAttendance;
   const hasAttendanceChanges = oldEventAttendance !== newEventAttendance;
   const isRegistered = useMemo(() => {
-    if (!user) return false;
-    return event?.registrations?.some((r) => r.userId === user.id) ?? false;
+    if (!user || !event?.registrations) return false;
+    return event.registrations.some((r) => r.userId === user.id);
   }, [event?.registrations, user]);
 
   // Decide which list to show (events are either attendance-based or registration-based, not both)
   const isAttendanceMode = attendanceRecorded;
+
   const baseUsersForList: EventUserEntry[] = isAttendanceMode
-    ? (event?.attendances?.map(({ name, status }) => ({
-        name: `${name}`,
+    ? (event?.attendees?.map(({ firstName, lastName, status }) => ({
+        name: `${firstName} ${lastName}`,
         status: status === 'ABSENT' ? false : status === 'PRESENT' ? true : null,
       })) ?? [])
-    : event?.registrations?.map(({ name }) => ({
-        name: `${name}`,
+    : (event?.registrations?.map(({ firstName, lastName }) => ({
+        name: `${firstName} ${lastName}`,
         status: true,
-      }));
+      })) ?? []);
 
   const usersForList = useMemo(() => {
     if (!isAttendanceMode || !user) return baseUsersForList;
@@ -142,23 +131,9 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
   }, [baseUsersForList, isAttendanceMode, newEventAttendance, user]);
 
   const handleRegistration = async () => {
-    if (!user) return;
+    if (!user || !event) return;
     try {
-      const res = await fetch(`http://localhost:5050/api/events/${event.id}/registrations`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: user.id,
-        }),
-        credentials: 'include',
-      });
-
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body.error || `Request failed: ${res.status}`);
-      }
+      await EventsService.markRegistration({ eventId: event.id, requestBody: { userId: user.id } });
 
       addToast({
         title: 'Anmäld till evenemanget',
@@ -179,23 +154,12 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
   };
 
   const handleUnregister = async () => {
-    if (!user) return;
+    if (!user || !event) return;
     try {
-      const res = await fetch(`http://localhost:5050/api/events/${event.id}/registrations`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: user.id,
-        }),
-        credentials: 'include',
+      await EventsService.unmarkRegistration({
+        eventId: event.id,
+        requestBody: { userId: user.id },
       });
-
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body.error || `Request failed: ${res.status}`);
-      }
 
       addToast({
         title: 'Avanmäld från evenemanget',
@@ -221,26 +185,17 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
   };
 
   const handleSaveAttendance = async () => {
-    if (!user) return;
+    if (!user || !event) return;
     const status = choiceToStatus(newEventAttendance);
 
     try {
-      const res = await fetch(`http://localhost:5050/api/events/${event.id}/attendances`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      await EventsService.markAttendance({
+        eventId: event.id,
+        requestBody: {
           userId: user.id,
           status,
-        }),
-        credentials: 'include',
+        },
       });
-
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body.error || `Request failed: ${res.status}`);
-      }
 
       setOldEventAttendance(newEventAttendance);
       addToast({
