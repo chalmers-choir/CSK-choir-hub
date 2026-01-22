@@ -3,119 +3,105 @@ paths:
     get:
       tags:
         - roles
-      summary: Get all roles.
-      description: Gets the full list of all roles.
+      summary: List roles
       operationId: getRoles
       responses:
         '200':
-          description: Successful operation
+          description: Roles fetched
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '../../docs/openapi.yaml#/components/schemas/Role'
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+                type: object
+                properties:
+                  roles:
+                    type: array
+                    items:
+                      $ref: '../../docs/openapi.yaml#/components/schemas/Role'
     post:
       tags:
         - roles
-      summary: Add a new role.
-      description: Adds a new role to the collection.
-      operationId: addRole
+      summary: Create role
+      description: Creates a new role.
+      operationId: createRole
       requestBody:
-        description: Group object that needs to be added to the collection
         required: true
         content:
           application/json:
             schema:
               type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+              required:
+                - name
       responses:
         '201':
-          description: Successful operation
+          description: Role created
           content:
             application/json:
               schema:
                 type: object
-            application/xml:
-              schema:
-                type: object
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+                properties:
+                  role:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/Role'
+
   /roles/{roleId}:
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+        description: ID of the role
+        schema:
+          type: integer
+          format: int64
     delete:
       tags:
         - roles
-      summary: Deletes a role.
-      description: Deletes a role by ID.
+      summary: Delete role
+      description: Deletes a role (Admins only).
       operationId: deleteRole
       responses:
         '204':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+          description: Role deleted
+
   /roles/{roleId}/user:
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+        description: ID of the role
+        schema:
+          type: integer
+          format: int64
     put:
       tags:
         - roles
-      summary: Assigns a user to a role.
-      description: Assigns a user to a role by ID.
+      summary: Assign user to role
+      description: Assigns a user to a role (Admins only).
       operationId: assignUserToRole
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  format: int64
+              required:
+                - userId
       responses:
         '204':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+          description: User assigned
     delete:
       tags:
         - roles
-      summary: Removes a user from a role.
-      description: Assigns a user to a role by ID.
-      operationId: assignUserToRole
+      summary: Remove user from role
+      description: Removes the user assignment from the role (Admins only).
+      operationId: removeUserFromRole
       responses:
         '204':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+          description: User removed

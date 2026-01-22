@@ -1,16 +1,18 @@
-import { Link } from '@heroui/link';
-import { button as buttonStyles } from '@heroui/theme';
-
+import AuthLoading from '@/components/AuthLoading';
+import LoggedOutCta from '@/components/LoggedOutCta';
 import { subtitle, title } from '@/components/primitives';
-import { siteConfig } from '@/config/site';
 import { useAuth } from '@/contexts/AuthContext';
 import DefaultLayout from '@/layouts/default';
 
 export default function IndexPage() {
-  const { user, loading, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <DefaultLayout>
+        <AuthLoading />
+      </DefaultLayout>
+    );
   }
 
   return (
@@ -29,20 +31,7 @@ export default function IndexPage() {
             <p className="mb-2 text-lg">Välkommen tillbaka, {user?.firstName}!</p>
           </div>
         ) : (
-          <div className="flex gap-3">
-            <Link
-              className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
-              href={siteConfig.links.login}
-            >
-              Login
-            </Link>
-            <Link
-              className={buttonStyles({ variant: 'bordered', radius: 'full' })}
-              href={siteConfig.links.register}
-            >
-              Register
-            </Link>
-          </div>
+          <LoggedOutCta />
         )}
       </section>
     </DefaultLayout>

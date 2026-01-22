@@ -1,5 +1,5 @@
 import { userModel } from '@db';
-import { Group, Role } from '@prisma/client';
+import { Group, Role } from '@prisma/generated/client';
 import { ForbiddenError, UnauthorizedError } from '@utils';
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
@@ -45,7 +45,7 @@ export const requireAuth = (rules?: AccessRules) => {
       const user = await userModel.findById(decoded.id, { roles: true, groups: true });
 
       if (!user) {
-        throw new UnauthorizedError('User not found');
+        return next(new UnauthorizedError('User not found'));
       }
 
       req.user = {
@@ -56,19 +56,19 @@ export const requireAuth = (rules?: AccessRules) => {
 
       // Role check
       if (rules?.roles?.length && !req.user.roles.some((r) => rules.roles!.includes(r))) {
-        throw new ForbiddenError('Forbidden: Role not allowed.');
+        return next(new ForbiddenError('Forbidden: Role not allowed.'));
       }
 
       // Group check
       if (rules?.groups?.length && !req.user.groups.some((g) => rules.groups!.includes(g))) {
-        throw new ForbiddenError('Forbidden: Group not allowed.');
+        return next(new ForbiddenError('Forbidden: Group not allowed.'));
       }
 
       // Self check
       if (rules?.allowSelf && rules.paramKey) {
         const targetId = parseInt(req.params[rules.paramKey], 10);
         if (req.user.id !== targetId) {
-          throw new ForbiddenError('Forbidden: Not your resource.');
+          return next(new ForbiddenError('Forbidden: Not your resource.'));
         }
       }
 

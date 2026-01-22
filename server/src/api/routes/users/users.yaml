@@ -3,11 +3,51 @@ paths:
     get:
       tags:
         - users
+      summary: List users
+      operationId: getUsers
+      responses:
+        '200':
+          description: Users fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '../../docs/openapi.yaml#/components/schemas/User'
 
   /users/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        description: ID of the user
+        schema:
+          type: integer
+          format: int64
     get:
       tags:
         - users
+      summary: Get user
+      operationId: getUser
+      responses:
+        '200':
+          description: User fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/User'
     delete:
       tags:
         - users
+      summary: Delete user
+      description: Deletes a user (Admins only).
+      operationId: deleteUser
+      responses:
+        '204':
+          description: User deleted

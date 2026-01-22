@@ -2,11 +2,10 @@ import app from './app';
 import { prisma } from '@db';
 import dotenv from 'dotenv';
 
-// Load environment variables
 dotenv.config();
 
 // Server port
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
 
 const startServer = async () => {
   try {

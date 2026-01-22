@@ -42,7 +42,7 @@ export interface AuthResponse {
 
 // Context types
 export interface AuthContextType {
-  user: AuthenticatedUser | null;
+  user: User | undefined;
   loading: boolean;
   login: (username: string, password: string) => Promise<void>;
   register: (userData: Omit<RegisterForm, 'confirmPassword'>) => Promise<void>;
@@ -50,4 +50,3 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   isAdmin: boolean;
 }
-A;

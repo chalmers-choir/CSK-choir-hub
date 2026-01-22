@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client';
-import { Book } from '@prisma/client';
+import { PrismaClient } from '@prisma/generated/client';
+import { Book } from '@prisma/generated/client';
 
-export default async function seedRoles(prisma: PrismaClient): Promise<Books> {
+export default async function seedBooks(prisma: PrismaClient): Promise<Books> {
   // Create Books
   const utantill = await prisma.book.create({
     data: {

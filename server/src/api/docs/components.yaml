@@ -20,13 +20,11 @@ schemas:
       groups:
         type: array
         items:
-          type: integer
-          format: int64
+          $ref: '#/schemas/Group'
       roles:
         type: array
         items:
-          type: integer
-          format: int64
+          $ref: '#/schemas/Role'
       songKnowledge:
         type: array
         items:
@@ -230,6 +228,9 @@ schemas:
         type: boolean
         example: true
       requiresRegistration:
+        type: boolean
+        example: false
+      testIsWorking:
         type: boolean
         example: false
       attendances:

@@ -12,7 +12,7 @@ externalDocs:
   url: https://chalmerssangkor.se
 
 servers:
-  - url: http://localhost:5000/api
+  - url: http://localhost:5050/api
     description: Local development server
   - url: https://portal.chalmerssangkor.se/api
     description: Production server
@@ -23,6 +23,12 @@ paths:
 
   /auth/login:
     $ref: '../routes/auth/auth.yaml#/paths/~1auth~1login'
+
+  /auth/logout:
+    $ref: '../routes/auth/auth.yaml#/paths/~1auth~1logout'
+
+  /auth/authenticate:
+    $ref: '../routes/auth/auth.yaml#/paths/~1auth~1authenticate'
 
   /books:
     $ref: '../routes/books/books.yaml#/paths/~1books'

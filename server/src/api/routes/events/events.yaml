@@ -3,158 +3,149 @@ paths:
     get:
       tags:
         - events
-      summary: Get all events.
-      description: Gets the full list of all events.
+      summary: List events
+      description: Returns all events in chronological order.
       operationId: getEvents
       responses:
         '200':
-          description: Successful operation
+          description: Events fetched
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-            application/xml:
-              schema:
-                type: array
-                items:
-                  type: object
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: '../../docs/openapi.yaml#/components/schemas/Event'
     post:
       tags:
         - events
-      summary: Add a new event.
-      description: Adds a new event to the collection.
+      summary: Create event
+      description: Creates a new event (Admins only).
       operationId: addEvent
       requestBody:
-        description: Event object that needs to be added to the collection
+        description: Event data
         required: true
         content:
           application/json:
             schema:
               type: object
-          application/xml:
-            schema:
-              type: object
+              properties:
+                name:
+                  type: string
+                type:
+                  type: string
+                  enum: [REHEARSAL, CONCERT, GIG, PARTY, MEETING, OTHER]
+                description:
+                  type: string
+                dateStart:
+                  type: string
+                  format: date-time
+                dateEnd:
+                  type: string
+                  format: date-time
+                place:
+                  type: string
+                requiresAttendance:
+                  type: boolean
+                requiresRegistration:
+                  type: boolean
+              required:
+                - name
+                - type
+                - dateStart
+                - place
       responses:
         '201':
-          description: Successful operation
+          description: Event created
           content:
             application/json:
               schema:
                 type: object
-            application/xml:
-              schema:
-                type: object
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
-            application/xml:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+                properties:
+                  event:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/Event'
 
   /events/{eventId}:
+    parameters:
+      - name: eventId
+        in: path
+        description: ID of the event
+        required: true
+        schema:
+          type: integer
+          format: int64
     put:
       tags:
         - events
-      summary: Update an event.
-      description: Updates an existing event by ID.
+      summary: Update event
+      description: Updates an existing event by ID (Admins only).
       operationId: updateEvent
-      parameters:
-        - name: id
-          in: path
-          description: ID of the event to update
-          required: true
-          schema:
-            type: integer
-            format: int64
       requestBody:
-        description: Event object that needs to be updated
+        description: Event fields to update
         required: true
         content:
           application/json:
             schema:
               type: object
-          application/xml:
-            schema:
-              type: object
+              properties:
+                name:
+                  type: string
+                type:
+                  type: string
+                  enum: [REHEARSAL, CONCERT, GIG, PARTY, MEETING, OTHER]
+                description:
+                  type: string
+                dateStart:
+                  type: string
+                  format: date-time
+                dateEnd:
+                  type: string
+                  format: date-time
+                place:
+                  type: string
+                requiresAttendance:
+                  type: boolean
+                requiresRegistration:
+                  type: boolean
       responses:
         '200':
-          description: Successful operation
+          description: Event updated
           content:
             application/json:
               schema:
                 type: object
-            application/xml:
-              schema:
-                type: object
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
-            application/xml:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+                properties:
+                  event:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/Event'
     delete:
       tags:
         - events
-      summary: Deletes an event.
-      description: Deletes an event by ID.
+      summary: Delete event
+      description: Deletes an event by ID (Admins only).
       operationId: deleteEvent
-      parameters:
-        - name: id
-          in: path
-          description: Event id to delete
-          required: true
-          schema:
-            type: integer
-            format: int64
       responses:
         '204':
-          description: Successful operation
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+          description: Event deleted
 
   /events/{eventId}/registration:
+    parameters:
+      - name: eventId
+        in: path
+        description: ID of the event
+        required: true
+        schema:
+          type: integer
+          format: int64
     post:
       tags:
         - events
-      summary: Mark registration for an event.
+      summary: Register user for event
       description: Marks a user's registration for the specified event.
       operationId: markRegistration
-      parameters:
-        - name: id
-          in: path
-          description: ID of the event
-          required: true
-          schema:
-            type: integer
-            format: int64
       requestBody:
-        description: Attendance details
+        description: Registration details
         required: true
         content:
           application/json:
@@ -167,37 +158,24 @@ paths:
               required:
                 - userId
       responses:
-        '200':
-          description: Successful operation, returns updated Event
+        '201':
+          description: Registration created
           content:
             application/json:
               schema:
                 type: object
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+                properties:
+                  registration:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/Registration'
 
     delete:
       tags:
         - events
-      summary: Unmark registration for an event.
+      summary: Unregister user from event
       description: Removes a user's registration for the specified event.
       operationId: unmarkRegistration
-      parameters:
-        - name: id
-          in: path
-          description: ID of the event
-          required: true
-          schema:
-            type: integer
-            format: int64
       requestBody:
-        description: Attendance details
+        description: Registration details
         required: true
         content:
           application/json:
@@ -211,31 +189,23 @@ paths:
                 - userId
       responses:
         '204':
-          description: Attendance unmarked successfully
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+          description: Registration removed
 
   /events/{eventId}/attendance:
+    parameters:
+      - name: eventId
+        in: path
+        description: ID of the event
+        required: true
+        schema:
+          type: integer
+          format: int64
     put:
       tags:
         - events
-      summary: Mark attendance for an event.
+      summary: Update attendance
       description: Marks a user's attendance for the specified event.
       operationId: markAttendance
-      parameters:
-        - name: id
-          in: path
-          description: ID of the event
-          required: true
-          schema:
-            type: integer
-            format: int64
       requestBody:
         description: Attendance details
         required: true
@@ -247,20 +217,19 @@ paths:
                 userId:
                   type: integer
                   format: int64
+                status:
+                  type: string
+                  enum: [PRESENT, ABSENT]
               required:
                 - userId
+                - status
       responses:
         '200':
-          description: Successful operation, returns updated Event
+          description: Attendance updated
           content:
             application/json:
               schema:
                 type: object
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+                properties:
+                  attendance:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/Attendance'

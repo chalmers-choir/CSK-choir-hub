@@ -1,6 +1,7 @@
 import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
+import nextPlugin from '@next/eslint-plugin-next';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import _import from 'eslint-plugin-import';
@@ -47,6 +48,7 @@ export default defineConfig([
   {
     extends: fixupConfigRules(
       compat.extends(
+        'next/core-web-vitals',
         'plugin:react/recommended',
         'plugin:prettier/recommended',
         'plugin:react-hooks/recommended',
@@ -56,6 +58,7 @@ export default defineConfig([
 
     plugins: {
       react: fixupPluginRules(react),
+      '@next/next': fixupPluginRules(nextPlugin),
       'unused-imports': unusedImports,
       import: fixupPluginRules(_import),
       '@typescript-eslint': typescriptEslint,
@@ -86,7 +89,7 @@ export default defineConfig([
       },
     },
 
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['**/*.{js,jsx,cjs,mjs,ts,tsx}'],
 
     rules: {
       'no-console': 'warn',
@@ -110,31 +113,7 @@ export default defineConfig([
         },
       ],
 
-      'import/order': [
-        'warn',
-        {
-          groups: [
-            'type',
-            'builtin',
-            'object',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index',
-          ],
-
-          pathGroups: [
-            {
-              pattern: '~/**',
-              group: 'external',
-              position: 'after',
-            },
-          ],
-
-          'newlines-between': 'always',
-        },
-      ],
+      'import/order': 'off',
 
       'react/self-closing-comp': 'warn',
 

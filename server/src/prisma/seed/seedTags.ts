@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import { Tag } from '@prisma/client';
+import { PrismaClient } from '@prisma/generated/client';
+import { Tag } from '@prisma/generated/client';
 
 export default async function seedRoles(prisma: PrismaClient): Promise<Tags> {
   // Create Tags

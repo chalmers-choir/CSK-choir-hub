@@ -18,6 +18,7 @@
     "docker:logs": "cd server && docker-compose logs -f",
     "docker:ps": "cd server && docker-compose ps",
     "docker:restart": "cd server && docker-compose down && docker-compose up -d",
+    "docker:start": "cd server && docker-compose start db",
     "format": "prettier . --write",
     "format:check": "prettier . --check"
   },

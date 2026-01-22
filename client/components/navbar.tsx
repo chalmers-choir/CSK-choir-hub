@@ -45,7 +45,7 @@ export const Navbar = () => {
   );
   const { isAuthenticated, logout } = useAuth();
   const logoutButton = (
-    <Button type="submit" color="danger" size="sm" variant="light" onPress={logout}>
+    <Button color="danger" size="sm" type="submit" variant="light" onPress={logout}>
       Logout
     </Button>
   );

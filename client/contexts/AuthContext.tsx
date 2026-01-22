@@ -4,11 +4,8 @@ import React, { ReactNode, createContext, useContext, useEffect, useState } from
 
 import { useRouter } from 'next/navigation';
 
-import { addToast } from '@heroui/toast';
-
-import { AuthContextType, AuthenticatedUser, RegisterForm } from '../types/auth';
-import { siteConfig } from '@/config/site';
-import axios from 'axios';
+import { AuthContextType, RegisterForm } from '../types/auth';
+import { AuthService, User } from '@/lib/apiClient';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -22,17 +19,12 @@ export const useAuth = (): AuthContextType => {
   return context;
 };
 
-const api = axios.create({
-  baseURL: siteConfig.apiBaseUrl + '/auth',
-  withCredentials: true,
-});
-
 interface AuthProviderProps {
   children: ReactNode;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<AuthenticatedUser | null>(null);
+  const [user, setUser] = useState<User | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
 
   const router = useRouter();
@@ -40,23 +32,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const fetchUser = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${siteConfig.apiBaseUrl}/auth/authenticate`, {
-        credentials: 'include',
-      });
+      const res = await AuthService.authenticate();
 
-      if (!res.ok) {
-        throw new Error('Not authenticated');
-      }
-      const data = await res.json();
-
-      setUser(data.user);
-    } catch (error: any) {
-      setUser(null);
-      // Log 401 errors for debugging but don't redirect
-      if (error?.response?.status === 401) {
-        console.log('Authentication failed:', error.response?.data?.error);
-      }
-      // Remove automatic redirect - let pages handle their own routing
+      setUser(res.user);
+    } catch {
+      setUser(undefined);
     } finally {
       setLoading(false);
     }
@@ -69,36 +49,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (username: string, password: string) => {
     setLoading(true);
     try {
-      const res = await api.post('/login', { username, password });
-      setUser(res.data.user);
+      const res = await AuthService.loginUser({ requestBody: { username, password } });
+
+      setUser(res.user);
       router.push('/');
-    } catch (error: any) {
-      console.log('Login error details:', {
-        response: error.response,
-        status: error.response?.status,
-        data: error.response?.data,
-        message: error.message,
-      });
-
-      // Handle axios errors properly
-      if (error.response) {
-        // Server responded with an error status
-        const message = error.response.data?.error || error.response.data?.message;
-
-        if (error.response.status === 401) {
-          throw new Error(message || 'Invalid username/email or password');
-        } else if (error.response.status === 400) {
-          throw new Error(message || 'Please check your input');
-        } else {
-          throw new Error(message || `Server error (${error.response.status})`);
-        }
-      } else if (error.request) {
-        // Network error
-        throw new Error('Unable to connect to server. Please check your connection.');
-      } else {
-        // Something else
-        throw new Error(error.message || 'An unexpected error occurred');
-      }
+    } catch {
+      setUser(undefined);
     } finally {
       setLoading(false);
     }
@@ -106,11 +62,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const register = async (userData: Omit<RegisterForm, 'confirmPassword'>) => {
     setLoading(true);
+
     try {
-      await api.post('/register', userData);
+      await AuthService.registerUser({ requestBody: userData });
       router.push('/login');
-    } catch (error) {
-      console.error('Registration failed:', error);
+    } catch {
+      setUser(undefined);
     } finally {
       setLoading(false);
     }
@@ -118,20 +75,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = async () => {
     setLoading(true);
+
     try {
-      await api.post('/logout');
-      setUser(null);
+      await AuthService.logout();
+      setUser(undefined);
       router.push('/');
-    } catch (error) {
-      console.error('Logout failed:', error);
+    } catch {
+      setUser(undefined);
     } finally {
       setLoading(false);
-      addToast({
-        title: 'You have been logged out.',
-        timeout: 3000,
-        shouldShowTimeoutProgress: true,
-        color: 'danger',
-      });
     }
   };
 
@@ -142,7 +94,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     register,
     logout,
     isAuthenticated: !!user,
-    isAdmin: user?.roles?.some((role) => role.name === 'admin') ?? false,
+    isAdmin: user?.groups?.some((group) => group.name === 'Admins') ?? false,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -4,13 +4,8 @@ echo 🚀 Setting up Project...
 :: Clean up any existing node_modules and lock files
 echo 🧹 Cleaning up existing dependencies...
 rmdir /s /q node_modules
-del /q package-lock.json
-
 rmdir /s /q server\node_modules
-del /q server\package-lock.json
-
 rmdir /s /q client\node_modules
-del /q client\package-lock.json
 
 :: Install root dependencies
 echo 📦 Installing root dependencies...
@@ -26,6 +21,7 @@ cd ..
 echo 📦 Installing client dependencies...
 cd client
 npm install
+npm run api:generate
 cd ..
 
 :: Build TypeScript

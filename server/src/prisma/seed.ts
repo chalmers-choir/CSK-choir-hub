@@ -1,16 +1,21 @@
-import seedBooks from './seedBooks';
-import seedEventAttendances from './seedEventAttendances';
-import seedEventRegistrations from './seedEventRegistrations';
-import seedEvents from './seedEvents';
-import seedGroups from './seedGroups';
-import seedRoles from './seedRoles';
-import seedUserSongKnowledges from './seedSongKnowledges';
-import seedSongs from './seedSongs';
-import seedTags from './seedTags';
-import seedUsers from './seedUsers';
-import { PrismaClient } from '@prisma/client';
+import seedBooks from './seed/seedBooks';
+import seedEventAttendances from './seed/seedEventAttendances';
+import seedEventRegistrations from './seed/seedEventRegistrations';
+import seedEvents from './seed/seedEvents';
+import seedGroups from './seed/seedGroups';
+import seedRoles from './seed/seedRoles';
+import seedUserSongKnowledges from './seed/seedSongKnowledges';
+import seedSongs from './seed/seedSongs';
+import seedTags from './seed/seedTags';
+import seedUsers from './seed/seedUsers';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from '@prisma/generated/client';
 
-const prisma = new PrismaClient();
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
+});
+
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log('Seeding database...');

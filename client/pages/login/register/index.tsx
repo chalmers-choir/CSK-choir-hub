@@ -1,16 +1,22 @@
 'use client';
 
-import { siteConfig } from '@/config/site';
-import { useAuth } from '@/contexts/AuthContext';
-import DefaultLayout from '@/layouts/default';
+import { useEffect, useState } from 'react';
+
+import { useRouter } from 'next/router';
+
 import { Button } from '@heroui/button';
 import { Input } from '@heroui/input';
 import { Link } from '@heroui/link';
 import { button as buttonStyles } from '@heroui/theme';
-import { useState } from 'react';
+
+import AuthLoading from '@/components/AuthLoading';
+import { siteConfig } from '@/config/site';
+import { useAuth } from '@/contexts/AuthContext';
+import DefaultLayout from '@/layouts/default';
 
 export default function RegisterPage() {
-  const { register } = useAuth();
+  const { register, isAuthenticated, loading } = useAuth();
+  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -19,6 +25,12 @@ export default function RegisterPage() {
   const [lastName, setLastName] = useState('');
 
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      router.replace('/');
+    }
+  }, [isAuthenticated, loading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,63 +49,67 @@ export default function RegisterPage() {
 
   return (
     <DefaultLayout>
-      <form onSubmit={handleSubmit} className="mx-auto mt-20 flex max-w-sm flex-col gap-2">
-        <h2 className="w-full text-center text-lg font-semibold">Register</h2>
-        <Input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+      {loading ? (
+        <AuthLoading />
+      ) : (
+        <form className="mx-auto mt-20 flex max-w-sm flex-col gap-2" onSubmit={handleSubmit}>
+          <h2 className="w-full text-center text-lg font-semibold">Register</h2>
+          <Input
+            required
+            placeholder="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <Input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
+          <Input
+            required
+            placeholder="Username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
 
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <Input
+            required
+            placeholder="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <Input
-          type="text"
-          placeholder="First Name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          required
-        />
+          <Input
+            required
+            placeholder="First Name"
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
 
-        <Input
-          type="text"
-          placeholder="Last Name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          required
-        />
+          <Input
+            required
+            placeholder="Last Name"
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
 
-        {error && <p className="text-red-500">{error}</p>}
+          {error && <p className="text-red-500">{error}</p>}
 
-        <Button
-          type="submit"
-          className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
-        >
-          Register
-        </Button>
-        <Link
-          href={siteConfig.links.login}
-          className="mt-4 inline-block w-full text-center text-sm text-blue-500"
-        >
-          Already have an account? Login
-        </Link>
-      </form>
+          <Button
+            className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
+            type="submit"
+          >
+            Register
+          </Button>
+          <Link
+            className="mt-4 inline-block w-full text-center text-sm text-blue-500"
+            href={siteConfig.links.login}
+          >
+            Already have an account? Login
+          </Link>
+        </form>
+      )}
     </DefaultLayout>
   );
 }

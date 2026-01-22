@@ -33,10 +33,9 @@ npm run dev
 This will start:
 
 - Docker database on localhost:5432
-- Backend server on http://localhost:5000
+- Backend server on http://localhost:5050
 - Frontend development server (Vite) on http://localhost:3000
 
 ### Common Issues
 
 1. **Database connection errors**: Ensure PostgreSQL is running and credentials are correct
-2. **Port conflicts**: Change the PORT in server/.env if 5000 is already in use

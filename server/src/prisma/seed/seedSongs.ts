@@ -1,7 +1,7 @@
 import { Books } from './seedBooks';
 import { Tags } from './seedTags';
-import { PrismaClient } from '@prisma/client';
-import { Song, Voice } from '@prisma/client';
+import { PrismaClient } from '@prisma/generated/client';
+import { Song, Voice } from '@prisma/generated/client';
 
 export default async function seedRoles(
   prisma: PrismaClient,

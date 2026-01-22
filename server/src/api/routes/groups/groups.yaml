@@ -3,145 +3,242 @@ paths:
     get:
       tags:
         - groups
-      summary: Get all groups.
-      description: Gets the full list of all groups.
+      summary: List groups
       operationId: getGroups
       responses:
         '200':
-          description: Successful operation
+          description: Groups fetched
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-            application/xml:
-              schema:
-                type: array
-                items:
-                  type: object
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+                type: object
+                properties:
+                  groups:
+                    type: array
+                    items:
+                      $ref: '../../docs/openapi.yaml#/components/schemas/Group'
     post:
       tags:
         - groups
-      summary: Add a new group.
-      description: Adds a new group to the collection.
+      summary: Create group
+      description: Creates a new group (Admins only).
       operationId: addGroup
       requestBody:
-        description: Group object that needs to be added to the collection
+        description: Group to create
         required: true
         content:
           application/json:
             schema:
               type: object
-          application/xml:
-            schema:
-              type: object
+              properties:
+                name:
+                  type: string
+                type:
+                  type: string
+                  enum: [VOICE, CHOIR, COMMITTEE, OTHER]
+                description:
+                  type: string
+              required:
+                - name
+                - type
       responses:
         '201':
-          description: Successful operation
+          description: Group created
           content:
             application/json:
               schema:
                 type: object
-            application/xml:
-              schema:
-                type: object
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+                properties:
+                  group:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/Group'
+
   /groups/{groupId}:
+    parameters:
+      - name: groupId
+        in: path
+        required: true
+        description: ID of the group
+        schema:
+          type: integer
+          format: int64
     put:
       tags:
         - groups
-      summary: Updates a group
-      description: Add or change information regarding a group
-      operationId: addGroup
+      summary: Update group
+      description: Updates name/description (Admins only).
+      operationId: updateGroup
       requestBody:
-        description: Group object that needs to be added to the collection
+        description: Group fields to update
         required: true
         content:
           application/json:
             schema:
               type: object
-          application/xml:
-            schema:
-              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
       responses:
-        '204':
-          description: Successful operation
+        '200':
+          description: Group updated
           content:
             application/json:
               schema:
                 type: object
-            application/xml:
-              schema:
-                type: object
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+                properties:
+                  group:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/Group'
     delete:
       tags:
         - groups
-      summary: Deletes a group.
-      description: Deletes a group by ID.
+      summary: Delete group
+      description: Deletes a group (Admins only).
       operationId: deleteGroup
       responses:
         '204':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-            application/xml:
-              schema:
-                type: object
-        '400':
-          description: Token missing or access denied.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '../../docs/openapi.yaml#/components/schemas/Error'
+          description: Group deleted
 
   /groups/{groupId}/users:
+    parameters:
+      - name: groupId
+        in: path
+        required: true
+        description: ID of the group
+        schema:
+          type: integer
+          format: int64
     post:
       tags:
         - groups
+      summary: Add user to group
+      description: Adds a user to the group (Admins only).
+      operationId: addUserToGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  format: int64
+              required:
+                - userId
+      responses:
+        '204':
+          description: User added
     delete:
       tags:
         - groups
+      summary: Remove user from group
+      description: Removes a user from the group (Admins only).
+      operationId: removeUserFromGroup
+      parameters:
+        - name: userId
+          in: query
+          description: ID of the user to remove
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: User removed
 
   /groups/{groupId}/roles:
+    parameters:
+      - name: groupId
+        in: path
+        required: true
+        description: ID of the group
+        schema:
+          type: integer
+          format: int64
     post:
       tags:
         - groups
+      summary: Add role to group
+      description: Assigns a role to the group (Admins only).
+      operationId: addRoleToGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleId:
+                  type: integer
+                  format: int64
+              required:
+                - roleId
+      responses:
+        '204':
+          description: Role assigned
     delete:
       tags:
         - groups
+      summary: Remove role from group
+      description: Removes a role from the group (Admins only).
+      operationId: removeRoleFromGroup
+      parameters:
+        - name: roleId
+          in: path
+          description: ID of the role to remove
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Role removed
 
   /groups/{groupId}/groups:
+    parameters:
+      - name: groupId
+        in: path
+        required: true
+        description: ID of the parent group
+        schema:
+          type: integer
+          format: int64
     post:
       tags:
         - groups
+      summary: Add subgroup
+      description: Adds a subgroup to a parent group (Admins only).
+      operationId: addGroupToGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subgroupId:
+                  type: integer
+                  format: int64
+              required:
+                - subgroupId
+      responses:
+        '204':
+          description: Subgroup added
     delete:
       tags:
         - groups
+      summary: Remove subgroup
+      description: Removes a subgroup from a parent group (Admins only).
+      operationId: removeGroupFromGroup
+      parameters:
+        - name: subgroupId
+          in: path
+          description: ID of the subgroup to remove
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Subgroup removed

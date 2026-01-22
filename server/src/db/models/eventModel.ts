@@ -5,7 +5,7 @@ import type {
   EventRegistration,
   EventType,
   Prisma,
-} from '@prisma/client';
+} from '@prisma/generated/client';
 
 /**
  * Create a new event.
