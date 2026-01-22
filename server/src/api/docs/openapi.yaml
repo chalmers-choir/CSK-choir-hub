@@ -12,7 +12,7 @@ externalDocs:
   url: https://chalmerssangkor.se
 
 servers:
-  - url: http://localhost:5000/api
+  - url: http://localhost:5050/api
     description: Local development server
   - url: https://portal.chalmerssangkor.se/api
     description: Production server

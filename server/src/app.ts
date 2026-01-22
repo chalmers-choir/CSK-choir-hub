@@ -26,11 +26,23 @@ app.use(express.json());
 app.use(logAtLevel(4));
 
 /* ---- CORS configuration ---- */
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000').split(',');
+
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || '*', // allow from your frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    // Dynamically validate Origin so ACAO matches the requesting site when allowed.
+    origin: (origin, callback) => {
+      // allow non-browser/SSR requests (no origin) and any whitelisted origin
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, origin ?? true);
+      } else {
+        callback(new Error(`CORS: origin ${origin} not allowed`));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
+    optionsSuccessStatus: 204,
   }),
 );
 

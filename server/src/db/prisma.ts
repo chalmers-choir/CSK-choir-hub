@@ -1,6 +1,9 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/generated/client';
+import dotenv from 'dotenv';
 import { Pool } from 'pg';
+
+dotenv.config();
 
 const globalForPrisma = global as unknown as { prisma?: PrismaClient };
 
