@@ -1,5 +1,5 @@
-import { prisma } from '@db/prisma';
-import { KnowledgeLevel, Prisma, Tag, Voice } from '@prisma/client';
+import { prisma } from '@db';
+import { KnowledgeLevel, Prisma, Tag, Voice } from '@prisma/generated/client';
 
 /**
  * Create a new song in the database.

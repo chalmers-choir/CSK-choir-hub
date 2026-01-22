@@ -1,6 +1,6 @@
 import { Events } from './seedEvents';
 import { Users } from './seedUsers';
-import { AttendanceStatus, PrismaClient } from '@prisma/client';
+import { AttendanceStatus, PrismaClient } from '@prisma/generated/client';
 
 export default async function seedEventAttendances(
   prisma: PrismaClient,

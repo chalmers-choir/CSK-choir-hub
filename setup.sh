@@ -23,15 +23,15 @@ npm install
 npm run api:generate
 cd ..
 
-# Build TypeScript
-echo "🔨 Building server TypeScript..."
-npm run build
-
 # Set up Prisma
 echo "🌱 Setting up Prisma..."
 cd server
 npx prisma generate
 cd ..
+
+# Build TypeScript
+echo "🔨 Building server TypeScript..."
+npm run build
 
 # Run script that drops all tables in the database
 # Ask for confirmation first, otherwise skip the drop

@@ -1,6 +1,6 @@
-import DefaultLayout from '@/layouts/default';
-import RequireAuth from '@/components/RequireAuth';
 import LoggedOutCta from '@/components/LoggedOutCta';
+import RequireAuth from '@/components/RequireAuth';
+import DefaultLayout from '@/layouts/default';
 
 export default function IndexPage() {
   return (

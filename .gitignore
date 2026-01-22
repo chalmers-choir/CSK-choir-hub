@@ -50,7 +50,3 @@ Thumbs.db
 *.pem
 *.key
 *.crt
-
-# Ignore package-lock.json and yarn.lock to avoid merge conflicts
-package-lock.json
-yarn.lock

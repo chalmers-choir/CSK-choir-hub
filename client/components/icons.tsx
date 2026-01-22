@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import { IconSvgProps } from '@/types/icon';
 
-export const Logo = () => <Image src="/logo/small.png" alt="Logo" width={36} height={36} />;
+export const Logo = () => <Image alt="Logo" height={36} src="/logo/small.png" width={36} />;
 
 export const DiscordIcon: React.FC<IconSvgProps> = ({ size = 24, width, height, ...props }) => {
   return (

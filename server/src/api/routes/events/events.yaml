@@ -35,7 +35,8 @@ paths:
                 name:
                   type: string
                 type:
-                  $ref: '../../docs/openapi.yaml#/components/schemas/Event/properties/type'
+                  type: string
+                  enum: [REHEARSAL, CONCERT, GIG, PARTY, MEETING, OTHER]
                 description:
                   type: string
                 dateStart:
@@ -92,7 +93,8 @@ paths:
                 name:
                   type: string
                 type:
-                  $ref: '../../docs/openapi.yaml#/components/schemas/Event/properties/type'
+                  type: string
+                  enum: [REHEARSAL, CONCERT, GIG, PARTY, MEETING, OTHER]
                 description:
                   type: string
                 dateStart:

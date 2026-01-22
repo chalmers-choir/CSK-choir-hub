@@ -1,5 +1,5 @@
-import { prisma } from '@db/prisma';
-import { AttendanceStatus } from '@prisma/client';
+import { prisma } from '@db';
+import { AttendanceStatus } from '@prisma/generated/client';
 
 /**
  * Update the attendance status of a user for a specific event.

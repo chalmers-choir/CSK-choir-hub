@@ -1,15 +1,18 @@
 'use client';
 
-import { siteConfig } from '@/config/site';
-import { useAuth } from '@/contexts/AuthContext';
-import DefaultLayout from '@/layouts/default';
+import { useEffect, useState } from 'react';
+
+import { useRouter } from 'next/router';
+
 import { Button } from '@heroui/button';
 import { Input } from '@heroui/input';
 import { Link } from '@heroui/link';
 import { button as buttonStyles } from '@heroui/theme';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+
 import AuthLoading from '@/components/AuthLoading';
+import { siteConfig } from '@/config/site';
+import { useAuth } from '@/contexts/AuthContext';
+import DefaultLayout from '@/layouts/default';
 
 export default function RegisterPage() {
   const { register, isAuthenticated, loading } = useAuth();
@@ -49,59 +52,59 @@ export default function RegisterPage() {
       {loading ? (
         <AuthLoading />
       ) : (
-        <form onSubmit={handleSubmit} className="mx-auto mt-20 flex max-w-sm flex-col gap-2">
+        <form className="mx-auto mt-20 flex max-w-sm flex-col gap-2" onSubmit={handleSubmit}>
           <h2 className="w-full text-center text-lg font-semibold">Register</h2>
           <Input
-            type="email"
+            required
             placeholder="Email"
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
 
           <Input
-            type="text"
+            required
             placeholder="Username"
+            type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
           />
 
           <Input
-            type="password"
+            required
             placeholder="Password"
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
 
           <Input
-            type="text"
+            required
             placeholder="First Name"
+            type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            required
           />
 
           <Input
-            type="text"
+            required
             placeholder="Last Name"
+            type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            required
           />
 
           {error && <p className="text-red-500">{error}</p>}
 
           <Button
-            type="submit"
             className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
+            type="submit"
           >
             Register
           </Button>
           <Link
-            href={siteConfig.links.login}
             className="mt-4 inline-block w-full text-center text-sm text-blue-500"
+            href={siteConfig.links.login}
           >
             Already have an account? Login
           </Link>

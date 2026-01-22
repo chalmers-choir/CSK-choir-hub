@@ -33,8 +33,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(true);
     try {
       const res = await AuthService.authenticate();
+
       setUser(res.user);
-    } catch (error: any) {
+    } catch {
       setUser(undefined);
     } finally {
       setLoading(false);
@@ -49,9 +50,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(true);
     try {
       const res = await AuthService.loginUser({ requestBody: { username, password } });
+
       setUser(res.user);
       router.push('/');
-    } catch (error: any) {
+    } catch {
       setUser(undefined);
     } finally {
       setLoading(false);
@@ -64,7 +66,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       await AuthService.registerUser({ requestBody: userData });
       router.push('/login');
-    } catch (error) {
+    } catch {
       setUser(undefined);
     } finally {
       setLoading(false);
@@ -78,7 +80,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       await AuthService.logout();
       setUser(undefined);
       router.push('/');
-    } catch (error) {
+    } catch {
       setUser(undefined);
     } finally {
       setLoading(false);

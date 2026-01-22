@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
-import { useAuth } from '@/contexts/AuthContext';
 import AuthLoading from './AuthLoading';
+import { useAuth } from '@/contexts/AuthContext';
 
 type RequireAuthProps = {
   children: ReactNode;

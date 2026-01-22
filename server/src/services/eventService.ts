@@ -1,5 +1,5 @@
 import { eventModel, userModel } from '@db';
-import { AttendanceStatus, EventType } from '@prisma/client';
+import { AttendanceStatus, EventType } from '@prisma/generated/client';
 import { NotFoundError } from '@utils';
 
 /**

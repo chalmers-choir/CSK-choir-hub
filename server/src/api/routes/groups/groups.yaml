@@ -34,7 +34,8 @@ paths:
                 name:
                   type: string
                 type:
-                  $ref: '../../docs/openapi.yaml#/components/schemas/Group/properties/type'
+                  type: string
+                  enum: [VOICE, CHOIR, COMMITTEE, OTHER]
                 description:
                   type: string
               required:
