@@ -197,6 +197,11 @@ schemas:
       - id
       - title
 
+  EventType:
+    type: string
+    enum: [REHEARSAL, CONCERT, GIG, PARTY, MEETING, OTHER]
+    example: REHEARSAL
+
   Event:
     type: object
     properties:
@@ -207,9 +212,7 @@ schemas:
         type: string
         example: Rep KK
       type:
-        type: string
-        enum: [REHEARSAL, CONCERT, GIG, PARTY, MEETING, OTHER]
-        example: REHEARSAL
+        $ref: '#/schemas/EventType'
       dateStart:
         type: string
         format: date-time

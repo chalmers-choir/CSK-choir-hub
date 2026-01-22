@@ -8,12 +8,11 @@ import { Input, Textarea } from '@heroui/input';
 import { button as buttonStyles } from '@heroui/theme';
 
 import RequestLogin from '@/components/request-login';
-import { siteConfig } from '@/config/site';
 import { useAuth } from '@/contexts/AuthContext';
 import DefaultLayout from '@/layouts/default';
+import { EventType, EventsService } from '@/lib/apiClient';
 import { DateValue } from '@internationalized/date';
 import { I18nProvider } from '@react-aria/i18n';
-import axios from 'axios';
 
 interface ResultData {
   type: 'success' | 'error';
@@ -22,7 +21,7 @@ interface ResultData {
 
 type Result = ResultData | undefined;
 
-const eventTypeDbKeyToName: Record<string, string> = {
+const eventTypeDbKeyToName: Record<EventType, string> = {
   REHEARSAL: 'Rep',
   CONCERT: 'Konsert',
   GIG: 'Gig',
@@ -40,17 +39,12 @@ const autocompletePlaceNames: Record<string, string> = {
   sbm500: 'SB-M500',
 };
 
-const api = axios.create({
-  baseURL: siteConfig.apiBaseUrl,
-  withCredentials: true,
-});
-
 export default function CreateEventPage() {
   const { loading, isAdmin } = useAuth();
 
   // name, type, description, dateStart, place
   const [name, setName] = useState('');
-  const [type, setType] = useState('');
+  const [type, setType] = useState<EventType | undefined>(undefined);
   const [typeIsInvalid, setTypeIsInvalid] = useState(false);
   const [description, setDescription] = useState('');
   const [dateStart, setDateStart] = useState<DateValue | null>(null);
@@ -59,7 +53,7 @@ export default function CreateEventPage() {
   const [placeIsInvalid, setPlaceIsInvalid] = useState(false);
   const resetState = () => {
     setName('');
-    setType('');
+    setType(undefined);
     setTypeIsInvalid(false);
     setDescription('');
     setDateStart(null);
@@ -72,7 +66,6 @@ export default function CreateEventPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const eventData = { name, type, description, dateStart: dateStart?.toString(), place };
     try {
       if (!type) {
         setTypeIsInvalid(true);
@@ -86,7 +79,10 @@ export default function CreateEventPage() {
       if (!type || !dateStart || !place) {
         throw new Error('Vänligen fyll i alla fält.');
       }
-      await api.post('/events', eventData);
+
+      const eventData = { name, type, description, dateStart: dateStart?.toString(), place };
+
+      await EventsService.addEvent({ requestBody: eventData }); // Invalidate cache
       resetState();
       setResult({ type: 'success', message: 'Evenemanget har lagts upp!' });
     } catch (err: any) {
@@ -127,7 +123,7 @@ export default function CreateEventPage() {
               </DropdownTrigger>
               <DropdownMenu
                 items={Object.entries(eventTypeDbKeyToName)}
-                onAction={(key) => setType(key.toString())}
+                onAction={(key) => setType(key as EventType)}
               >
                 {(item) => <DropdownItem key={item[0]}>{item[1]}</DropdownItem>}
               </DropdownMenu>

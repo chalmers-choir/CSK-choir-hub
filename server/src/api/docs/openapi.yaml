@@ -107,6 +107,9 @@ components:
     Token:
       $ref: './components.yaml#/schemas/Token'
 
+    EventType:
+      $ref: './components.yaml#/schemas/EventType'
+
     Event:
       $ref: './components.yaml#/schemas/Event'
 
