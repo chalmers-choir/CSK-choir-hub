@@ -2,32 +2,25 @@ import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
+import RequireAuth from '@/components/RequireAuth';
 import EventDetailCard from '@/components/events/eventDetailCard';
-// import { useAuth } from '@/contexts/AuthContext';
 import DefaultLayout from '@/layouts/default';
-import { CSKEvent } from '@/types/event';
+import { CSKEvent, EventsService } from '@/lib/api-client';
 
 export default function IndexPage() {
-  // const { isAuthenticated } = useAuth();
   const { query } = useRouter();
   const { id } = query;
 
-  const [event, setEvent] = useState<CSKEvent | null>(null);
-  const [attendees, setAttendees] = useState<Array<any>>([]);
-  const [registrations, setRegistrations] = useState<Array<any>>([]);
+  const [event, setEvent] = useState<CSKEvent | undefined>(undefined);
 
   useEffect(() => {
     if (!id) return; // wait until id is available
+    const eventId = parseInt(id as string, 10);
 
     const fetchEvent = async () => {
       try {
-        const res = await fetch(`http://localhost:5050/api/events/${id}`);
-        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-
-        const data = await res.json();
-        setEvent(data.event);
-        setAttendees(data.attendees);
-        setRegistrations(data.registrations);
+        const res = await EventsService.getEventById({ eventId });
+        setEvent(res.event);
       } catch (err: any) {
         console.log(err.message || 'Failed to fetch event');
       }
@@ -38,7 +31,9 @@ export default function IndexPage() {
 
   return (
     <DefaultLayout>
-      <EventDetailCard event={event} attendees={attendees} registrations={registrations} />
+      <RequireAuth>
+        <EventDetailCard event={event} />
+      </RequireAuth>
     </DefaultLayout>
   );
 }

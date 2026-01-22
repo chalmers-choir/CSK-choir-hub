@@ -17,7 +17,7 @@ paths:
                   events:
                     type: array
                     items:
-                      $ref: '../../docs/openapi.yaml#/components/schemas/Event'
+                      $ref: '../../docs/openapi.yaml#/components/schemas/CSKEvent'
     post:
       tags:
         - events
@@ -65,7 +65,7 @@ paths:
                 type: object
                 properties:
                   event:
-                    $ref: '../../docs/openapi.yaml#/components/schemas/Event'
+                    $ref: '../../docs/openapi.yaml#/components/schemas/CSKEvent'
 
   /events/{eventId}:
     parameters:
@@ -76,6 +76,22 @@ paths:
         schema:
           type: integer
           format: int64
+    get:
+      tags:
+        - events
+      summary: Get event
+      description: Returns an event by ID.
+      operationId: getEventById
+      responses:
+        '200':
+          description: Event fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/CSKEvent'
     put:
       tags:
         - events
@@ -118,7 +134,7 @@ paths:
                 type: object
                 properties:
                   event:
-                    $ref: '../../docs/openapi.yaml#/components/schemas/Event'
+                    $ref: '../../docs/openapi.yaml#/components/schemas/CSKEvent'
     delete:
       tags:
         - events

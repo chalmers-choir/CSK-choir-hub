@@ -197,12 +197,12 @@ schemas:
       - id
       - title
 
-  EventType:
+  CSKEventType:
     type: string
     enum: [REHEARSAL, CONCERT, GIG, PARTY, MEETING, OTHER]
     example: REHEARSAL
 
-  Event:
+  CSKEvent:
     type: object
     properties:
       id:
@@ -212,7 +212,7 @@ schemas:
         type: string
         example: Rep KK
       type:
-        $ref: '#/schemas/EventType'
+        $ref: '#/schemas/CSKEventType'
       dateStart:
         type: string
         format: date-time

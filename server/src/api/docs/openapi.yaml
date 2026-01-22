@@ -107,11 +107,11 @@ components:
     Token:
       $ref: './components.yaml#/schemas/Token'
 
-    EventType:
-      $ref: './components.yaml#/schemas/EventType'
+    CSKEventType:
+      $ref: './components.yaml#/schemas/CSKEventType'
 
-    Event:
-      $ref: './components.yaml#/schemas/Event'
+    CSKEvent:
+      $ref: './components.yaml#/schemas/CSKEvent'
 
     Attendance:
       $ref: './components.yaml#/schemas/Attendance'

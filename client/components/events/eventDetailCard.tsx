@@ -7,7 +7,7 @@ import { addToast } from '@heroui/toast';
 
 import { EventUserEntry, EventUserListAccordion } from './EventUserListAccordion';
 import { useAuth } from '@/contexts/AuthContext';
-import { CSKEvent, CSKEventAttendee, CSKEventRegistration, CSKEventType } from '@/types/event';
+import { CSKEvent, CSKEventType } from '@/lib/api-client';
 import { IoClose } from 'react-icons/io5';
 
 const formatDate = (isoString?: string) => {
@@ -33,25 +33,19 @@ const formatTime = (isoString?: string) => {
 };
 
 interface EventDetailCardProps {
-  event: CSKEvent | null;
-  attendees?: Array<CSKEventAttendee>;
-  registrations?: Array<CSKEventRegistration>;
+  event: CSKEvent | undefined;
 }
 
 const CSKEventTypeString: Record<CSKEventType, string> = {
-  [CSKEventType.REHEARSAL]: 'Repetition',
-  [CSKEventType.CONCERT]: 'Konsert',
-  [CSKEventType.GIG]: 'Gig',
-  [CSKEventType.PARTY]: 'Fest',
-  [CSKEventType.MEETING]: 'Möte',
-  [CSKEventType.OTHER]: 'Övrigt',
+  REHEARSAL: 'Repetition',
+  CONCERT: 'Konsert',
+  GIG: 'Gig',
+  PARTY: 'Fest',
+  MEETING: 'Möte',
+  OTHER: 'Övrigt',
 };
 
-export default function EventDetailCard({
-  event,
-  attendees = [],
-  registrations = [],
-}: EventDetailCardProps) {
+export default function EventDetailCard({ event }: EventDetailCardProps) {
   // Extract data from event prop when available
 
   if (!event) {
@@ -74,9 +68,9 @@ export default function EventDetailCard({
 
   const userAttendanceStatus = useMemo(() => {
     if (!user) return null;
-    const entry = attendees.find((a) => a.id === user.id);
+    const entry = event?.attendances?.find((a) => a.userId === user.id);
     return entry?.status ?? null;
-  }, [attendees, user]);
+  }, [event?.attendances, user]);
 
   const [oldEventAttendance, setOldEventAttendance] = useState<AttendanceChoice>(
     statusToChoice(userAttendanceStatus),
@@ -113,18 +107,18 @@ export default function EventDetailCard({
   const hasAttendanceChanges = oldEventAttendance !== newEventAttendance;
   const isRegistered = useMemo(() => {
     if (!user) return false;
-    return registrations.some((r) => r.id === user.id);
-  }, [registrations, user]);
+    return event?.registrations?.some((r) => r.userId === user.id) ?? false;
+  }, [event?.registrations, user]);
 
   // Decide which list to show (events are either attendance-based or registration-based, not both)
   const isAttendanceMode = attendanceRecorded;
   const baseUsersForList: EventUserEntry[] = isAttendanceMode
-    ? attendees.map(({ firstName, lastName, status }) => ({
-        name: `${firstName} ${lastName}`,
+    ? (event?.attendances?.map(({ name, status }) => ({
+        name: `${name}`,
         status: status === 'ABSENT' ? false : status === 'PRESENT' ? true : null,
-      }))
-    : registrations.map(({ firstName, lastName }) => ({
-        name: `${firstName} ${lastName}`,
+      })) ?? [])
+    : event?.registrations?.map(({ name }) => ({
+        name: `${name}`,
         status: true,
       }));
 

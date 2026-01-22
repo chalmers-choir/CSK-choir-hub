@@ -1,5 +1,5 @@
 import { eventService } from '@services';
-import { BadRequestError } from '@utils/errors';
+import { BadRequestError, NotFoundError } from '@utils/errors';
 import { NextFunction, Request, Response } from 'express';
 
 // Get all events
@@ -13,12 +13,12 @@ export const getEvents = async (req: Request, res: Response, next: NextFunction)
 };
 
 // Get event details by ID
-export const getEventDetail = async (req: Request, res: Response) => {
+export const getEventDetail = async (req: Request, res: Response, next: NextFunction) => {
   const eventId = parseInt(req.params.id, 10);
-  if (isNaN(eventId)) return res.status(400).json({ error: 'Invalid event ID' });
+  if (isNaN(eventId)) return next(new BadRequestError('Invalid event ID'));
 
   const event = await eventService.getEvent(eventId);
-  if (!event) return res.status(404).json({ error: 'Event not found' });
+  if (!event) return next(new NotFoundError('Event not found'));
 
   return res.json({ ...event });
 };
