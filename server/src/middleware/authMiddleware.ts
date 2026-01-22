@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
 interface JwtPayload {
-  id: number;
+  userId: number;
 }
 
 declare module 'express-serve-static-core' {
@@ -42,7 +42,7 @@ export const requireAuth = (rules?: AccessRules) => {
       }
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-      const user = await userModel.findById(decoded.id, { roles: true, groups: true });
+      const user = await userModel.findById(decoded.userId, { roles: true, groups: true });
 
       if (!user) {
         return next(new UnauthorizedError('User not found'));
