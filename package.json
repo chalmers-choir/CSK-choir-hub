@@ -5,7 +5,7 @@
   "main": "server/dist/index.js",
   "scripts": {
     "prisma:generate": "cd server && npx prisma generate",
-    "dev": "npm run docker:start && concurrently \"npm run server\" \"npm run client\"",
+    "dev": "npm run docker:up && concurrently \"npm run server\" \"npm run client\"",
     "dev:local": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd server && npm run dev",
     "client": "cd client && npm run dev",
