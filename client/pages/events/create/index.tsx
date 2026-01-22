@@ -10,7 +10,7 @@ import { button as buttonStyles } from '@heroui/theme';
 import RequestLogin from '@/components/request-login';
 import { useAuth } from '@/contexts/AuthContext';
 import DefaultLayout from '@/layouts/default';
-import { EventType, EventsService } from '@/lib/apiClient';
+import { CSKEventType, EventsService } from '@/lib/apiClient';
 import { DateValue } from '@internationalized/date';
 import { I18nProvider } from '@react-aria/i18n';
 
@@ -21,7 +21,7 @@ interface ResultData {
 
 type Result = ResultData | undefined;
 
-const eventTypeDbKeyToName: Record<EventType, string> = {
+const eventTypeDbKeyToName: Record<CSKEventType, string> = {
   REHEARSAL: 'Rep',
   CONCERT: 'Konsert',
   GIG: 'Gig',
@@ -44,7 +44,7 @@ export default function CreateEventPage() {
 
   // name, type, description, dateStart, place
   const [name, setName] = useState('');
-  const [type, setType] = useState<EventType | undefined>(undefined);
+  const [type, setType] = useState<CSKEventType | undefined>(undefined);
   const [typeIsInvalid, setTypeIsInvalid] = useState(false);
   const [description, setDescription] = useState('');
   const [dateStart, setDateStart] = useState<DateValue | null>(null);
@@ -82,9 +82,11 @@ export default function CreateEventPage() {
 
       const eventData = { name, type, description, dateStart: dateStart?.toString(), place };
 
-      await EventsService.addEvent({ requestBody: eventData }); // Invalidate cache
+      const { event: newEvent } = await EventsService.addEvent({ requestBody: eventData }); // Invalidate cache
+      const eventId = newEvent.id;
       resetState();
-      setResult({ type: 'success', message: 'Evenemanget har lagts upp!' });
+      setResult({ type: 'success', message: 'Evenemang skapat!' });
+      window.location.href = `/events/${eventId}`;
     } catch (err: any) {
       setResult({ type: 'error', message: err.message });
     }
@@ -123,7 +125,7 @@ export default function CreateEventPage() {
               </DropdownTrigger>
               <DropdownMenu
                 items={Object.entries(eventTypeDbKeyToName)}
-                onAction={(key) => setType(key as EventType)}
+                onAction={(key) => setType(key as CSKEventType)}
               >
                 {(item) => <DropdownItem key={item[0]}>{item[1]}</DropdownItem>}
               </DropdownMenu>

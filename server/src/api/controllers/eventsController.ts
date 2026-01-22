@@ -1,5 +1,5 @@
 import { eventService } from '@services';
-import { BadRequestError } from '@utils/errors';
+import { BadRequestError, NotFoundError } from '@utils/errors';
 import { NextFunction, Request, Response } from 'express';
 
 // Get all events
@@ -10,6 +10,17 @@ export const getEvents = async (req: Request, res: Response, next: NextFunction)
   } catch (error) {
     return next(error);
   }
+};
+
+// Get event details by ID
+export const getEventDetail = async (req: Request, res: Response, next: NextFunction) => {
+  const eventId = parseInt(req.params.id, 10);
+  if (isNaN(eventId)) return next(new BadRequestError('Invalid event ID'));
+
+  const event = await eventService.getEvent(eventId);
+  if (!event) return next(new NotFoundError('Event not found'));
+
+  return res.json({ ...event });
 };
 
 // Delete an event by ID
@@ -73,7 +84,7 @@ export const updateUserAttendance = async (req: Request, res: Response, next: Ne
   if (isNaN(eventId)) return next(new BadRequestError('Invalid event ID'));
 
   const { userId, status } = req.body;
-  if (!userId || !status) return next(new BadRequestError('User ID and status are required'));
+  if (!userId) return next(new BadRequestError('User ID and status are required'));
 
   try {
     const updatedAttendance = await eventService.updateUserAttendance(eventId, userId, status);

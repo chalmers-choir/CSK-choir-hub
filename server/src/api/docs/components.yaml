@@ -197,12 +197,12 @@ schemas:
       - id
       - title
 
-  EventType:
+  CSKEventType:
     type: string
     enum: [REHEARSAL, CONCERT, GIG, PARTY, MEETING, OTHER]
     example: REHEARSAL
 
-  Event:
+  CSKEvent:
     type: object
     properties:
       id:
@@ -212,7 +212,7 @@ schemas:
         type: string
         example: Rep KK
       type:
-        $ref: '#/schemas/EventType'
+        $ref: '#/schemas/CSKEventType'
       dateStart:
         type: string
         format: date-time
@@ -233,10 +233,7 @@ schemas:
       requiresRegistration:
         type: boolean
         example: false
-      testIsWorking:
-        type: boolean
-        example: false
-      attendances:
+      attendees:
         type: array
         items:
           $ref: '#/schemas/Attendance'
@@ -252,8 +249,6 @@ schemas:
       - place
       - requiresAttendance
       - requiresRegistration
-      - attendances
-      - registrations
 
   Attendance:
     type: object
@@ -261,17 +256,20 @@ schemas:
       userId:
         type: integer
         format: int64
-      name:
+      firstName:
         type: string
-        example: Liam Cotton
+        example: Liam
+      lastName:
+        type: string
+        example: Cotton
       status:
         type: string
         enum: [PRESENT, ABSENT]
         example: PRESENT
     required:
       - userId
-      - name
-      - status
+      - firstName
+      - lastName
 
   Registration:
     type: object
@@ -279,12 +277,22 @@ schemas:
       userId:
         type: integer
         format: int64
-      name:
+      firstName:
         type: string
-        example: Liam Cotton
+        example: Liam
+      lastName:
+        type: string
+        example: Cotton
+      comments:
+        type: string
+        example: Looking forward to it!
+      dietaryRestrictions:
+        type: string
+        example: Vegetarian
     required:
       - userId
-      - name
+      - firstName
+      - lastName
 
   Tag:
     type: object

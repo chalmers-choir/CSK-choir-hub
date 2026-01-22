@@ -17,7 +17,9 @@ paths:
                   events:
                     type: array
                     items:
-                      $ref: '../../docs/openapi.yaml#/components/schemas/Event'
+                      $ref: '../../docs/openapi.yaml#/components/schemas/CSKEvent'
+                required:
+                  - events
     post:
       tags:
         - events
@@ -65,7 +67,9 @@ paths:
                 type: object
                 properties:
                   event:
-                    $ref: '../../docs/openapi.yaml#/components/schemas/Event'
+                    $ref: '../../docs/openapi.yaml#/components/schemas/CSKEvent'
+                required:
+                  - event
 
   /events/{eventId}:
     parameters:
@@ -76,6 +80,24 @@ paths:
         schema:
           type: integer
           format: int64
+    get:
+      tags:
+        - events
+      summary: Get event
+      description: Returns an event by ID.
+      operationId: getEventById
+      responses:
+        '200':
+          description: Event fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/CSKEvent'
+                required:
+                  - event
     put:
       tags:
         - events
@@ -118,7 +140,7 @@ paths:
                 type: object
                 properties:
                   event:
-                    $ref: '../../docs/openapi.yaml#/components/schemas/Event'
+                    $ref: '../../docs/openapi.yaml#/components/schemas/CSKEvent'
     delete:
       tags:
         - events
@@ -129,7 +151,7 @@ paths:
         '204':
           description: Event deleted
 
-  /events/{eventId}/registration:
+  /events/{eventId}/registrations:
     parameters:
       - name: eventId
         in: path
@@ -167,6 +189,8 @@ paths:
                 properties:
                   registration:
                     $ref: '../../docs/openapi.yaml#/components/schemas/Registration'
+                required:
+                  - registration
 
     delete:
       tags:
@@ -191,7 +215,7 @@ paths:
         '204':
           description: Registration removed
 
-  /events/{eventId}/attendance:
+  /events/{eventId}/attendances:
     parameters:
       - name: eventId
         in: path
@@ -222,7 +246,6 @@ paths:
                   enum: [PRESENT, ABSENT]
               required:
                 - userId
-                - status
       responses:
         '200':
           description: Attendance updated
@@ -233,3 +256,5 @@ paths:
                 properties:
                   attendance:
                     $ref: '../../docs/openapi.yaml#/components/schemas/Attendance'
+                required:
+                  - attendance
