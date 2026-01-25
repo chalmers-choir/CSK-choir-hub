@@ -39,6 +39,16 @@ schemas:
       - roles
       - songKnowledge
 
+  CSKVoice:
+    type: string
+    enum: [S, A, T, B, S1, S2, A1, A2, T1, T2, B1, B2]
+    example: B1
+
+  SongKnowledgeLevel:
+    type: string
+    enum: [PARTY, GIG, UTANTILL]
+    example: UTANTILL
+
   SongKnowledge:
     type: object
     properties:
@@ -49,13 +59,9 @@ schemas:
         type: string
         example: Island
       voice:
-        type: string
-        enum: [S, A, T, B, S1, S2, A1, A2, T1, T2, B1, B2]
-        example: B1
+        $ref: '#/schemas/CSKVoice'
       level:
-        type: string
-        enum: [PARTY, GIG, UTANTILL]
-        example: UTANTILL
+        $ref: '#/schemas/SongKnowledgeLevel'
     required:
       - songId
       - title
@@ -95,6 +101,11 @@ schemas:
       - groups
       - user
 
+  GroupType:
+    type: string
+    enum: [VOICE, CHOIR, COMMITTEE, OTHER]
+    example: VOICE
+
   Group:
     type: object
     properties:
@@ -105,9 +116,7 @@ schemas:
         type: string
         example: Tenor
       type:
-        type: string
-        enum: [VOICE, CHOIR, COMMITTEE, OTHER]
-        example: VOICE
+        $ref: '#/schemas/GroupType'
       description:
         type: string
         example: Tenor section of the choir
@@ -250,6 +259,11 @@ schemas:
       - requiresAttendance
       - requiresRegistration
 
+  AttendanceStatus:
+    type: string
+    enum: [PRESENT, ABSENT]
+    example: PRESENT
+
   Attendance:
     type: object
     properties:
@@ -263,9 +277,7 @@ schemas:
         type: string
         example: Cotton
       status:
-        type: string
-        enum: [PRESENT, ABSENT]
-        example: PRESENT
+        $ref: '#/schemas/AttendanceStatus'
     required:
       - userId
       - firstName
