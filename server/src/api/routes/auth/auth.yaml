@@ -15,8 +15,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  token:
-                    $ref: '../../docs/openapi.yaml#/components/schemas/Token'
+                  user:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/User'
 
   /auth/login:
     post:

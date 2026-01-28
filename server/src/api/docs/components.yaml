@@ -2,7 +2,7 @@ schemas:
   User:
     type: object
     properties:
-      id:
+      userId:
         type: integer
         format: int64
       username:
@@ -16,28 +16,29 @@ schemas:
         example: Cotton
       email:
         type: string
+        format: email
         example: liam@cotton.com
       groups:
         type: array
         items:
-          $ref: '#/schemas/Group'
+          $ref: '#/schemas/GroupSummary'
       roles:
         type: array
         items:
-          $ref: '#/schemas/Role'
-      songKnowledge:
+          $ref: '#/schemas/RoleSummary'
+      knownSongs:
         type: array
         items:
-          $ref: '#/schemas/SongKnowledge'
+          $ref: '#/schemas/KnownSong'
     required:
-      - id
+      - userId
       - username
       - firstName
       - lastName
       - email
       - groups
       - roles
-      - songKnowledge
+      - knownSongs
 
   CSKVoice:
     type: string
@@ -52,26 +53,28 @@ schemas:
   SongKnowledge:
     type: object
     properties:
-      songId:
-        type: integer
-        format: int64
-      title:
-        type: string
-        example: Island
       voice:
         $ref: '#/schemas/CSKVoice'
       level:
         $ref: '#/schemas/SongKnowledgeLevel'
     required:
-      - songId
-      - title
       - voice
       - level
 
-  Role:
+  KnownSong:
+    allOf:
+      - $ref: '#/schemas/SongKnowledge'
+      - type: object
+        properties:
+          song:
+            $ref: '#/schemas/Song'
+        required:
+          - song
+
+  RoleSummary:
     type: object
     properties:
-      id:
+      roleId:
         type: integer
         format: int64
       name:
@@ -80,36 +83,41 @@ schemas:
       description:
         type: string
         example: Administrator with full access
-      groups:
-        type: array
-        items:
-          type: integer
-          format: int64
-      user:
-        type: object
-        nullable: true
+    required: [roleId, name]
+
+  Role:
+    allOf:
+      - $ref: '#/schemas/RoleSummary'
+      - type: object
         properties:
-          userId:
+        groups:
+          type: array
+          items:
             type: integer
             format: int64
-          name:
-            type: string
-            example: Liam Cotton
-    required:
-      - id
-      - name
-      - groups
-      - user
+        user:
+          type: object
+          nullable: true
+          properties:
+            userId:
+              type: integer
+              format: int64
+            name:
+              type: string
+              example: Liam Cotton
+        required:
+          - groups
+          - user
 
   GroupType:
     type: string
     enum: [VOICE, CHOIR, COMMITTEE, OTHER]
     example: VOICE
 
-  Group:
+  GroupSummary:
     type: object
     properties:
-      id:
+      groupId:
         type: integer
         format: int64
       name:
@@ -117,48 +125,45 @@ schemas:
         example: Tenor
       type:
         $ref: '#/schemas/GroupType'
-      description:
-        type: string
-        example: Tenor section of the choir
-      members:
-        type: array
-        items:
-          type: integer
-          format: int64
-      roles:
-        type: array
-        items:
-          type: integer
-          format: int64
-      parents:
-        type: array
-        items:
-          type: integer
-          format: int64
-      children:
-        type: array
-        items:
-          type: integer
-          format: int64
-    required:
-      - id
-      - name
-      - type
-      - members
-      - roles
-      - parents
-      - children
+    required: [groupId, name, type]
 
-  Token:
-    type: object
-    properties:
-      token:
-        type: string
+  Group:
+    allOf:
+      - $ref: '#/schemas/GroupSummary'
+      - type: object
+        properties:
+          description:
+            type: string
+          members:
+            type: array
+            items:
+              type: integer
+              format: int64
+          roles:
+            type: array
+            items:
+              type: integer
+              format: int64
+          parents:
+            type: array
+            items:
+              type: integer
+              format: int64
+          children:
+            type: array
+            items:
+              type: integer
+              format: int64
+        required:
+          - members
+          - roles
+          - parents
+          - children
 
   Book:
     type: object
     properties:
-      id:
+      bookId:
         type: integer
         format: int64
       title:
@@ -167,34 +172,32 @@ schemas:
       songs:
         type: array
         items:
-          type: object
-          properties:
-            id:
-              type: integer
-              format: int64
-            title:
-              type: string
-              example: Island
-            page:
-              type: integer
-              example: 50
+          $ref: '#/schemas/BookSong'
     required:
-      - id
+      - bookId
       - title
       - songs
+
+  BookSong:
+    allOf:
+      - $ref: '#/schemas/Song'
+      - type: object
+        properties:
+          page:
+            type: integer
+            example: 50
+        required:
+          - page
 
   Song:
     type: object
     properties:
-      id:
+      songId:
         type: integer
         format: int64
       title:
         type: string
         example: Island
-      page:
-        type: integer
-        example: 50
       startingTones:
         type: string
         example: A3
@@ -203,7 +206,7 @@ schemas:
         items:
           type: string
     required:
-      - id
+      - songId
       - title
 
   CSKEventType:
@@ -214,7 +217,7 @@ schemas:
   CSKEvent:
     type: object
     properties:
-      id:
+      eventId:
         type: integer
         format: int64
       name:
@@ -251,7 +254,7 @@ schemas:
         items:
           $ref: '#/schemas/Registration'
     required:
-      - id
+      - eventId
       - name
       - type
       - dateStart
@@ -309,14 +312,14 @@ schemas:
   Tag:
     type: object
     properties:
-      id:
+      tagId:
         type: integer
         format: int64
       name:
         type: string
         example: Lucia
     required:
-      - id
+      - tagId
       - name
 
   Error:
@@ -329,14 +332,9 @@ schemas:
     required:
       - message
 
-requestBodies:
-  RegisterUser:
+  RegisterUserInput:
     type: object
     properties:
-      id:
-        type: integer
-        format: int64
-        example: 50
       username:
         type: string
         example: concertmasterkkb1
@@ -359,20 +357,31 @@ requestBodies:
       - username
       - password
 
-  LoginUser:
+  LoginUserInput:
     description: User credentials
+    type: object
+    properties:
+      username:
+        type: string
+        example: concertmasterkkb1
+      password:
+        type: string
+        example: 'jagkansjunga'
+    required:
+      - username
+      - password
+
+requestBodies:
+  RegisterUser:
     required: true
     content:
       application/json:
         schema:
-          type: object
-          properties:
-            username:
-              type: string
-              example: concertmasterkkb1
-            password:
-              type: string
-              example: 'jagkansjunga'
-          required:
-            - username
-            - password
+          $ref: '#/schemas/RegisterUserInput'
+
+  LoginUser:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/schemas/LoginUserInput'

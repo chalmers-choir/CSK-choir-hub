@@ -104,8 +104,8 @@ components:
     User:
       $ref: './components.yaml#/schemas/User'
 
-    Token:
-      $ref: './components.yaml#/schemas/Token'
+    CSKVoice:
+      $ref: './components.yaml#/schemas/CSKVoice'
 
     CSKEventType:
       $ref: './components.yaml#/schemas/CSKEventType'
@@ -113,14 +113,23 @@ components:
     CSKEvent:
       $ref: './components.yaml#/schemas/CSKEvent'
 
+    AttendanceStatus:
+      $ref: './components.yaml#/schemas/AttendanceStatus'
+
     Attendance:
       $ref: './components.yaml#/schemas/Attendance'
 
     Registration:
       $ref: './components.yaml#/schemas/Registration'
 
+    GroupSummary:
+      $ref: './components.yaml#/schemas/GroupSummary'
+
     Group:
       $ref: './components.yaml#/schemas/Group'
+
+    RoleSummary:
+      $ref: './components.yaml#/schemas/RoleSummary'
 
     Role:
       $ref: './components.yaml#/schemas/Role'
@@ -131,14 +140,36 @@ components:
     Song:
       $ref: './components.yaml#/schemas/Song'
 
+    BookSong:
+      $ref: './components.yaml#/schemas/BookSong'
+
     Tag:
       $ref: './components.yaml#/schemas/Tag'
 
     SongKnowledge:
       $ref: './components.yaml#/schemas/SongKnowledge'
 
+    SongKnowledgeLevel:
+      $ref: './components.yaml#/schemas/SongKnowledgeLevel'
+
+    KnownSong:
+      $ref: './components.yaml#/schemas/KnownSong'
+
     Error:
       $ref: './components.yaml#/schemas/Error'
+
+    RegisterUserInput:
+      $ref: './components.yaml#/schemas/RegisterUserInput'
+
+    LoginUserInput:
+      $ref: './components.yaml#/schemas/LoginUserInput'
+
+  requestBodies:
+    RegisterUser:
+      $ref: './components.yaml#/requestBodies/RegisterUser'
+
+    LoginUser:
+      $ref: './components.yaml#/requestBodies/LoginUser'
 
   responses:
     DefaultError:
@@ -147,10 +178,3 @@ components:
         application/json:
           schema:
             $ref: './components.yaml#/schemas/Error'
-
-  requestBodies:
-    RegisterUser:
-      $ref: './components.yaml#/requestBodies/RegisterUser'
-
-    LoginUser:
-      $ref: './components.yaml#/requestBodies/LoginUser'
