@@ -110,8 +110,14 @@ components:
     CSKEventType:
       $ref: './components.yaml#/schemas/CSKEventType'
 
+    CSKEventSummary:
+      $ref: './components.yaml#/schemas/CSKEventSummary'
+
     CSKEvent:
       $ref: './components.yaml#/schemas/CSKEvent'
+
+    CreateEventInput:
+      $ref: './components.yaml#/schemas/CreateEventInput'
 
     AttendanceStatus:
       $ref: './components.yaml#/schemas/AttendanceStatus'
@@ -170,6 +176,9 @@ components:
 
     LoginUser:
       $ref: './components.yaml#/requestBodies/LoginUser'
+
+    CreateEvent:
+      $ref: './components.yaml#/requestBodies/CreateEvent'
 
   responses:
     DefaultError:

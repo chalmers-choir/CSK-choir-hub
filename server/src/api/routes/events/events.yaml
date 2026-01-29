@@ -32,32 +32,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                type:
-                  type: string
-                  enum: [REHEARSAL, CONCERT, GIG, PARTY, MEETING, OTHER]
-                description:
-                  type: string
-                dateStart:
-                  type: string
-                  format: date-time
-                dateEnd:
-                  type: string
-                  format: date-time
-                place:
-                  type: string
-                requiresAttendance:
-                  type: boolean
-                requiresRegistration:
-                  type: boolean
-              required:
-                - name
-                - type
-                - dateStart
-                - place
+              $ref: '../../docs/openapi.yaml#/components/schemas/CreateEventInput'
       responses:
         '201':
           description: Event created

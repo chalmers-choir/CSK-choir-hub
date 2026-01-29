@@ -214,17 +214,17 @@ schemas:
     enum: [REHEARSAL, CONCERT, GIG, PARTY, MEETING, OTHER]
     example: REHEARSAL
 
-  CSKEvent:
+  CSKEventSummary:
     type: object
     properties:
-      eventId:
-        type: integer
-        format: int64
       name:
         type: string
         example: Rep KK
       type:
         $ref: '#/schemas/CSKEventType'
+      description:
+        type: string
+        example: Annual Christmas concert
       dateStart:
         type: string
         format: date-time
@@ -236,31 +236,41 @@ schemas:
       place:
         type: string
         example: St. Paul's Church
-      description:
-        type: string
-        example: Annual Christmas concert
       requiresAttendance:
         type: boolean
         example: true
       requiresRegistration:
         type: boolean
         example: false
-      attendees:
-        type: array
-        items:
-          $ref: '#/schemas/Attendance'
-      registrations:
-        type: array
-        items:
-          $ref: '#/schemas/Registration'
     required:
-      - eventId
       - name
       - type
       - dateStart
       - place
       - requiresAttendance
       - requiresRegistration
+
+  CSKEvent:
+    allOf:
+      - $ref: '#/schemas/CSKEventSummary'
+      - type: object
+        properties:
+          eventId:
+            type: integer
+            format: int64
+          attendees:
+            type: array
+            items:
+              $ref: '#/schemas/Attendance'
+          registrations:
+            type: array
+            items:
+              $ref: '#/schemas/Registration'
+        required:
+          - eventId
+
+  CreateEventInput:
+    $ref: '#/schemas/CSKEventSummary'
 
   AttendanceStatus:
     type: string
@@ -385,3 +395,10 @@ requestBodies:
       application/json:
         schema:
           $ref: '#/schemas/LoginUserInput'
+
+  CreateEvent:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/schemas/CreateEventInput'
