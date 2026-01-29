@@ -1,3 +1,5 @@
+---
+# CSK Choir Hub API declaration (OpenAPI 3.0.4)
 openapi: 3.0.4
 
 info:
@@ -17,169 +19,149 @@ servers:
   - url: https://portal.chalmerssangkor.se/api
     description: Production server
 
+# Paths grouped by feature area
 paths:
+  # Auth
   /auth/register:
     $ref: '../routes/auth/auth.yaml#/paths/~1auth~1register'
-
   /auth/login:
     $ref: '../routes/auth/auth.yaml#/paths/~1auth~1login'
-
   /auth/logout:
     $ref: '../routes/auth/auth.yaml#/paths/~1auth~1logout'
-
   /auth/authenticate:
     $ref: '../routes/auth/auth.yaml#/paths/~1auth~1authenticate'
 
+  # Books
   /books:
     $ref: '../routes/books/books.yaml#/paths/~1books'
-
   /books/{bookId}:
     $ref: '../routes/books/books.yaml#/paths/~1books~1{bookId}'
-
   /books/{bookId}/songs:
     $ref: '../routes/books/books.yaml#/paths/~1books~1{bookId}~1songs'
-
   /books/{bookId}/songs/{songId}:
     $ref: '../routes/books/books.yaml#/paths/~1books~1{bookId}~1songs~1{songId}'
 
+  # Events
   /events:
     $ref: '../routes/events/events.yaml#/paths/~1events'
-
   /events/{eventId}:
     $ref: '../routes/events/events.yaml#/paths/~1events~1{eventId}'
-
   /events/{eventId}/registrations:
     $ref: '../routes/events/events.yaml#/paths/~1events~1{eventId}~1registrations'
-
   /events/{eventId}/attendances:
     $ref: '../routes/events/events.yaml#/paths/~1events~1{eventId}~1attendances'
 
+  # Groups
   /groups:
     $ref: '../routes/groups/groups.yaml#/paths/~1groups'
-
   /groups/{groupId}:
     $ref: '../routes/groups/groups.yaml#/paths/~1groups~1{groupId}'
-
   /groups/{groupId}/users:
     $ref: '../routes/groups/groups.yaml#/paths/~1groups~1{groupId}~1users'
-
   /groups/{groupId}/roles:
     $ref: '../routes/groups/groups.yaml#/paths/~1groups~1{groupId}~1roles'
-
   /groups/{groupId}/groups:
     $ref: '../routes/groups/groups.yaml#/paths/~1groups~1{groupId}~1groups'
 
+  # Roles
   /roles:
     $ref: '../routes/roles/roles.yaml#/paths/~1roles'
-
   /roles/{roleId}:
     $ref: '../routes/roles/roles.yaml#/paths/~1roles~1{roleId}'
-
   /roles/{roleId}/user:
     $ref: '../routes/roles/roles.yaml#/paths/~1roles~1{roleId}~1user'
 
+  # Songs
   /songs:
     $ref: '../routes/songs/songs.yaml#/paths/~1songs'
-
   /songs/{songId}:
     $ref: '../routes/songs/songs.yaml#/paths/~1songs~1{songId}'
-
   /songs/{songId}/tags:
     $ref: '../routes/songs/songs.yaml#/paths/~1songs~1{songId}~1tags'
 
+  # Tags
   /tags:
     $ref: '../routes/tags/tags.yaml#/paths/~1tags'
-
   /tags/{tagId}:
     $ref: '../routes/tags/tags.yaml#/paths/~1tags~1{tagId}'
 
+  # Users
   /users:
     $ref: '../routes/users/users.yaml#/paths/~1users'
-
   /users/{userId}:
     $ref: '../routes/users/users.yaml#/paths/~1users~1{userId}'
 
 components:
+  # Reusable schemas
   schemas:
+    # Users & auth
     User:
       $ref: './components.yaml#/schemas/User'
-
+    RegisterUserInput:
+      $ref: './components.yaml#/schemas/RegisterUserInput'
+    LoginUserInput:
+      $ref: './components.yaml#/schemas/LoginUserInput'
     CSKVoice:
       $ref: './components.yaml#/schemas/CSKVoice'
 
+    # Events
     CSKEventType:
       $ref: './components.yaml#/schemas/CSKEventType'
-
     CSKEventSummary:
       $ref: './components.yaml#/schemas/CSKEventSummary'
-
     CSKEvent:
       $ref: './components.yaml#/schemas/CSKEvent'
-
     CreateEventInput:
       $ref: './components.yaml#/schemas/CreateEventInput'
 
+    # Attendance & registration
     AttendanceStatus:
       $ref: './components.yaml#/schemas/AttendanceStatus'
-
     Attendance:
       $ref: './components.yaml#/schemas/Attendance'
-
     Registration:
       $ref: './components.yaml#/schemas/Registration'
 
+    # Groups & roles
     GroupSummary:
       $ref: './components.yaml#/schemas/GroupSummary'
-
     Group:
       $ref: './components.yaml#/schemas/Group'
-
     RoleSummary:
       $ref: './components.yaml#/schemas/RoleSummary'
-
     Role:
       $ref: './components.yaml#/schemas/Role'
 
+    # Music catalog
     Book:
       $ref: './components.yaml#/schemas/Book'
-
     Song:
       $ref: './components.yaml#/schemas/Song'
-
     BookSong:
       $ref: './components.yaml#/schemas/BookSong'
-
     Tag:
       $ref: './components.yaml#/schemas/Tag'
-
     SongKnowledge:
       $ref: './components.yaml#/schemas/SongKnowledge'
-
     SongKnowledgeLevel:
       $ref: './components.yaml#/schemas/SongKnowledgeLevel'
-
     KnownSong:
       $ref: './components.yaml#/schemas/KnownSong'
 
+    # Errors
     Error:
       $ref: './components.yaml#/schemas/Error'
 
-    RegisterUserInput:
-      $ref: './components.yaml#/schemas/RegisterUserInput'
-
-    LoginUserInput:
-      $ref: './components.yaml#/schemas/LoginUserInput'
-
+  # Reusable request bodies
   requestBodies:
     RegisterUser:
       $ref: './components.yaml#/requestBodies/RegisterUser'
-
     LoginUser:
       $ref: './components.yaml#/requestBodies/LoginUser'
-
     CreateEvent:
       $ref: './components.yaml#/requestBodies/CreateEvent'
 
+  # Common responses
   responses:
     DefaultError:
       description: Unexpected error
