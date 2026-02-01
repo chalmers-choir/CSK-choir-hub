@@ -1,23 +1,22 @@
 ---
 # CSK Choir Hub API declaration (OpenAPI 3.0.4)
-openapi: 3.0.4
+openapi: 3.2.0
 
 info:
   title: CSK Choir Hub
-  description: This is the API declaration for CSK Choir Hub.
+  summary: This is the API declaration for CSK Choir Hub.
   contact:
+    name: CSK Webbmästare
     email: webmasters@choir.chs.chalmers.se
   version: 1.0.0
-
-externalDocs:
-  description: Find out more about CSK
-  url: https://chalmerssangkor.se
 
 servers:
   - url: http://localhost:5050/api
     description: Local development server
+    name: local
   - url: https://portal.chalmerssangkor.se/api
     description: Production server
+    name: prod
 
 # Paths grouped by feature area
 paths:
