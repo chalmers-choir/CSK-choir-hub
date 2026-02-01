@@ -142,18 +142,7 @@ paths:
       description: Marks a user's registration for the specified event.
       operationId: markRegistration
       requestBody:
-        description: Registration details
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: integer
-                  format: int64
-              required:
-                - userId
+        $ref: '../../docs/openapi.yaml#/components/requestBodies/MakeRegistration'
       responses:
         '201':
           description: Registration created
@@ -206,21 +195,7 @@ paths:
       description: Marks a user's attendance for the specified event.
       operationId: markAttendance
       requestBody:
-        description: Attendance details
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: integer
-                  format: int64
-                status:
-                  type: string
-                  enum: [PRESENT, ABSENT]
-              required:
-                - userId
+        $ref: '../../docs/openapi.yaml#/components/requestBodies/UpdateAttendance'
       responses:
         '200':
           description: Attendance updated

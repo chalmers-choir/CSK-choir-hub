@@ -56,7 +56,7 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
 
   const userAttendanceStatus = useMemo(() => {
     if (!user || !event?.attendees) return undefined;
-    const entry = event.attendees.find((a) => a.userId === user.id);
+    const entry = event.attendees.find((a) => a.userId === user.userId);
     return entry?.status ?? undefined;
   }, [event?.attendees, user]);
 
@@ -95,7 +95,7 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
   const hasAttendanceChanges = oldEventAttendance !== newEventAttendance;
   const isRegistered = useMemo(() => {
     if (!user || !event?.registrations) return false;
-    return event.registrations.some((r) => r.userId === user.id);
+    return event.registrations.some((r) => r.userId === user.userId);
   }, [event?.registrations, user]);
 
   // Decide which list to show (events are either attendance-based or registration-based, not both)
@@ -133,7 +133,10 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
   const handleRegistration = async () => {
     if (!user || !event) return;
     try {
-      await EventsService.markRegistration({ eventId: event.id, requestBody: { userId: user.id } });
+      await EventsService.markRegistration({
+        eventId: event.eventId,
+        requestBody: { userId: user.userId },
+      });
 
       addToast({
         title: 'Anmäld till evenemanget',
@@ -157,8 +160,8 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
     if (!user || !event) return;
     try {
       await EventsService.unmarkRegistration({
-        eventId: event.id,
-        requestBody: { userId: user.id },
+        eventId: event.eventId,
+        requestBody: { userId: user.userId },
       });
 
       addToast({
@@ -190,9 +193,9 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
 
     try {
       await EventsService.markAttendance({
-        eventId: event.id,
+        eventId: event.eventId,
         requestBody: {
-          userId: user.id,
+          userId: user.userId,
           status,
         },
       });

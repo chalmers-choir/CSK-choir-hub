@@ -159,6 +159,10 @@ components:
       $ref: './components.yaml#/requestBodies/LoginUser'
     CreateEvent:
       $ref: './components.yaml#/requestBodies/CreateEvent'
+    UpdateAttendance:
+      $ref: './components.yaml#/requestBodies/UpdateAttendance'
+    MakeRegistration:
+      $ref: './components.yaml#/requestBodies/MakeRegistration'
 
   # Common responses
   responses:
