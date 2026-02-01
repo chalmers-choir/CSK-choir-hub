@@ -176,7 +176,6 @@ schemas:
     required:
       - bookId
       - title
-      - songs
 
   BookSong:
     allOf:

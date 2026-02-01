@@ -23,7 +23,7 @@ paths:
         - books
       summary: Create book
       description: Creates a new book (Admins only).
-      operationId: addBook
+      operationId: createBook
       requestBody:
         description: Book to create
         required: true
@@ -32,10 +32,10 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                title:
                   type: string
               required:
-                - name
+                - title
       responses:
         '201':
           description: Book created
