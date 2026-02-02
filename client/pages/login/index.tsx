@@ -26,14 +26,16 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      router.replace('/');
+      const redirectTo = (router.query.next as string) || '/';
+      router.replace(redirectTo);
     }
-  }, [isAuthenticated, loading, router]);
+  }, [isAuthenticated, loading, router, router.query.next]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(username, password);
+      const redirectTo = (router.query.next as string) || '/';
+      await login(username, password, redirectTo);
     } catch (err: any) {
       setError(err.message);
     }
