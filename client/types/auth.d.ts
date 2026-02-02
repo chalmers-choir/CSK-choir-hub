@@ -44,7 +44,7 @@ export interface AuthResponse {
 export interface AuthContextType {
   user: User | undefined;
   loading: boolean;
-  login: (username: string, password: string) => Promise<void>;
+  login: (username: string, password: string, redirectTo?: string) => Promise<void>;
   register: (userData: Omit<RegisterForm, 'confirmPassword'>) => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
