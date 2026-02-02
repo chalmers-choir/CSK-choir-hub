@@ -128,27 +128,45 @@ model EventRegistration {
 
 model Book {
   id        Int      @id @default(autoincrement())
-  name      String   @unique
+  title      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  songs Song[]
+  bookSongs BookSong[]
 }
 
 model Song {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  name      String
+  title     String
 
-  page          Int?
   startingTones String?
 
-  books Book[]
+  bookSongs BookSong[]
 
   voices        Voice[]
   tags          Tag[]
   songKnowledge SongKnowledge[]
+}
+
+model BookSong {
+  bookId Int
+  songId Int
+
+  // If you only need a single page number, keep `page` and delete `pageStart/pageEnd`.
+  pageStart Int?
+  pageEnd   Int?
+
+  // Optional: preserve ordering of songs within a book
+  order Int?
+
+  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  song Song @relation(fields: [songId], references: [id], onDelete: Cascade)
+
+  @@id([bookId, songId])
+  @@index([songId])
+  @@index([bookId])
 }
 
 enum KnowledgeLevel {
