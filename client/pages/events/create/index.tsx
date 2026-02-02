@@ -84,6 +84,7 @@ export default function CreateEventPage() {
 
       const { event: newEvent } = await EventsService.addEvent({ requestBody: eventData }); // Invalidate cache
       const eventId = newEvent.id;
+
       resetState();
       setResult({ type: 'success', message: 'Evenemang skapat!' });
       window.location.href = `/events/${eventId}`;
@@ -99,25 +100,25 @@ export default function CreateEventPage() {
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         {isAdmin ? (
           <form
-            onSubmit={handleSubmit}
             className="w-md mx-auto mt-20 flex max-w-full flex-col gap-2"
+            onSubmit={handleSubmit}
           >
             <h2 className="w-full text-center text-lg font-semibold">Skapa nytt evenemang</h2>
 
             <Input
-              type="text"
-              label="Namn på evenemanget"
-              variant={defaultVariant}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
               required
+              label="Namn på evenemanget"
+              type="text"
+              value={name}
+              variant={defaultVariant}
+              onChange={(e) => setName(e.target.value)}
             />
 
             <Dropdown>
               <DropdownTrigger>
                 <Button
-                  variant={defaultVariant}
                   color={typeIsInvalid ? 'danger' : 'default'}
+                  variant={defaultVariant}
                   onPress={() => setTypeIsInvalid(false)}
                 >
                   {type ? eventTypeDbKeyToName[type] : 'Välj typ'}
@@ -132,22 +133,22 @@ export default function CreateEventPage() {
             </Dropdown>
 
             <Textarea
-              type="text"
-              label="Beskrivning"
-              variant={defaultVariant}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
               required
+              label="Beskrivning"
+              type="text"
+              value={description}
+              variant={defaultVariant}
+              onChange={(e) => setDescription(e.target.value)}
             />
 
             <I18nProvider locale="sv-SE">
               <DatePicker
                 classNames={{ label: 'after:content-none' }}
-                label="Datum och tid"
-                variant={defaultVariant}
-                isInvalid={dateIsInvalid}
                 granularity="minute"
+                isInvalid={dateIsInvalid}
+                label="Datum och tid"
                 value={dateStart}
+                variant={defaultVariant}
                 onChange={(e) => e && setDateStart(e)}
                 onFocus={() => setDateIsInvalid(false)}
               />
@@ -155,13 +156,13 @@ export default function CreateEventPage() {
 
             <Autocomplete
               allowsCustomValue
+              inputValue={place}
+              isInvalid={placeIsInvalid}
+              items={Object.entries(autocompletePlaceNames)}
               label="Plats (välj från listan eller skriv egen)"
               variant={defaultVariant}
-              isInvalid={placeIsInvalid}
-              inputValue={place}
-              onInputChange={(e) => setPlace(e)}
               onFocus={() => setPlaceIsInvalid(false)}
-              items={Object.entries(autocompletePlaceNames)}
+              onInputChange={(e) => setPlace(e)}
             >
               {(item) => <AutocompleteItem key={item[0]}>{item[1]}</AutocompleteItem>}
             </Autocomplete>
@@ -173,8 +174,8 @@ export default function CreateEventPage() {
             )}
 
             <Button
-              type="submit"
               className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
+              type="submit"
             >
               Skapa
             </Button>

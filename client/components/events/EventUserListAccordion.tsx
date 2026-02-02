@@ -21,6 +21,7 @@ export const EventUserListAccordion = ({
   const renderStatusIcon = (status: boolean | null | undefined) => {
     if (status === true) return <IoCheckmarkCircle className="text-success" size={18} />;
     if (status === false) return <IoCloseCircle className="text-danger" size={18} />;
+
     return <IoEllipseOutline className="text-default-400" size={18} />;
   };
 

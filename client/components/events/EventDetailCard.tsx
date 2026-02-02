@@ -13,7 +13,9 @@ import { IoClose } from 'react-icons/io5';
 const formatDate = (isoString?: string) => {
   if (!isoString) return 'N/A';
   const date = new Date(isoString);
+
   if (Number.isNaN(date.getTime())) return 'N/A';
+
   return new Intl.DateTimeFormat('sv-SE', {
     weekday: 'short',
     day: 'numeric',
@@ -24,7 +26,9 @@ const formatDate = (isoString?: string) => {
 const formatTime = (isoString?: string) => {
   if (!isoString) return 'N/A';
   const date = new Date(isoString);
+
   if (Number.isNaN(date.getTime())) return 'N/A';
+
   return new Intl.DateTimeFormat('sv-SE', {
     hour: '2-digit',
     minute: '2-digit',
@@ -57,6 +61,7 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
   const userAttendanceStatus = useMemo(() => {
     if (!user || !event?.attendees) return undefined;
     const entry = event.attendees.find((a) => a.userId === user.id);
+
     return entry?.status ?? undefined;
   }, [event?.attendees, user]);
 
@@ -69,6 +74,7 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
 
   useEffect(() => {
     const choice = statusToChoice(userAttendanceStatus);
+
     setOldEventAttendance(choice);
     setNewEventAttendance(choice);
   }, [userAttendanceStatus]);
@@ -95,6 +101,7 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
   const hasAttendanceChanges = oldEventAttendance !== newEventAttendance;
   const isRegistered = useMemo(() => {
     if (!user || !event?.registrations) return false;
+
     return event.registrations.some((r) => r.userId === user.id);
   }, [event?.registrations, user]);
 
@@ -114,7 +121,9 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
   const usersForList = useMemo(() => {
     if (!isAttendanceMode || !user) return baseUsersForList;
     const displayName = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
+
     if (!displayName) return baseUsersForList;
+
     return baseUsersForList.map((entry) =>
       entry.name === displayName
         ? {
@@ -273,18 +282,18 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
               {hasAttendanceChanges && (
                 <Button
                   isIconOnly
-                  size="sm"
-                  radius="full"
-                  onPress={handleResetAttendance}
                   aria-label="Ångra närvaroval"
+                  radius="full"
+                  size="sm"
+                  onPress={handleResetAttendance}
                 >
                   <IoClose size={18} />
                 </Button>
               )}
               <Button
+                color={oldEventAttendance == newEventAttendance ? 'default' : 'primary'}
                 disabled={!hasAttendanceChanges}
                 onPress={handleSaveAttendance}
-                color={oldEventAttendance == newEventAttendance ? 'default' : 'primary'}
               >
                 <span className="text-small font-semibold">Spara</span>
               </Button>
@@ -294,7 +303,7 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
       )}
 
       <CardFooter>
-        <EventUserListAccordion users={usersForList} title={listTitle} />
+        <EventUserListAccordion title={listTitle} users={usersForList} />
       </CardFooter>
     </Card>
   );

@@ -20,6 +20,7 @@ export default function IndexPage() {
     const fetchEvent = async () => {
       try {
         const res = await EventsService.getEventById({ eventId });
+
         setEvent(res.event);
       } catch (err: any) {
         console.log(err.message || 'Failed to fetch event');
