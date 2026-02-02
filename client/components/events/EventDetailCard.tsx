@@ -142,7 +142,10 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
   const handleRegistration = async () => {
     if (!user || !event) return;
     try {
-      await EventsService.markRegistration({ eventId: event.id, requestBody: { userId: user.id } });
+      await EventsService.markRegistration({
+        eventId: event.id,
+        requestBody: { userId: user.id },
+      });
 
       addToast({
         title: 'Anmäld till evenemanget',

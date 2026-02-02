@@ -21,13 +21,13 @@ export async function deleteById(bookId: number) {
  * List books
  */
 export async function findAll() {
-  return prisma.book.findMany({
-    include: {
-      songs: true,
-    },
-  });
+  return prisma.book.findMany();
 }
 
+/**
+ * Find a book by its ID.
+ * @param bookId Book ID
+ */
 export async function findById(bookId: number) {
   return prisma.book.findUnique({
     where: { id: bookId },
