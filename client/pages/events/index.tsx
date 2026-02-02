@@ -8,26 +8,9 @@ import RequireAuth from '@/components/RequireAuth';
 import { siteConfig } from '@/config/site';
 import { useAuth } from '@/contexts/AuthContext';
 import DefaultLayout from '@/layouts/default';
+import { CSKEvent, CSKEventType, EventsService } from '@/lib/apiClient';
 
-type EventType = 'REHEARSAL' | 'CONCERT' | 'GIG' | 'PARTY' | 'MEETING' | 'OTHER';
-
-type Event = {
-  id: number;
-  name: string;
-  type: EventType;
-  place: string;
-  dateStart: string;
-  dateEnd?: string | null;
-  description?: string | null;
-  requiresAttendance: boolean;
-  requiresRegistration: boolean;
-};
-
-type EventsResponse = {
-  events?: Event[];
-};
-
-const eventTypeMeta: Record<EventType, { label: string; color: string }> = {
+const eventTypeMeta: Record<CSKEventType, { label: string; color: string }> = {
   REHEARSAL: { label: 'Repetition', color: 'bg-sky-100 text-sky-700' },
   CONCERT: { label: 'Konsert', color: 'bg-purple-100 text-purple-700' },
   GIG: { label: 'Gig', color: 'bg-amber-100 text-amber-800' },
@@ -91,7 +74,7 @@ const getWeekMeta = (isoDate: string) => {
   };
 };
 
-const EventCard = ({ event }: { event: Event }) => {
+const EventCard = ({ event }: { event: CSKEvent }) => {
   const badge = eventTypeMeta[event.type] ?? eventTypeMeta.OTHER;
 
   return (
@@ -141,7 +124,7 @@ const EventCard = ({ event }: { event: Event }) => {
 export default function IndexPage() {
   const { isAuthenticated, isAdmin, loading: authLoading } = useAuth();
 
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<CSKEvent[]>([]);
   const [eventsLoading, setEventsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -151,24 +134,13 @@ export default function IndexPage() {
       return;
     }
 
-    const controller = new AbortController();
-
     const fetchEvents = async () => {
       setEventsLoading(true);
       setError(null);
 
       try {
-        const response = await fetch(`${siteConfig.apiBaseUrl}/events`, {
-          credentials: 'include',
-          signal: controller.signal,
-        });
-
-        if (!response.ok) {
-          throw new Error(`Kunde inte hämta evenemang (status ${response.status}).`);
-        }
-
-        const payload = (await response.json()) as EventsResponse | Event[];
-        const eventList: Event[] = Array.isArray(payload) ? payload : (payload.events ?? []);
+        const response = await EventsService.getEvents();
+        const eventList = response.events;
 
         const now = new Date();
         const upcomingEvents = eventList.filter(
@@ -182,26 +154,21 @@ export default function IndexPage() {
 
         setEvents(sortedEvents);
       } catch (err) {
-        if (controller.signal.aborted) return;
         setError(
           err instanceof Error ? err.message : 'Något gick fel när evenemangen skulle hämtas.',
         );
       } finally {
-        if (!controller.signal.aborted) {
-          setEventsLoading(false);
-        }
+        setEventsLoading(false);
       }
     };
 
     fetchEvents();
-
-    return () => controller.abort();
   }, [isAuthenticated]);
 
   const eventsByWeek = useMemo(() => {
     const grouped = new Map<
       string,
-      { key: string; weekNumber: number; rangeLabel: string; items: Event[] }
+      { key: string; weekNumber: number; rangeLabel: string; items: CSKEvent[] }
     >();
 
     events.forEach((event) => {
