@@ -94,7 +94,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     register,
     logout,
     isAuthenticated: !!user,
-    isAdmin: user?.groups?.some((group) => group.name === 'Admins') ?? false,
+    isAdmin: user?.groups.some((group) => group.name === 'Admins') ?? false,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

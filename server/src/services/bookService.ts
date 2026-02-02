@@ -1,4 +1,4 @@
-import { bookModel, songModel } from '@db';
+import { bookModel } from '@db';
 import { NotFoundError } from '@utils';
 
 export async function getAllBooks() {

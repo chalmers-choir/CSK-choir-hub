@@ -80,7 +80,15 @@ export default function CreateEventPage() {
         throw new Error('Vänligen fyll i alla fält.');
       }
 
-      const eventData = { name, type, description, dateStart: dateStart?.toString(), place };
+      const eventData = {
+        name,
+        type,
+        description,
+        dateStart: dateStart?.toString(),
+        place,
+        requiresRegistration: false,
+        requiresAttendance: false,
+      };
 
       const { event: newEvent } = await EventsService.addEvent({ requestBody: eventData }); // Invalidate cache
       const eventId = newEvent.id;

@@ -1,23 +1,4 @@
-// User types
-export interface AuthenticatedUser {
-  id: number;
-  username: string;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  roles: UserRole[];
-  groups: UserGroup[];
-}
-
-export type UserRole = {
-  id: number;
-  name: string;
-};
-
-export type UserGroup = {
-  id: number;
-  name: string;
-};
+import { User } from '@/lib/api-client';
 
 // Form types
 export interface LoginForm {
@@ -32,12 +13,6 @@ export interface RegisterForm {
   confirmPassword: string;
   firstName: string;
   lastName: string;
-}
-
-// API Response types
-export interface AuthResponse {
-  user: User;
-  token: string;
 }
 
 // Context types
