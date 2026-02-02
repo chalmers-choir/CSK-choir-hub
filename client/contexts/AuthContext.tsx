@@ -2,7 +2,7 @@
 
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 import { AuthContextType, RegisterForm } from '../types/auth';
 import { AuthService, User } from '@/lib/apiClient';
@@ -46,13 +46,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     fetchUser();
   }, []);
 
-  const login = async (username: string, password: string) => {
+  const login = async (username: string, password: string, redirectTo = '/') => {
     setLoading(true);
     try {
       const res = await AuthService.loginUser({ requestBody: { username, password } });
 
       setUser(res.user);
-      router.push('/');
+      router.push(redirectTo);
     } catch {
       setUser(undefined);
     } finally {
