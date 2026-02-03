@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { HeroUIProvider } from '@heroui/system';
 import { ToastProvider } from '@heroui/toast';
 
@@ -10,7 +12,7 @@ import { ThemeProvider } from 'next-themes';
  *
  * @returns {JSX.Element} The combined providers wrapping the children components.
  */
-export default function Providers({ children }: { children: React.ReactNode }): JSX.Element {
+export default function Providers({ children }: { children: React.ReactNode }): React.JSX.Element {
   return (
     <AuthProvider>
       <HeroUIProvider>
