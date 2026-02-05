@@ -4,7 +4,7 @@
     "module": "commonjs",
     "lib": ["ES2020"],
     "outDir": "./dist",
-    "rootDir": ".",
+    "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -23,10 +23,11 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "baseUrl": "./src",
     "paths": {
-      "@*": ["./src/*"]
+      "@*": ["*"]
     }
   },
-  "include": ["src/**/*", "src/types", "scripts", "src/prisma"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
