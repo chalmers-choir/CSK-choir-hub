@@ -12,7 +12,6 @@ export async function createSong(data: Prisma.SongCreateInput) {
 export async function findAll() {
   return prisma.song.findMany({
     include: {
-      books: true,
       tags: true,
     },
   });
@@ -53,7 +52,7 @@ export async function deleteById(songId: number) {
 export async function listSongs(filters?: { bookId?: number; tags?: Tag[] }) {
   const where: Prisma.SongWhereInput = {};
   if (filters?.bookId) {
-    where.books = { some: { id: filters.bookId } };
+    where.bookSongs = { some: { bookId: filters.bookId } };
   }
   if (filters?.tags && filters.tags.length > 0) {
     where.tags = { some: { name: { in: filters.tags.map((tag) => tag.name) } } };

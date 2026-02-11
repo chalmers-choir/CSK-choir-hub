@@ -13,7 +13,7 @@ export async function getAllSongs() {
  * @param data Data for the new song
  * @returns The created song
  */
-export async function createSong(data: { name: string }) {
+export async function createSong(data: { title: string }) {
   return await songModel.createSong(data);
 }
 

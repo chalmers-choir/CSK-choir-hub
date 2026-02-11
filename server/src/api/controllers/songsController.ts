@@ -14,11 +14,11 @@ export const getSongs = async (req: Request, res: Response, next: NextFunction) 
 
 // Create a new song
 export const createSong = async (req: Request, res: Response, next: NextFunction) => {
-  const { name } = req.body;
-  if (!name) return next(new BadRequestError('Song name is required'));
+  const { title } = req.body;
+  if (!title) return next(new BadRequestError('Song title is required'));
 
   try {
-    const newSong = await songService.createSong({ name });
+    const newSong = await songService.createSong({ title });
     return res.status(201).json(newSong);
   } catch (error) {
     next(error);

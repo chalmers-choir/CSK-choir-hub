@@ -32,7 +32,11 @@ export async function findById(bookId: number) {
   return prisma.book.findUnique({
     where: { id: bookId },
     include: {
-      songs: true,
+      bookSongs: {
+        include: {
+          song: true,
+        },
+      },
     },
   });
 }
@@ -46,8 +50,10 @@ export async function addSong(bookId: number, songId: number) {
   return prisma.book.update({
     where: { id: bookId },
     data: {
-      songs: {
-        connect: { id: songId },
+      bookSongs: {
+        create: {
+          song: { connect: { id: songId } },
+        },
       },
     },
   });
@@ -62,8 +68,13 @@ export async function removeSong(bookId: number, songId: number) {
   return prisma.book.update({
     where: { id: bookId },
     data: {
-      songs: {
-        disconnect: { id: songId },
+      bookSongs: {
+        delete: {
+          bookId_songId: {
+            bookId,
+            songId,
+          },
+        },
       },
     },
   });

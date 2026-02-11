@@ -27,11 +27,11 @@ export const getBookWithId = async (req: Request, res: Response, next: NextFunct
 
 // Create a new book
 export const createBook = async (req: Request, res: Response, next: NextFunction) => {
-  const { name } = req.body;
-  if (!name) return next(new BadRequestError('Name is required'));
+  const { title } = req.body;
+  if (!title) return next(new BadRequestError('Title is required'));
 
   try {
-    const newBook = await bookService.createBook({ name });
+    const newBook = await bookService.createBook({ title });
     return res.status(201).json({ book: newBook });
   } catch (error) {
     return next(error);

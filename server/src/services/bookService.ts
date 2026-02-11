@@ -11,7 +11,7 @@ export async function getBookById(bookId: number) {
   return book;
 }
 
-export async function createBook(data: { name: string }) {
+export async function createBook(data: { title: string }) {
   return await bookModel.create(data);
 }
 

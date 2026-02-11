@@ -5,19 +5,19 @@ export default async function seedBooks(prisma: PrismaClient): Promise<Books> {
   // Create Books
   const utantill = await prisma.book.create({
     data: {
-      name: 'Utanill',
+      title: 'Utanill',
     },
   });
 
   const grona = await prisma.book.create({
     data: {
-      name: 'Gröna Boken',
+      title: 'Gröna Boken',
     },
   });
 
   const svarta = await prisma.book.create({
     data: {
-      name: 'Lilla Svarta',
+      title: 'Lilla Svarta',
     },
   });
 

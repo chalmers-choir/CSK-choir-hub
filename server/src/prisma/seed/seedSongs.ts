@@ -11,44 +11,36 @@ export default async function seedRoles(
   // Create Songs
   const island = await prisma.song.create({
     data: {
-      name: 'Island',
-      page: 50,
+      title: 'Island',
       startingTones: 'A',
       voices: [Voice.T1, Voice.T2, Voice.B1, Voice.B2],
-      books: { connect: [{ id: books.utantill.id }, { id: books.svarta.id }] },
       tags: { connect: [{ id: tags.student.id }] },
     },
   });
 
   const utandig = await prisma.song.create({
     data: {
-      name: 'Utan dig',
-      page: 86,
+      title: 'Utan dig',
       startingTones: 'E',
       voices: [Voice.S1, Voice.S2, Voice.A1, Voice.A2],
-      books: { connect: [{ id: books.utantill.id }, { id: books.grona.id }] },
       tags: { connect: [{ id: tags.serenad.id }] },
     },
   });
 
   const helan = await prisma.song.create({
     data: {
-      name: 'Helan går',
-      page: 12,
+      title: 'Helan går',
       startingTones: 'C',
       voices: [Voice.S, Voice.A, Voice.T, Voice.B],
-      books: { connect: [{ id: books.utantill.id }] },
       tags: { connect: [{ id: tags.student.id }] },
     },
   });
 
   const bastu = await prisma.song.create({
     data: {
-      name: 'I bastun',
-      page: 34,
+      title: 'Bastufadäs',
       startingTones: 'F',
       voices: [Voice.S1, Voice.S2, Voice.A1, Voice.A2, Voice.T1, Voice.T2, Voice.B1, Voice.B2],
-      books: { connect: [{ id: books.utantill.id }] },
       tags: { connect: [{ id: tags.chalmers.id }] },
     },
   });
