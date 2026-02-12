@@ -30,6 +30,10 @@ schemas:
         type: array
         items:
           $ref: '#/schemas/KnownSong'
+      dietaryPreferences:
+        type: string
+        example: Vegetarian
+
     required:
       - id
       - username
@@ -408,6 +412,26 @@ schemas:
       - username
       - password
 
+  UpdateUserInput:
+    type: object
+    properties:
+      username:
+        type: string
+        example: concertmasterkkb1
+      firstName:
+        type: string
+        example: Liam
+      lastName:
+        type: string
+        example: Cotton
+      email:
+        type: string
+        format: email
+        example: liam@cotton.com
+      dietaryPreferences:
+        type: string
+        example: Vegetarian
+
 requestBodies:
   RegisterUser:
     required: true
@@ -422,6 +446,13 @@ requestBodies:
       application/json:
         schema:
           $ref: '#/schemas/LoginUserInput'
+
+  UpdateUser:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/schemas/UpdateUserInput'
 
   CreateEvent:
     required: true

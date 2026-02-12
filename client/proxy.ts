@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
@@ -18,7 +18,9 @@ export async function proxy(req: NextRequest) {
   // No token: send to login with return URL
   if (!token) {
     const loginUrl = new URL('/login', req.url);
+
     loginUrl.searchParams.set('next', pathname + search);
+
     return NextResponse.redirect(loginUrl);
   }
 
@@ -42,7 +44,9 @@ export async function proxy(req: NextRequest) {
       }
     } catch {
       const loginUrl = new URL('/login', req.url);
+
       loginUrl.searchParams.set('next', pathname + search);
+
       return NextResponse.redirect(loginUrl);
     }
   }

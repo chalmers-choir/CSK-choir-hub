@@ -113,16 +113,38 @@ export default defineConfig([
         },
       ],
 
-      'import/order': 'off',
+      'import/order': [
+        'warn',
+        {
+          groups: [
+            'type',
+            'builtin',
+            'object',
+            'external',
+            'internal',
+            'parent',
+            'sibling',
+            'index',
+          ],
+
+          pathGroups: [
+            {
+              pattern: '~/**',
+              group: 'external',
+              position: 'after',
+            },
+          ],
+        },
+      ],
 
       'react/self-closing-comp': 'warn',
 
       'react/jsx-sort-props': [
         'warn',
         {
-          callbacksLast: true,
-          shorthandFirst: true,
-          noSortAlphabetically: false,
+          callbacksLast: false,
+          shorthandFirst: false,
+          noSortAlphabetically: true,
           reservedFirst: true,
         },
       ],

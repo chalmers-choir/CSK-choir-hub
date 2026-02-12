@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
 import { Button } from '@heroui/button';
 import { Input } from '@heroui/input';
 import { Link } from '@heroui/link';
+import { Form } from '@heroui/react';
 import { button as buttonStyles } from '@heroui/theme';
 
 import AuthLoading from '@/components/AuthLoading';
@@ -27,6 +27,7 @@ export default function LoginPage() {
   useEffect(() => {
     if (!loading && isAuthenticated) {
       const redirectTo = (router.query.next as string) || '/';
+
       router.replace(redirectTo);
     }
   }, [isAuthenticated, loading, router, router.query.next]);
@@ -35,6 +36,7 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       const redirectTo = (router.query.next as string) || '/';
+
       await login(username, password, redirectTo);
     } catch (err: any) {
       setError(err.message);
@@ -46,7 +48,7 @@ export default function LoginPage() {
       {loading ? (
         <AuthLoading />
       ) : (
-        <form className="mx-auto mt-20 flex max-w-sm flex-col gap-2" onSubmit={handleSubmit}>
+        <Form className="mx-auto mt-20 flex max-w-sm flex-col gap-2" onSubmit={handleSubmit}>
           <h2 className="w-full text-center text-lg font-semibold">Login</h2>
           <Input
             placeholder="Username"
@@ -73,7 +75,7 @@ export default function LoginPage() {
           >
             Inget konto? Registrera
           </Link>
-        </form>
+        </Form>
       )}
     </DefaultLayout>
   );

@@ -102,6 +102,7 @@ export default async function seedUsers(prisma: PrismaClient): Promise<Users> {
       passwordHash: await bcrypt.hash('password', 10),
       firstName: 'Lucas',
       lastName: 'Lyric',
+      webRole: 'ADMIN',
     },
   });
 

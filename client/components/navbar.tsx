@@ -2,21 +2,22 @@ import NextLink from 'next/link';
 
 import clsx from 'clsx';
 
-import { Button } from '@heroui/button';
-import { Input } from '@heroui/input';
-import { Kbd } from '@heroui/kbd';
-import { Link } from '@heroui/link';
 import {
+  Button,
   Navbar as HeroUINavbar,
+  Input,
+  Kbd,
+  Link,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
-} from '@heroui/navbar';
-import { link as linkStyles } from '@heroui/theme';
+  link as linkStyles,
+} from '@heroui/react';
 
+import { UserMenu } from './user';
 import { Logo, SearchIcon } from '@/components/icons';
 import { ThemeSwitch } from '@/components/theme-switch';
 import { siteConfig } from '@/config/site';
@@ -43,9 +44,9 @@ export const Navbar = () => {
       type="search"
     />
   );
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const logoutButton = (
-    <Button color="danger" size="sm" type="submit" variant="light" onPress={logout}>
+    <Button type="submit" color="primary" size="md" variant="ghost" onPress={logout}>
       Logout
     </Button>
   );
@@ -58,7 +59,7 @@ export const Navbar = () => {
             <Logo />
           </NextLink>
         </NavbarBrand>
-        <div className="ml-2 hidden justify-start gap-4 lg:flex">
+        <div className="ml-2 hidden justify-start gap-4 md:flex">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
@@ -80,36 +81,30 @@ export const Navbar = () => {
         <NavbarItem className="hidden gap-2 sm:flex">
           <ThemeSwitch />
         </NavbarItem>
-        <NavbarItem className="hidden sm:flex">{isAuthenticated && logoutButton}</NavbarItem>
+        {/* <NavbarItem className="hidden sm:flex">{isAuthenticated && logoutButton}</NavbarItem> */}
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
+        <UserMenu isAuthenticated={isAuthenticated} logout={logout} user={user} />
       </NavbarContent>
 
       <NavbarContent className="basis-1 pl-4 sm:hidden" justify="end">
-        <ThemeSwitch />
+        <UserMenu isAuthenticated={isAuthenticated} logout={logout} user={user} />
         <NavbarMenuToggle />
       </NavbarContent>
 
       <NavbarMenu>
-        {logoutButton}
+        {/* <UserInfo /> */}
         {searchInput}
-        <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
+        <div className="w-75 mx-4 mt-2 flex flex-col gap-2">
+          {siteConfig.navItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
-                color={
-                  index === 2
-                    ? 'primary'
-                    : index === siteConfig.navMenuItems.length - 1
-                      ? 'danger'
-                      : 'foreground'
-                }
-                href="#"
-                size="lg"
-              >
+              <Link href={item.href} size="lg" color={'foreground'}>
                 {item.label}
               </Link>
             </NavbarMenuItem>
           ))}
+          <NavbarMenuItem>
+            <ThemeSwitch />
+          </NavbarMenuItem>
         </div>
       </NavbarMenu>
     </HeroUINavbar>

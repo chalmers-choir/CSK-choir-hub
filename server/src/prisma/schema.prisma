@@ -7,6 +7,11 @@ datasource db {
   provider = "postgresql"
 }
 
+enum WebRole {
+  USER
+  ADMIN
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -26,6 +31,8 @@ model User {
   attendances   EventAttendance[]
   registrations EventRegistration[]
   songKnowledge SongKnowledge[]
+
+  webRole WebRole @default(USER)
 }
 
 enum GroupType {

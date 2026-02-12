@@ -100,6 +100,8 @@ components:
       $ref: './components.yaml#/schemas/RegisterUserInput'
     LoginUserInput:
       $ref: './components.yaml#/schemas/LoginUserInput'
+    UpdateUserInput:
+      $ref: './components.yaml#/schemas/UpdateUserInput'
     CSKVoice:
       $ref: './components.yaml#/schemas/CSKVoice'
 
@@ -126,6 +128,8 @@ components:
       $ref: './components.yaml#/schemas/GroupSummary'
     Group:
       $ref: './components.yaml#/schemas/Group'
+    GroupType:
+      $ref: './components.yaml#/schemas/GroupType'
     RoleSummary:
       $ref: './components.yaml#/schemas/RoleSummary'
     Role:
@@ -157,6 +161,8 @@ components:
       $ref: './components.yaml#/requestBodies/RegisterUser'
     LoginUser:
       $ref: './components.yaml#/requestBodies/LoginUser'
+    UpdateUser:
+      $ref: './components.yaml#/requestBodies/UpdateUser'
     CreateEvent:
       $ref: './components.yaml#/requestBodies/CreateEvent'
     UpdateAttendance:

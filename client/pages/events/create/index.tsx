@@ -64,7 +64,7 @@ export default function CreateEventPage() {
 
   const [result, setResult] = useState<Result>(undefined);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     try {
       if (!type) {

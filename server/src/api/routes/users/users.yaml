@@ -51,3 +51,22 @@ paths:
       responses:
         '204':
           description: User deleted
+
+    put:
+      tags:
+        - users
+      summary: Update user
+      description: Updates a user's information.
+      operationId: updateUser
+      requestBody:
+        $ref: '../../docs/openapi.yaml#/components/requestBodies/UpdateUser'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '../../docs/openapi.yaml#/components/schemas/User'

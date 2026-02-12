@@ -93,6 +93,8 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
   try {
     const user = await userService.getUserFromToken(token);
+    const groups = await userService.getUserAllGroups(user.id);
+    user.groups = groups;
     return res.json({ user });
   } catch (error: any) {
     return next(error);
