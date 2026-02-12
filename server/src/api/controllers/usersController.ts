@@ -25,6 +25,25 @@ export const getUserWithId = async (req: Request, res: Response, next: NextFunct
   }
 };
 
+export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
+  const userId = parseInt(req.params.userId, 10);
+  if (isNaN(userId)) return next(new BadRequestError('Invalid user ID'));
+
+  const { firstName, lastName, email, dietaryPreferences } = req.body;
+
+  try {
+    const updatedUser = await userService.updateUser(userId, {
+      firstName,
+      lastName,
+      email,
+      dietaryPreferences,
+    });
+    return res.json({ user: updatedUser });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 // Delete a user by ID
 export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   const userId = parseInt(req.params.userId, 10);

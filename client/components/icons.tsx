@@ -3,8 +3,21 @@ import * as React from 'react';
 import Image from 'next/image';
 
 import { IconSvgProps } from '@/types/icon';
+import { useTheme } from 'next-themes';
 
-export const Logo = () => <Image alt="Logo" height={36} src="/logo/small.png" width={36} />;
+export const Logo = () => {
+  const { resolvedTheme } = useTheme();
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const logoSrc =
+    !isMounted || resolvedTheme === 'light' ? '/logo/small.png' : '/logo/small_invert.png';
+
+  return <Image alt="Logo" height={36} src={logoSrc} unoptimized width={36} />;
+};
 
 export const DiscordIcon: React.FC<IconSvgProps> = ({ size = 24, width, height, ...props }) => {
   return (

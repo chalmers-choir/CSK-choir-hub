@@ -1,4 +1,6 @@
+import { prisma } from '@db';
 import * as userModel from '@db/models/userModel';
+import { User } from '@prisma/generated/client';
 import { NotFoundError, UnauthorizedError } from '@utils';
 import { generateToken } from '@utils/generateToken';
 import logger from '@utils/logger';
@@ -85,8 +87,76 @@ export const getUserFromToken = async (token: string) => {
     const userId = decoded.userId;
     const user = await userModel.findById(userId, { roles: true, groups: true });
     if (!user) throw new NotFoundError('User not found');
-    return user;
+
+    const { passwordHash, ...userWithoutPWHash } = user;
+
+    return userWithoutPWHash;
   } catch (err) {
     throw new UnauthorizedError('Invalid token');
   }
+};
+
+export const updateUser = async (userId: number, updateData: Partial<User>) => {
+  const { email } = updateData;
+
+  if (email) {
+    const existingUser = await userModel.findByEmail(email);
+    if (existingUser && existingUser.id !== userId) {
+      throw new Error('Email already in use by another account');
+    }
+  }
+
+  return userModel.updateUser(userId, updateData);
+};
+
+/**
+ * Get all groups a user belongs to, including inherited groups through parent hierarchy.
+ * @param {number} userId - The user ID.
+ * @returns {Promise<Array>} Array of groups with id, name, and type.
+ */
+export const getUserAllGroups = async (userId: number) => {
+  // Get direct group memberships
+  const directGroups = await prisma.group.findMany({
+    where: { members: { some: { id: userId } } },
+  });
+
+  const roles = await userModel.findRolesByUser(userId);
+  const roleGroups = await prisma.group.findMany({
+    where: { roles: { some: { id: { in: roles.map((r) => r.id) } } } },
+  });
+
+  // Recursively get all parent groups
+  const allGroupIds = new Set<number>();
+  const visited = new Set<number>();
+
+  const collectAncestors = async (groupId: number) => {
+    if (visited.has(groupId)) return;
+    visited.add(groupId);
+    allGroupIds.add(groupId);
+
+    const parents = await prisma.group.findMany({
+      where: { children: { some: { id: groupId } } },
+      select: { id: true },
+    });
+
+    for (const parent of parents) {
+      await collectAncestors(parent.id);
+    }
+  };
+
+  // Collect all ancestors for each direct group
+  for (const group of directGroups) {
+    await collectAncestors(group.id);
+  }
+
+  for (const group of roleGroups) {
+    await collectAncestors(group.id);
+  }
+
+  // Fetch group summaries for all collected groups
+  const allGroups = await prisma.group.findMany({
+    where: { id: { in: Array.from(allGroupIds) } },
+  });
+
+  return allGroups;
 };

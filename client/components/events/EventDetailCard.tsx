@@ -5,8 +5,8 @@ import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
 import { Checkbox } from '@heroui/checkbox';
 import { addToast } from '@heroui/toast';
 
-import { EventUserEntry, EventUserListAccordion } from './EventUserListAccordion';
 import { useAuth } from '@/contexts/AuthContext';
+import { EventUserEntry, EventUserListAccordion } from './EventUserListAccordion';
 import { CSKEvent, CSKEventType, EventsService } from '@/lib/api-client';
 import { IoClose } from 'react-icons/io5';
 

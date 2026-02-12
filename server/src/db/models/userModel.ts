@@ -1,5 +1,5 @@
 import { prisma } from '@db';
-import type { Choir, Voice } from '@prisma/generated/client';
+import type { Choir, User, Voice } from '@prisma/generated/client';
 import { RegisterInput } from '@services/userService';
 
 // Creates a new user with the provided data.
@@ -43,18 +43,7 @@ export const findById = async (id: number, param?: IncludeParams) => {
 };
 
 // Updates user fields by ID. Provide an object with fields to update.
-export const updateUser = async (
-  id: number,
-  updateData: Partial<{
-    email: string;
-    password: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    choirId: number;
-    voice: Voice;
-  }>,
-) => {
+export const updateUser = async (id: number, updateData: Partial<User>) => {
   return prisma.user.update({
     where: { id },
     data: updateData,
@@ -97,6 +86,12 @@ export const findByRole = async (roleId: number) => {
   });
 };
 
+export const findRolesByUser = async (userId: number) => {
+  return prisma.role.findMany({
+    where: { user: { id: userId } },
+  });
+};
+
 // Finds all users with a specific group.
 export const findByGroup = async (groupId: number) => {
   return prisma.user.findMany({
@@ -105,17 +100,6 @@ export const findByGroup = async (groupId: number) => {
     },
   });
 };
-
-/**
- * Find all roles assigned to a user.
- * @param userId User ID
- */
-export async function findRolesByUser(userId: number) {
-  return prisma.user.findUnique({
-    where: { id: userId },
-    include: { roles: true },
-  });
-}
 
 /**
  * Finds groups that a user belongs to.
