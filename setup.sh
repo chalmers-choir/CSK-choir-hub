@@ -46,7 +46,7 @@ if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
     echo "🐳 Using Docker Postgres..."
     npm run docker:down || true
     docker volume rm csk_pgdata || true
-    rm -rf server/prisma/migrations
+    rm -rf server/src/prisma/migrations
     echo "⏳ Running database migrations (Docker)..."
     npm run docker:up
     pushd server >/dev/null
@@ -78,7 +78,7 @@ if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
     fi
 
     # Reset migrations (same behavior as your Docker flow)
-    rm -rf server/prisma/migrations
+    rm -rf server/src/prisma/migrations
     echo "⏳ Running database migrations (Local)..."
     pushd server >/dev/null
     echo "🗑️ Resetting database schema..."
