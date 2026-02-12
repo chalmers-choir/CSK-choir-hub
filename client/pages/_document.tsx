@@ -1,14 +1,14 @@
-import { Head, Html, Main, NextScript } from 'next/document';
+import { Head, Html, Main, NextScript } from "next/document";
 
-import clsx from 'clsx';
+import clsx from "clsx";
 
-import { fontSans } from '@/config/fonts';
+import { fontSans } from "@/config/fonts";
 
 export default function Document() {
   return (
     <Html lang="sv">
       <Head />
-      <body className={clsx('bg-background min-h-screen font-sans antialiased', fontSans.variable)}>
+      <body className={clsx("bg-background min-h-screen font-sans antialiased", fontSans.variable)}>
         <Main />
         <NextScript />
       </body>

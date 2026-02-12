@@ -1,4 +1,4 @@
-import { User } from '@/lib/api-client';
+import { User } from "@/lib/api-client";
 
 // Form types
 export interface LoginForm {
@@ -20,7 +20,7 @@ export interface AuthContextType {
   user: User | undefined;
   loading: boolean;
   login: (username: string, password: string, redirectTo?: string) => Promise<void>;
-  register: (userData: Omit<RegisterForm, 'confirmPassword'>) => Promise<void>;
+  register: (userData: Omit<RegisterForm, "confirmPassword">) => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
   isAdmin: boolean;

@@ -1,6 +1,6 @@
-import { Input } from '@heroui/react';
+import { Input } from "@heroui/react";
 
-import { ReadOnlyTextField } from './ReadOnlyTextField';
+import { ReadOnlyTextField } from "./ReadOnlyTextField";
 
 export interface TextFieldProps {
   label?: string;

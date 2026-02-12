@@ -1,4 +1,4 @@
 export enum WebRole {
-  USER = 'user',
-  ADMIN = 'admin',
+  USER = "user",
+  ADMIN = "admin",
 }

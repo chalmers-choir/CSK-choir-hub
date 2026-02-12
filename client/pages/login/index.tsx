@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
-import { Button } from '@heroui/button';
-import { Input } from '@heroui/input';
-import { Link } from '@heroui/link';
-import { Form } from '@heroui/react';
-import { button as buttonStyles } from '@heroui/theme';
+import { Button } from "@heroui/button";
+import { Input } from "@heroui/input";
+import { Link } from "@heroui/link";
+import { Form } from "@heroui/react";
+import { button as buttonStyles } from "@heroui/theme";
 
-import AuthLoading from '@/components/AuthLoading';
-import { siteConfig } from '@/config/site';
-import { useAuth } from '@/contexts/AuthContext';
-import DefaultLayout from '@/layouts/default';
+import AuthLoading from "@/components/AuthLoading";
+import { siteConfig } from "@/config/site";
+import { useAuth } from "@/contexts/AuthContext";
+import DefaultLayout from "@/layouts/default";
 
 export default function LoginPage() {
   const { login, isAuthenticated, loading } = useAuth();
   const router = useRouter();
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      const redirectTo = (router.query.next as string) || '/';
+      const redirectTo = (router.query.next as string) || "/";
 
       router.replace(redirectTo);
     }
@@ -35,7 +35,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const redirectTo = (router.query.next as string) || '/';
+      const redirectTo = (router.query.next as string) || "/";
 
       await login(username, password, redirectTo);
     } catch (err: any) {
@@ -64,7 +64,7 @@ export default function LoginPage() {
           />
           {error && <p className="text-red-500">{error}</p>}
           <Button
-            className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
+            className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
             type="submit"
           >
             Login

@@ -1,11 +1,12 @@
-import { groupService } from '@services';
-import { BadRequestError } from '@utils/errors';
-import { NextFunction, Request, Response } from 'express';
+import { groupService } from "@services";
+import { BadRequestError } from "@utils/errors";
+import { NextFunction, Request, Response } from "express";
 
 // Get all groups
 export const getGroups = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const groups = await groupService.getAllGroups();
+
     res.json({ groups });
   } catch (error) {
     next(error);
@@ -15,10 +16,12 @@ export const getGroups = async (req: Request, res: Response, next: NextFunction)
 // Delete a group by ID
 export const deleteGroup = async (req: Request, res: Response, next: NextFunction) => {
   const groupId = parseInt(req.params.groupId, 10);
-  if (isNaN(groupId)) return next(new BadRequestError('Invalid group ID'));
+
+  if (isNaN(groupId)) return next(new BadRequestError("Invalid group ID"));
 
   try {
     await groupService.deleteGroup(groupId);
+
     return res.status(204).send();
   } catch (error) {
     next(error);
@@ -28,10 +31,12 @@ export const deleteGroup = async (req: Request, res: Response, next: NextFunctio
 // Create a new group
 export const createGroup = async (req: Request, res: Response, next: NextFunction) => {
   const { name, type, description } = req.body;
-  if (!name || !type) return next(new BadRequestError('Group name and type are required'));
+
+  if (!name || !type) return next(new BadRequestError("Group name and type are required"));
 
   try {
     const newGroup = await groupService.createGroup({ name, type, description });
+
     return res.status(201).json({ group: newGroup });
   } catch (error) {
     next(error);
@@ -41,13 +46,16 @@ export const createGroup = async (req: Request, res: Response, next: NextFunctio
 // Update a group by ID
 export const updateGroup = async (req: Request, res: Response, next: NextFunction) => {
   const groupId = parseInt(req.params.groupId, 10);
-  if (isNaN(groupId)) return next(new BadRequestError('Invalid group ID'));
+
+  if (isNaN(groupId)) return next(new BadRequestError("Invalid group ID"));
 
   const { name, description } = req.body;
-  if (!name) return next(new BadRequestError('Group name is required'));
+
+  if (!name) return next(new BadRequestError("Group name is required"));
 
   try {
     const updatedGroup = await groupService.updateGroup(groupId, { name, description });
+
     return res.json({ group: updatedGroup });
   } catch (error) {
     next(error);
@@ -58,11 +66,13 @@ export const updateGroup = async (req: Request, res: Response, next: NextFunctio
 export const addGroupToGroup = async (req: Request, res: Response, next: NextFunction) => {
   const parentGroupId = parseInt(req.params.groupId, 10);
   const { subgroupId } = req.body;
+
   if (isNaN(parentGroupId) || isNaN(subgroupId))
-    return next(new BadRequestError('Invalid group ID or subgroup ID'));
+    return next(new BadRequestError("Invalid group ID or subgroup ID"));
 
   try {
     await groupService.addGroup(subgroupId, parentGroupId);
+
     return res.status(204).send();
   } catch (error) {
     next(error);
@@ -73,11 +83,13 @@ export const addGroupToGroup = async (req: Request, res: Response, next: NextFun
 export const removeGroupFromGroup = async (req: Request, res: Response, next: NextFunction) => {
   const parentGroupId = parseInt(req.params.groupId, 10);
   const subgroupId = parseInt(req.params.groupId, 10);
+
   if (isNaN(parentGroupId) || isNaN(subgroupId))
-    return next(new BadRequestError('Invalid group ID or subgroup ID'));
+    return next(new BadRequestError("Invalid group ID or subgroup ID"));
 
   try {
     await groupService.removeGroup(subgroupId, parentGroupId);
+
     return res.status(204).send();
   } catch (error) {
     next(error);
@@ -88,11 +100,13 @@ export const removeGroupFromGroup = async (req: Request, res: Response, next: Ne
 export const addRoleToGroup = async (req: Request, res: Response, next: NextFunction) => {
   const groupId = parseInt(req.params.groupId, 10);
   const { roleId } = req.body;
+
   if (isNaN(groupId) || isNaN(roleId))
-    return next(new BadRequestError('Invalid group ID or role ID'));
+    return next(new BadRequestError("Invalid group ID or role ID"));
 
   try {
     await groupService.addRole(roleId, groupId);
+
     return res.status(204).send();
   } catch (error) {
     next(error);
@@ -103,11 +117,13 @@ export const addRoleToGroup = async (req: Request, res: Response, next: NextFunc
 export const removeRoleFromGroup = async (req: Request, res: Response, next: NextFunction) => {
   const groupId = parseInt(req.params.groupId, 10);
   const roleId = parseInt(req.params.roleId, 10);
+
   if (isNaN(groupId) || isNaN(roleId))
-    return next(new BadRequestError('Invalid group ID or role ID'));
+    return next(new BadRequestError("Invalid group ID or role ID"));
 
   try {
     await groupService.removeRole(roleId, groupId);
+
     return res.status(204).send();
   } catch (error) {
     next(error);
@@ -118,11 +134,13 @@ export const removeRoleFromGroup = async (req: Request, res: Response, next: Nex
 export const addUserToGroup = async (req: Request, res: Response, next: NextFunction) => {
   const { userId } = req.body;
   const groupId = parseInt(req.params.groupId, 10);
+
   if (isNaN(userId) || isNaN(groupId))
-    return next(new BadRequestError('Invalid user ID or group ID'));
+    return next(new BadRequestError("Invalid user ID or group ID"));
 
   try {
     await groupService.addUser(userId, groupId);
+
     return res.status(204).send();
   } catch (error) {
     next(error);
@@ -133,11 +151,13 @@ export const addUserToGroup = async (req: Request, res: Response, next: NextFunc
 export const removeUserFromGroup = async (req: Request, res: Response, next: NextFunction) => {
   const userId = parseInt(req.params.userId, 10);
   const groupId = parseInt(req.params.groupId, 10);
+
   if (isNaN(userId) || isNaN(groupId))
-    return next(new BadRequestError('Invalid user ID or group ID'));
+    return next(new BadRequestError("Invalid user ID or group ID"));
 
   try {
     await groupService.removeUser(userId, groupId);
+
     return res.status(204).send();
   } catch (error) {
     next(error);

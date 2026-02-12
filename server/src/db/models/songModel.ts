@@ -1,5 +1,5 @@
-import { prisma } from '@db';
-import { KnowledgeLevel, Prisma, Tag, Voice } from '@prisma/generated/client';
+import { prisma } from "@db";
+import { KnowledgeLevel, Prisma, Tag, Voice } from "@prisma/generated/client";
 
 /**
  * Create a new song in the database.
@@ -51,12 +51,14 @@ export async function deleteById(songId: number) {
  */
 export async function listSongs(filters?: { bookId?: number; tags?: Tag[] }) {
   const where: Prisma.SongWhereInput = {};
+
   if (filters?.bookId) {
     where.bookSongs = { some: { bookId: filters.bookId } };
   }
   if (filters?.tags && filters.tags.length > 0) {
     where.tags = { some: { name: { in: filters.tags.map((tag) => tag.name) } } };
   }
+
   return prisma.song.findMany({ where });
 }
 

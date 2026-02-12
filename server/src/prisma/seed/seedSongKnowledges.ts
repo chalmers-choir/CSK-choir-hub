@@ -1,6 +1,6 @@
-import { Songs } from './seedSongs';
-import { Users } from './seedUsers';
-import { KnowledgeLevel, PrismaClient, Voice } from '@prisma/generated/client';
+import { KnowledgeLevel, PrismaClient, Voice } from "@prisma/generated/client";
+import { Songs } from "./seedSongs";
+import { Users } from "./seedUsers";
 
 export default async function seedSongKnowledges(
   prisma: PrismaClient,

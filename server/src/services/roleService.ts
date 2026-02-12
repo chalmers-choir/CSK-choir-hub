@@ -1,4 +1,4 @@
-import { roleModel } from '@db';
+import { roleModel } from "@db";
 
 /**
  * Get all roles in the system.

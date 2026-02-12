@@ -1,9 +1,9 @@
-import * as React from 'react';
+import * as React from "react";
 
-import Image from 'next/image';
+import Image from "next/image";
 
-import { IconSvgProps } from '@/types/icon';
-import { useTheme } from 'next-themes';
+import { useTheme } from "next-themes";
+import { IconSvgProps } from "@/types/icon";
 
 export const Logo = () => {
   const { resolvedTheme } = useTheme();
@@ -14,7 +14,7 @@ export const Logo = () => {
   }, []);
 
   const logoSrc =
-    !isMounted || resolvedTheme === 'light' ? '/logo/small.png' : '/logo/small_invert.png';
+    !isMounted || resolvedTheme === "light" ? "/logo/small.png" : "/logo/small_invert.png";
 
   return <Image alt="Logo" height={36} src={logoSrc} unoptimized width={36} />;
 };

@@ -1,5 +1,5 @@
-import { bookModel } from '@db';
-import { NotFoundError } from '@utils';
+import { bookModel } from "@db";
+import { NotFoundError } from "@utils";
 
 export async function getAllBooks() {
   return await bookModel.findAll();
@@ -7,7 +7,9 @@ export async function getAllBooks() {
 
 export async function getBookById(bookId: number) {
   const book = await bookModel.findById(bookId);
-  if (!book) throw new NotFoundError('Book not found');
+
+  if (!book) throw new NotFoundError("Book not found");
+
   return book;
 }
 

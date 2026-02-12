@@ -1,6 +1,6 @@
-import { Groups } from './seedGroups';
-import { Users } from './seedUsers';
-import { PrismaClient } from '@prisma/generated/client';
+import { PrismaClient } from "@prisma/generated/client";
+import { Groups } from "./seedGroups";
+import { Users } from "./seedUsers";
 
 export default async function seedRoles(
   prisma: PrismaClient,
@@ -9,8 +9,8 @@ export default async function seedRoles(
 ): Promise<Roles> {
   const conductorKK = await prisma.role.create({
     data: {
-      name: 'Dirigent för KK',
-      description: 'Leder KK',
+      name: "Dirigent för KK",
+      description: "Leder KK",
       groups: { connect: [{ id: groups.kk.id }] },
       user: { connect: { id: users.maria.id } },
     },
@@ -18,8 +18,8 @@ export default async function seedRoles(
 
   const conductorDK = await prisma.role.create({
     data: {
-      name: 'Dirigent för DK',
-      description: 'Leder DK',
+      name: "Dirigent för DK",
+      description: "Leder DK",
       user: { connect: { id: users.elisabeth.id } },
       groups: { connect: [{ id: groups.dk.id }] },
     },
@@ -27,8 +27,8 @@ export default async function seedRoles(
 
   const conductorMK = await prisma.role.create({
     data: {
-      name: 'Dirigent för MK',
-      description: 'Leder MK',
+      name: "Dirigent för MK",
+      description: "Leder MK",
       user: { connect: { id: users.mathias.id } },
       groups: { connect: [{ id: groups.mk.id }] },
     },
@@ -36,8 +36,8 @@ export default async function seedRoles(
 
   const concertMaster1 = await prisma.role.create({
     data: {
-      name: '1a konsertmästaren',
-      description: 'Viktigaste styrelseposten',
+      name: "1a konsertmästaren",
+      description: "Viktigaste styrelseposten",
       user: { connect: { id: users.liam.id } },
       groups: { connect: [{ id: groups.styret.id }] },
     },
@@ -45,32 +45,32 @@ export default async function seedRoles(
 
   const consertMasterKK = await prisma.role.create({
     data: {
-      name: 'Konsertmästare för KK',
-      description: 'Planerar konserter i KK',
+      name: "Konsertmästare för KK",
+      description: "Planerar konserter i KK",
       groups: { connect: [{ id: groups.kk.id }, { id: groups.concertmasters.id }] },
     },
   });
 
   const consertMasterDK = await prisma.role.create({
     data: {
-      name: 'Konsertmästare för DK',
-      description: 'Planerar konserter i DK',
+      name: "Konsertmästare för DK",
+      description: "Planerar konserter i DK",
       groups: { connect: [{ id: groups.dk.id }, { id: groups.concertmasters.id }] },
     },
   });
 
   const consertMasterMK = await prisma.role.create({
     data: {
-      name: 'Konsertmästare för MK',
-      description: 'Planerar konserter i MK',
+      name: "Konsertmästare för MK",
+      description: "Planerar konserter i MK",
       groups: { connect: [{ id: groups.mk.id }, { id: groups.concertmasters.id }] },
     },
   });
 
   const treasurer = await prisma.role.create({
     data: {
-      name: 'Kassör',
-      description: 'Ansvarar för ekonomin',
+      name: "Kassör",
+      description: "Ansvarar för ekonomin",
       user: { connect: { id: users.vera.id } },
       groups: { connect: [{ id: groups.styret.id }] },
     },
@@ -78,8 +78,8 @@ export default async function seedRoles(
 
   const president = await prisma.role.create({
     data: {
-      name: 'Ordförande',
-      description: 'Leder styrelsen',
+      name: "Ordförande",
+      description: "Leder styrelsen",
       user: { connect: { id: users.isak.id } },
       groups: { connect: [{ id: groups.styret.id }] },
     },
@@ -87,8 +87,8 @@ export default async function seedRoles(
 
   const vicePresident = await prisma.role.create({
     data: {
-      name: 'Vice ordförande',
-      description: 'Stödjer ordföranden',
+      name: "Vice ordförande",
+      description: "Stödjer ordföranden",
       user: { connect: { id: users.lucas.id } },
       groups: { connect: [{ id: groups.styret.id }] },
     },
@@ -96,8 +96,8 @@ export default async function seedRoles(
 
   const secretary = await prisma.role.create({
     data: {
-      name: 'Sekreterare',
-      description: 'Ansvarar för protokoll och dokumentation',
+      name: "Sekreterare",
+      description: "Ansvarar för protokoll och dokumentation",
       user: { connect: { id: users.elinor.id } },
       groups: { connect: [{ id: groups.styret.id }] },
     },
@@ -105,8 +105,8 @@ export default async function seedRoles(
 
   const prmaster = await prisma.role.create({
     data: {
-      name: 'PR-ansvarig',
-      description: 'Ansvarar för PR och marknadsföring',
+      name: "PR-ansvarig",
+      description: "Ansvarar för PR och marknadsföring",
       user: { connect: { id: users.ingrid.id } },
       groups: { connect: [{ id: groups.styret.id }] },
     },
@@ -114,24 +114,24 @@ export default async function seedRoles(
 
   const sexmaster = await prisma.role.create({
     data: {
-      name: 'Sexmästare',
-      description: 'Ansvarar för sociala aktiviteter',
+      name: "Sexmästare",
+      description: "Ansvarar för sociala aktiviteter",
       groups: { connect: [{ id: groups.styret.id }, { id: groups.partycommittee.id }] },
     },
   });
 
   const sexmastress = await prisma.role.create({
     data: {
-      name: 'Sexmästarinna',
-      description: 'Ansvarar för sociala aktiviteter',
+      name: "Sexmästarinna",
+      description: "Ansvarar för sociala aktiviteter",
       groups: { connect: [{ id: groups.partycommittee.id }] },
     },
   });
 
   const gigmaster = await prisma.role.create({
     data: {
-      name: 'Gigmästare',
-      description: 'Ansvarar för gig och framträdanden',
+      name: "Gigmästare",
+      description: "Ansvarar för gig och framträdanden",
       user: { connect: { id: users.elin.id } },
       groups: { connect: [{ id: groups.styret.id }, { id: groups.gigmasters.id }] },
     },
@@ -139,24 +139,24 @@ export default async function seedRoles(
 
   const gigmasterKK = await prisma.role.create({
     data: {
-      name: 'Gigmästare för KK',
-      description: 'Ansvarar för gig och framträdanden i KK',
+      name: "Gigmästare för KK",
+      description: "Ansvarar för gig och framträdanden i KK",
       groups: { connect: [{ id: groups.kk.id }, { id: groups.gigmasters.id }] },
     },
   });
 
   const gigmasterDK = await prisma.role.create({
     data: {
-      name: 'Gigmästare för DK',
-      description: 'Ansvarar för gig och framträdanden i DK',
+      name: "Gigmästare för DK",
+      description: "Ansvarar för gig och framträdanden i DK",
       groups: { connect: [{ id: groups.dk.id }, { id: groups.gigmasters.id }] },
     },
   });
 
   const gigmasterMK = await prisma.role.create({
     data: {
-      name: 'Gigmästare för MK',
-      description: 'Ansvarar för gig och framträdanden i MK',
+      name: "Gigmästare för MK",
+      description: "Ansvarar för gig och framträdanden i MK",
       user: { connect: { id: users.robert.id } },
       groups: { connect: [{ id: groups.mk.id }, { id: groups.gigmasters.id }] },
     },

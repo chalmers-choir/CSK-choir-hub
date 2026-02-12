@@ -1,3 +1,3 @@
-export * from './models';
+export * from "./models";
 
-export { prisma } from './prisma';
+export { prisma } from "./prisma";

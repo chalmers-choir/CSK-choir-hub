@@ -1,10 +1,10 @@
-import { GroupType as ApiGroupType } from '@/lib/api-client/models/GroupType';
+import { GroupType as ApiGroupType } from "@/lib/api-client/models/GroupType";
 
 export const GroupType = {
-  VOICE: 'VOICE',
-  CHOIR: 'CHOIR',
-  COMMITTEE: 'COMMITTEE',
-  OTHER: 'OTHER',
+  VOICE: "VOICE",
+  CHOIR: "CHOIR",
+  COMMITTEE: "COMMITTEE",
+  OTHER: "OTHER",
 } as const;
 
 export type GroupType = (typeof GroupType)[keyof typeof GroupType];

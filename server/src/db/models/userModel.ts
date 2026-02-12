@@ -1,6 +1,6 @@
-import { prisma } from '@db';
-import type { Choir, User, Voice } from '@prisma/generated/client';
-import { RegisterInput } from '@services/userService';
+import type { Choir, User, Voice } from "@prisma/generated/client";
+import { prisma } from "@db";
+import { RegisterInput } from "@services/userService";
 
 // Creates a new user with the provided data.
 export const createUser = async (userData: RegisterInput) => {
@@ -65,6 +65,7 @@ export const getUsers = async (
   }> = {},
 ) => {
   const where: any = {};
+
   if (filter.choir) where.choir = filter.choir;
   if (filter.voice) where.voice = filter.voice;
   // Filtering by roleId requires relation query
@@ -74,6 +75,7 @@ export const getUsers = async (
   if (filter.groupId) {
     where.groups = { some: { id: filter.groupId } };
   }
+
   return prisma.user.findMany({ where });
 };
 
