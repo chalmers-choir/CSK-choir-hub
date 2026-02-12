@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
   const isAdminSection = pathname.startsWith('/admin');
   const API_BASE_URL = process.env.API_BASE_URL ?? 'http://localhost:5050/api';
