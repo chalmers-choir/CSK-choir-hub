@@ -57,42 +57,46 @@ export default function ProfilePage() {
   return (
     <DefaultLayout>
       <h1 className="mb-6 text-2xl font-semibold">Hi {user?.firstName}</h1>
-      <TextField label="First Name" value={user?.firstName} readOnly />
-      <TextField label="Last Name" value={user?.lastName} readOnly />
-      <TextField label="Email" value={user?.email} readOnly />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <TextField label="First Name" value={user?.firstName} readOnly />
+        <TextField label="Last Name" value={user?.lastName} readOnly />
+        <TextField label="Email" value={user?.email} readOnly />
 
-      <TextField
-        readOnly
-        label="Kör(er)"
-        value={user?.groups
-          .filter((g) => g.type == GroupType.CHOIR)
-          ?.map((c) => c.name)
-          .join(", ")}
-      />
-      <TextField
-        readOnly
-        label="Kommittér"
-        value={user?.groups
-          .filter((g) => g.type == GroupType.COMMITTEE)
-          ?.map((c) => c.name)
-          .join(", ")}
-      />
-      <TextField
-        readOnly
-        label="Other"
-        value={user?.groups
-          .filter((g) => g.type == GroupType.OTHER)
-          ?.map((c) => c.name)
-          .join(", ")}
-      />
-      <TextField readOnly label="Roller" value={user?.roles?.map((c) => c.name).join(", ")} />
-      <Form onSubmit={handleSave}>
-        <p className="mb-4 mt-8 text-xl font-semibold">Redigera din profil</p>
-        <TextField label="Matpref" value={dietPref} onChange={(val) => setDietPref(val)} />
-        <Button variant="ghost" type="submit" color="primary">
-          Save
-        </Button>
-      </Form>
+        <TextField
+          readOnly
+          label="Kör(er)"
+          value={user?.groups
+            .filter((g) => g.type == GroupType.CHOIR)
+            ?.map((c) => c.name)
+            .join(", ")}
+        />
+        <TextField
+          readOnly
+          label="Kommittér"
+          value={
+            user?.groups
+              .filter((g) => g.type == GroupType.COMMITTEE)
+              ?.map((c) => c.name)
+              .join(", ") || "Inga kommittéer"
+          }
+        />
+        <TextField
+          readOnly
+          label="Other"
+          value={user?.groups
+            .filter((g) => g.type == GroupType.OTHER)
+            ?.map((c) => c.name)
+            .join(", ")}
+        />
+        <TextField readOnly label="Roller" value={user?.roles?.map((c) => c.name).join(", ")} />
+        <Form onSubmit={handleSave}>
+          <p className="mb-4 mt-8 text-xl font-semibold">Redigera din profil</p>
+          <TextField label="Matpref" value={dietPref} onChange={(val) => setDietPref(val)} />
+          <Button variant="ghost" type="submit" color="primary">
+            Save
+          </Button>
+        </Form>
+      </div>
     </DefaultLayout>
   );
 }
