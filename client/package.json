@@ -7,8 +7,6 @@
     "dev:app": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --fix && prettier --write .",
-    "lint:check": "eslint . --max-warnings=0",
     "api:generate": "openapi --input ../server/src/api/docs/openapi.yaml --output ./lib/api-client --client fetch --useOptions --useUnionTypes",
     "api:watch": "chokidar \"../server/src/api/**/*.yaml\" -c \"npm run api:generate\""
   },
