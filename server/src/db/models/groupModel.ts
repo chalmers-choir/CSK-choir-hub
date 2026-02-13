@@ -1,5 +1,5 @@
-import { prisma } from '@db';
-import { GroupType } from '@prisma/generated/client';
+import { prisma } from "@db";
+import { GroupType } from "@prisma/generated/client";
 
 /**
  * Creates a new group with the given data.
@@ -76,6 +76,7 @@ export async function listGroupMembers(groupId: number, visited: Set<number> = n
 
   for (const subgroup of group.children) {
     const subgroupMembers = await listGroupMembers(subgroup.id);
+
     members.push(...subgroupMembers);
   }
 

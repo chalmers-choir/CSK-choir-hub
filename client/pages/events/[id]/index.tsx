@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
-import EventDetailCard from '@/components/events/EventDetailCard';
-import DefaultLayout from '@/layouts/default';
-import { CSKEvent, EventsService } from '@/lib/api-client';
+import EventDetailCard from "@/components/events/EventDetailCard";
+import DefaultLayout from "@/layouts/default";
+import { CSKEvent, EventsService } from "@/lib/api-client";
 
 export default function IndexPage() {
   const { query } = useRouter();
@@ -22,7 +22,7 @@ export default function IndexPage() {
 
         setEvent(res.event);
       } catch (err: any) {
-        console.log(err.message || 'Failed to fetch event');
+        console.log(err.message || "Failed to fetch event");
       }
     };
 

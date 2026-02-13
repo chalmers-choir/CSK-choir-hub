@@ -1,6 +1,6 @@
 export enum CSKAttendanceStatus {
-  PRESENT = 'PRESENT',
-  ABSENT = 'ABSENT',
+  PRESENT = "PRESENT",
+  ABSENT = "ABSENT",
 }
 
 export interface CSKEventAttendee {

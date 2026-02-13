@@ -1,6 +1,6 @@
-import { Accordion, AccordionItem } from '@heroui/accordion';
+import { Accordion, AccordionItem } from "@heroui/accordion";
 
-import { IoCheckmarkCircle, IoCloseCircle, IoEllipseOutline } from 'react-icons/io5';
+import { IoCheckmarkCircle, IoCloseCircle, IoEllipseOutline } from "react-icons/io5";
 
 export type EventUserEntry = {
   name: string;
@@ -14,7 +14,7 @@ type EventUserListAccordionProps = {
 
 export const EventUserListAccordion = ({
   users,
-  title = 'Registrerade',
+  title = "Registrerade",
 }: EventUserListAccordionProps) => {
   const count = users.length;
 

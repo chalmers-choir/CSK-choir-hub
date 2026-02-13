@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import NextHead from 'next/head';
+import NextHead from "next/head";
 
-import { siteConfig } from '@/config/site';
+import { siteConfig } from "@/config/site";
 
 export const Head = () => {
   return (

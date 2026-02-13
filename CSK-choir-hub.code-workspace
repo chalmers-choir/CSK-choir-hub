@@ -6,6 +6,8 @@
   ],
   "settings": {
     "prettier.documentSelectors": ["**/*.{ts,tsx,js,jsx,json,css,md}"],
+    "prettier.configPath": ".prettierrc",
+    "prettier.plugins": ["prettier-plugin-tailwindcss"],
     "cSpell.language": "en,sv-SE",
   },
 }

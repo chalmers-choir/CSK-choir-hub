@@ -1,4 +1,4 @@
-import { prisma } from '@db';
+import { prisma } from "@db";
 
 /**
  * Add registration: register a user for an event.

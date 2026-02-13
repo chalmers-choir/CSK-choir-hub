@@ -1,7 +1,7 @@
-import { Button } from '@heroui/button';
-import { Link } from '@heroui/link';
+import { Button } from "@heroui/button";
+import { Link } from "@heroui/link";
 
-import DefaultLayout from '@/layouts/default';
+import DefaultLayout from "@/layouts/default";
 
 export default function UnauthorizedPage() {
   return (

@@ -1,4 +1,4 @@
-import { songModel, tagModel } from '@db';
+import { songModel, tagModel } from "@db";
 
 /**
  * Gets all songs in the database.

@@ -1,5 +1,5 @@
-import { Link } from '@heroui/link';
-import { button as buttonStyles } from '@heroui/theme';
+import { Link } from "@heroui/link";
+import { button as buttonStyles } from "@heroui/theme";
 
 interface Props {
   children?: string;
@@ -13,12 +13,12 @@ export default function RequestLogin({ children }: Props) {
       </div>
       <div className="flex justify-center gap-3">
         <Link
-          className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
+          className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
           href="/login"
         >
           Login
         </Link>
-        <Link className={buttonStyles({ variant: 'bordered', radius: 'full' })} href="/register">
+        <Link className={buttonStyles({ variant: "bordered", radius: "full" })} href="/register">
           Register
         </Link>
       </div>

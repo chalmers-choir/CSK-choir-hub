@@ -1,4 +1,4 @@
-import { tagModel } from '@db';
+import { tagModel } from "@db";
 
 /**
  * Get all tags from the database.

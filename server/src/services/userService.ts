@@ -1,11 +1,11 @@
-import { prisma } from '@db';
-import * as userModel from '@db/models/userModel';
-import { User } from '@prisma/generated/client';
-import { NotFoundError, UnauthorizedError } from '@utils';
-import { generateToken } from '@utils/generateToken';
-import logger from '@utils/logger';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { prisma } from "@db";
+import * as userModel from "@db/models/userModel";
+import { User } from "@prisma/generated/client";
+import { NotFoundError, UnauthorizedError } from "@utils";
+import { generateToken } from "@utils/generateToken";
+import logger from "@utils/logger";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export interface RegisterInput {
   email: string;
@@ -26,10 +26,12 @@ export const registerUser = async (newUser: RegisterInput): Promise<string> => {
 
   // Check if user already exists
   const emailExists = await userModel.findByEmail(email);
-  if (emailExists) throw new Error('User with this email already exists');
+
+  if (emailExists) throw new Error("User with this email already exists");
 
   const usernameExists = await userModel.findByUsername(username);
-  if (usernameExists) throw new Error('Username already taken');
+
+  if (usernameExists) throw new Error("Username already taken");
 
   // Hash password
   const passwordHash = await bcrypt.hash(password, 10);
@@ -38,7 +40,7 @@ export const registerUser = async (newUser: RegisterInput): Promise<string> => {
     password: passwordHash,
   });
 
-  logger.info('User created', { userId: user.id });
+  logger.info("User created", { userId: user.id });
 
   return generateToken(user.id);
 };
@@ -66,7 +68,7 @@ export async function getUser(userId: number) {
 }
 
 export const getUserIdFromToken = async (token: string) => {
-  if (!token) throw new Error('No token provided');
+  if (!token) throw new Error("No token provided");
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
     userId: number;
@@ -78,7 +80,7 @@ export const getUserIdFromToken = async (token: string) => {
 };
 
 export const getUserFromToken = async (token: string) => {
-  if (!token) throw new UnauthorizedError('No token provided');
+  if (!token) throw new UnauthorizedError("No token provided");
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
@@ -86,13 +88,14 @@ export const getUserFromToken = async (token: string) => {
     };
     const userId = decoded.userId;
     const user = await userModel.findById(userId, { roles: true, groups: true });
-    if (!user) throw new NotFoundError('User not found');
+
+    if (!user) throw new NotFoundError("User not found");
 
     const { passwordHash, ...userWithoutPWHash } = user;
 
     return userWithoutPWHash;
   } catch (err) {
-    throw new UnauthorizedError('Invalid token');
+    throw new UnauthorizedError("Invalid token");
   }
 };
 
@@ -101,8 +104,9 @@ export const updateUser = async (userId: number, updateData: Partial<User>) => {
 
   if (email) {
     const existingUser = await userModel.findByEmail(email);
+
     if (existingUser && existingUser.id !== userId) {
-      throw new Error('Email already in use by another account');
+      throw new Error("Email already in use by another account");
     }
   }
 

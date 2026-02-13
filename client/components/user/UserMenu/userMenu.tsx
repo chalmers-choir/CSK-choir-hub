@@ -1,10 +1,10 @@
-import { AccountCircleOutlined } from '@mui/icons-material';
+import { AccountCircleOutlined } from "@mui/icons-material";
 
-import { Avatar } from '@heroui/react';
+import { Avatar } from "@heroui/react";
 
-import { LinkDropDownMenuRef, LinkDropdownMenu } from '@/components/menus';
-import { siteConfig } from '@/config/site';
-import { User } from '@/lib/api-client';
+import { LinkDropDownMenuRef, LinkDropdownMenu } from "@/components/menus";
+import { siteConfig } from "@/config/site";
+import { User } from "@/lib/api-client";
 
 export interface UserMenuProps {
   isAuthenticated: boolean;
@@ -19,7 +19,7 @@ export const UserMenu = ({ isAuthenticated, logout, user }: UserMenuProps) => {
       as="button"
       className="transition-transform"
       color="primary"
-      name={user?.firstName + ' ' + user?.lastName}
+      name={user?.firstName + " " + user?.lastName}
       size="sm"
     />
   ) : (
@@ -28,13 +28,13 @@ export const UserMenu = ({ isAuthenticated, logout, user }: UserMenuProps) => {
 
   const items: LinkDropDownMenuRef[] = isAuthenticated
     ? [
-        { key: 'profile', name: 'Profile', href: siteConfig.links.profile },
-        { key: 'settings', name: 'Settings', href: siteConfig.links.settings },
-        { key: 'logout', className: 'text-danger', name: 'Logout', onPress: logout },
+        { key: "profile", name: "Profile", href: siteConfig.links.profile },
+        { key: "settings", name: "Settings", href: siteConfig.links.settings },
+        { key: "logout", className: "text-danger", name: "Logout", onPress: logout },
       ]
     : [
-        { key: 'login', name: 'Login', href: siteConfig.links.login },
-        { key: 'register', name: 'Register', href: siteConfig.links.register },
+        { key: "login", name: "Login", href: siteConfig.links.login },
+        { key: "register", name: "Register", href: siteConfig.links.register },
       ];
 
   return <LinkDropdownMenu trigger={menuTrigger} items={items} />;

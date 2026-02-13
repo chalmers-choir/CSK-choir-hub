@@ -1,7 +1,7 @@
-import { Link } from '@heroui/link';
-import { button as buttonStyles } from '@heroui/theme';
+import { Link } from "@heroui/link";
+import { button as buttonStyles } from "@heroui/theme";
 
-import { siteConfig } from '@/config/site';
+import { siteConfig } from "@/config/site";
 
 type LoggedOutCtaProps = {
   message?: string;
@@ -15,13 +15,13 @@ const LoggedOutCta = ({ message }: LoggedOutCtaProps) => (
     {message && <p className="mb-1 text-lg">{message}</p>}
     <div className="flex gap-3">
       <Link
-        className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
+        className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
         href={siteConfig.links.login}
       >
         Login
       </Link>
       <Link
-        className={buttonStyles({ variant: 'bordered', radius: 'full' })}
+        className={buttonStyles({ variant: "bordered", radius: "full" })}
         href={siteConfig.links.register}
       >
         Register

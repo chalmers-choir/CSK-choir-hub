@@ -1,6 +1,6 @@
-import { groupModel } from '@db';
-import { GroupType } from '@prisma/generated/client';
-import { NotFoundError } from '@utils';
+import { groupModel } from "@db";
+import { GroupType } from "@prisma/generated/client";
+import { NotFoundError } from "@utils";
 
 /**
  * Get all groups in the system.
@@ -48,10 +48,12 @@ export async function updateGroup(
  */
 export async function addGroup(parentGroupId: number, subgroupId: number) {
   const parentGroup = await groupModel.findById(parentGroupId);
-  if (!parentGroup) throw new NotFoundError('Parent group not found');
+
+  if (!parentGroup) throw new NotFoundError("Parent group not found");
 
   const subgroup = await groupModel.findById(subgroupId);
-  if (!subgroup) throw new NotFoundError('Subgroup not found');
+
+  if (!subgroup) throw new NotFoundError("Subgroup not found");
 
   return await groupModel.addGroup(parentGroupId, subgroupId);
 }
@@ -64,10 +66,12 @@ export async function addGroup(parentGroupId: number, subgroupId: number) {
  */
 export async function removeGroup(parentGroupId: number, subgroupId: number) {
   const parentGroup = await groupModel.findById(parentGroupId);
-  if (!parentGroup) throw new NotFoundError('Parent group not found');
+
+  if (!parentGroup) throw new NotFoundError("Parent group not found");
 
   const subgroup = await groupModel.findById(subgroupId);
-  if (!subgroup) throw new NotFoundError('Subgroup not found');
+
+  if (!subgroup) throw new NotFoundError("Subgroup not found");
 
   return await groupModel.removeGroup(parentGroupId, subgroupId);
 }
@@ -100,10 +104,12 @@ export async function removeUser(userId: number, groupId: number): Promise<void>
  */
 export async function addRole(groupId: number, roleId: number) {
   const group = await groupModel.findById(groupId);
-  if (!group) throw new NotFoundError('Group not found');
+
+  if (!group) throw new NotFoundError("Group not found");
 
   const role = await groupModel.findById(roleId);
-  if (!role) throw new NotFoundError('Role not found');
+
+  if (!role) throw new NotFoundError("Role not found");
 
   return await groupModel.addRole(groupId, roleId);
 }
@@ -116,10 +122,12 @@ export async function addRole(groupId: number, roleId: number) {
  */
 export async function removeRole(groupId: number, roleId: number) {
   const group = await groupModel.findById(groupId);
-  if (!group) throw new NotFoundError('Group not found');
+
+  if (!group) throw new NotFoundError("Group not found");
 
   const role = await groupModel.findById(roleId);
-  if (!role) throw new NotFoundError('Role not found');
+
+  if (!role) throw new NotFoundError("Role not found");
 
   return await groupModel.removeRole(groupId, roleId);
 }

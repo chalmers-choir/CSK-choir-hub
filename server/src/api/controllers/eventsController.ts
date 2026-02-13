@@ -1,11 +1,12 @@
-import { eventService } from '@services';
-import { BadRequestError, NotFoundError } from '@utils/errors';
-import { NextFunction, Request, Response } from 'express';
+import { eventService } from "@services";
+import { BadRequestError, NotFoundError } from "@utils/errors";
+import { NextFunction, Request, Response } from "express";
 
 // Get all events
 export const getEvents = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const events = await eventService.getAllEvents();
+
     return res.json({ events });
   } catch (error) {
     return next(error);
@@ -15,10 +16,12 @@ export const getEvents = async (req: Request, res: Response, next: NextFunction)
 // Get event details by ID
 export const getEventDetail = async (req: Request, res: Response, next: NextFunction) => {
   const eventId = parseInt(req.params.id, 10);
-  if (isNaN(eventId)) return next(new BadRequestError('Invalid event ID'));
+
+  if (isNaN(eventId)) return next(new BadRequestError("Invalid event ID"));
 
   const event = await eventService.getEvent(eventId);
-  if (!event) return next(new NotFoundError('Event not found'));
+
+  if (!event) return next(new NotFoundError("Event not found"));
 
   return res.json({ ...event });
 };
@@ -27,10 +30,11 @@ export const getEventDetail = async (req: Request, res: Response, next: NextFunc
 export const deleteEvent = async (req: Request, res: Response, next: NextFunction) => {
   const eventId = parseInt(req.params.id, 10);
 
-  if (isNaN(eventId)) return next(new BadRequestError('Invalid event ID'));
+  if (isNaN(eventId)) return next(new BadRequestError("Invalid event ID"));
 
   try {
     await eventService.deleteEvent(eventId);
+
     return res.status(204).send();
   } catch (error) {
     return next(error);
@@ -40,15 +44,18 @@ export const deleteEvent = async (req: Request, res: Response, next: NextFunctio
 // Create a new event
 export const createEvent = async (req: Request, res: Response, next: NextFunction) => {
   const { name, type, description, dateStart: _dateStart, place } = req.body;
+
   if (!name || !_dateStart || !place)
-    return next(new BadRequestError('Name, start date, and place are required'));
+    return next(new BadRequestError("Name, start date, and place are required"));
 
   try {
     const dateStart = new Date(_dateStart);
+
     if (isNaN(dateStart.getTime())) {
-      return next(new BadRequestError('Invalid date format: expected ISO-8601 string'));
+      return next(new BadRequestError("Invalid date format: expected ISO-8601 string"));
     }
     const newEvent = await eventService.createEvent({ name, type, description, dateStart, place });
+
     return res.status(201).json({ event: newEvent });
   } catch (error) {
     return next(error);
@@ -58,11 +65,13 @@ export const createEvent = async (req: Request, res: Response, next: NextFunctio
 // Update an event by ID
 export const updateEvent = async (req: Request, res: Response, next: NextFunction) => {
   const eventId = parseInt(req.params.id, 10);
-  if (isNaN(eventId)) return next(new BadRequestError('Invalid event ID'));
+
+  if (isNaN(eventId)) return next(new BadRequestError("Invalid event ID"));
 
   const { name, type, description, dateStart, place } = req.body;
+
   if (!name && !dateStart && !place && !type && !description)
-    return next(new BadRequestError('At least one field is required to update'));
+    return next(new BadRequestError("At least one field is required to update"));
 
   try {
     const updatedEvent = await eventService.updateEvent(eventId, {
@@ -72,6 +81,7 @@ export const updateEvent = async (req: Request, res: Response, next: NextFunctio
       dateStart,
       place,
     });
+
     return res.json({ event: updatedEvent });
   } catch (error: any) {
     return next(error);
@@ -81,13 +91,16 @@ export const updateEvent = async (req: Request, res: Response, next: NextFunctio
 // Update user attendance for an event
 export const updateUserAttendance = async (req: Request, res: Response, next: NextFunction) => {
   const eventId = parseInt(req.params.id, 10);
-  if (isNaN(eventId)) return next(new BadRequestError('Invalid event ID'));
+
+  if (isNaN(eventId)) return next(new BadRequestError("Invalid event ID"));
 
   const { userId, status } = req.body;
-  if (!userId) return next(new BadRequestError('User ID and status are required'));
+
+  if (!userId) return next(new BadRequestError("User ID and status are required"));
 
   try {
     const updatedAttendance = await eventService.updateUserAttendance(eventId, userId, status);
+
     return res.json({ attendance: updatedAttendance });
   } catch (error: any) {
     return next(error);
@@ -97,13 +110,16 @@ export const updateUserAttendance = async (req: Request, res: Response, next: Ne
 // Register a user for an event
 export const registerUserForEvent = async (req: Request, res: Response, next: NextFunction) => {
   const eventId = parseInt(req.params.id, 10);
-  if (isNaN(eventId)) return next(new BadRequestError('Invalid event ID'));
+
+  if (isNaN(eventId)) return next(new BadRequestError("Invalid event ID"));
 
   const { userId } = req.body;
-  if (!userId) return next(new BadRequestError('User ID is required'));
+
+  if (!userId) return next(new BadRequestError("User ID is required"));
 
   try {
     const registration = await eventService.registerUser(eventId, userId);
+
     return res.status(201).json({ registration });
   } catch (error: any) {
     return next(error);
@@ -113,13 +129,16 @@ export const registerUserForEvent = async (req: Request, res: Response, next: Ne
 // Unregister a user from an event
 export const unregisterUserFromEvent = async (req: Request, res: Response, next: NextFunction) => {
   const eventId = parseInt(req.params.id, 10);
-  if (isNaN(eventId)) return next(new BadRequestError('Invalid event ID'));
+
+  if (isNaN(eventId)) return next(new BadRequestError("Invalid event ID"));
 
   const { userId } = req.body;
-  if (!userId) return next(new BadRequestError('User ID is required'));
+
+  if (!userId) return next(new BadRequestError("User ID is required"));
 
   try {
     await eventService.unregisterUser(eventId, userId);
+
     return res.status(204).send();
   } catch (error: any) {
     return next(error);

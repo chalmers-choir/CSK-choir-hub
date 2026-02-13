@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import React, { ReactNode, createContext, useContext, useEffect, useState } from "react";
 
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
-import { AuthContextType, RegisterForm } from '../types/auth';
-import { AuthService, User } from '@/lib/apiClient';
+import { AuthContextType, RegisterForm } from "../types/auth";
+import { AuthService, User } from "@/lib/apiClient";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -13,7 +13,7 @@ export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
 
   return context;
@@ -46,7 +46,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     fetchUser();
   }, []);
 
-  const login = async (username: string, password: string, redirectTo = '/') => {
+  const login = async (username: string, password: string, redirectTo = "/") => {
     setLoading(true);
     try {
       const res = await AuthService.loginUser({ requestBody: { username, password } });
@@ -60,12 +60,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const register = async (userData: Omit<RegisterForm, 'confirmPassword'>) => {
+  const register = async (userData: Omit<RegisterForm, "confirmPassword">) => {
     setLoading(true);
 
     try {
       await AuthService.registerUser({ requestBody: userData });
-      router.push('/login');
+      router.push("/login");
     } catch {
       setUser(undefined);
     } finally {
@@ -79,7 +79,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       await AuthService.logout();
       setUser(undefined);
-      router.push('/');
+      router.push("/");
     } catch {
       setUser(undefined);
     } finally {
@@ -94,7 +94,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     register,
     logout,
     isAuthenticated: !!user,
-    isAdmin: user?.groups.some((group) => group.name === 'Admins') ?? false,
+    isAdmin: user?.groups.some((group) => group.name === "Admins") ?? false,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

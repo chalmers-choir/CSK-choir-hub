@@ -1,11 +1,11 @@
-import { prisma } from '@db/prisma';
 import type {
   AttendanceStatus,
   EventAttendance,
   EventRegistration,
   EventType,
   Prisma,
-} from '@prisma/generated/client';
+} from "@prisma/generated/client";
+import { prisma } from "@db/prisma";
 
 /**
  * Create a new event.
@@ -59,9 +59,11 @@ export async function deleteById(eventId: number) {
  */
 export async function listEvents(filters?: { type?: EventType }) {
   const where: Prisma.EventWhereInput = {};
+
   if (filters) {
     if (filters.type) where.type = filters.type;
   }
+
   return await prisma.event.findMany({ where });
 }
 
@@ -119,6 +121,7 @@ export async function findEventsByUser(userId: number) {
     where: { userId },
     include: { event: true },
   });
+
   return {
     attending: attended.map((a: EventAttendance) => a.eventId),
     registered: registered.map((r: EventRegistration) => r.eventId),

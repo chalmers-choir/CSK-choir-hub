@@ -1,6 +1,6 @@
-import Link from 'next/link';
+import Link from "next/link";
 
-import DefaultLayout from '@/layouts/default';
+import DefaultLayout from "@/layouts/default";
 
 export default function IndexPage() {
   return (
