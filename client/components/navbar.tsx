@@ -20,13 +20,16 @@ import {
 import { UserMenu } from "./user";
 import { Logo, SearchIcon } from "@/components/icons";
 import { ThemeSwitch } from "@/components/theme-switch";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { siteConfig } from "@/config/site";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "@/contexts/IntlContext";
 
 export const Navbar = () => {
+  const { t } = useTranslation();
   const searchInput = (
     <Input
-      aria-label="Search"
+      aria-label={t("common.search")}
       classNames={{
         inputWrapper: "bg-default-100",
         input: "text-sm",
@@ -37,7 +40,7 @@ export const Navbar = () => {
         </Kbd>
       }
       labelPlacement="outside"
-      placeholder="Search..."
+      placeholder={t("common.search")}
       startContent={
         <SearchIcon className="text-default-400 pointer-events-none flex-shrink-0 text-base" />
       }
@@ -47,7 +50,7 @@ export const Navbar = () => {
   const { isAuthenticated, logout, user } = useAuth();
   const logoutButton = (
     <Button type="submit" color="primary" size="md" variant="ghost" onPress={logout}>
-      Logout
+      {t("common.logout")}
     </Button>
   );
 
@@ -70,7 +73,7 @@ export const Navbar = () => {
                 color="foreground"
                 href={item.href}
               >
-                {item.label}
+                {t(item.labelKey)}
               </NextLink>
             </NavbarItem>
           ))}
@@ -79,6 +82,7 @@ export const Navbar = () => {
 
       <NavbarContent className="hidden basis-1/5 sm:flex sm:basis-full" justify="end">
         <NavbarItem className="hidden gap-2 sm:flex">
+          <LanguageSwitcher />
           <ThemeSwitch />
         </NavbarItem>
         {/* <NavbarItem className="hidden sm:flex">{isAuthenticated && logoutButton}</NavbarItem> */}
@@ -98,10 +102,13 @@ export const Navbar = () => {
           {siteConfig.navItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link href={item.href} size="lg" color={"foreground"}>
-                {item.label}
+                {t(item.labelKey)}
               </Link>
             </NavbarMenuItem>
           ))}
+          <NavbarMenuItem>
+            <LanguageSwitcher />
+          </NavbarMenuItem>
           <NavbarMenuItem>
             <ThemeSwitch />
           </NavbarMenuItem>

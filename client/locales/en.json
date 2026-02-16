@@ -1,0 +1,26 @@
+{
+  "common": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "search": "Search...",
+    "home": "Home",
+    "events": "Events",
+    "profile": "Profile",
+    "settings": "Settings",
+    "username": "Username",
+    "password": "Password",
+    "welcome_back": "Welcome back, {name}!",
+    "no_account": "No account? Register",
+    "create_new_event": "Create new event"
+  },
+  "home": {
+    "title_part1": "Sweden's",
+    "title_part2": "finest",
+    "title_part3": "member portal.",
+    "subtitle": "Imagine if Klok was an app."
+  },
+  "events": {
+    "title": "Events!"
+  }
+}

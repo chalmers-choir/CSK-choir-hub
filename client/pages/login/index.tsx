@@ -13,10 +13,12 @@ import { button as buttonStyles } from "@heroui/theme";
 import AuthLoading from "@/components/AuthLoading";
 import { siteConfig } from "@/config/site";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "@/contexts/IntlContext";
 import DefaultLayout from "@/layouts/default";
 
 export default function LoginPage() {
   const { login, isAuthenticated, loading } = useAuth();
+  const { t } = useTranslation();
   const router = useRouter();
 
   const [username, setUsername] = useState("");
@@ -49,15 +51,15 @@ export default function LoginPage() {
         <AuthLoading />
       ) : (
         <Form className="mx-auto mt-20 flex max-w-sm flex-col gap-2" onSubmit={handleSubmit}>
-          <h2 className="w-full text-center text-lg font-semibold">Login</h2>
+          <h2 className="w-full text-center text-lg font-semibold">{t("common.login")}</h2>
           <Input
-            placeholder="Username"
+            placeholder={t("common.username")}
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
           <Input
-            placeholder="Password"
+            placeholder={t("common.password")}
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -67,13 +69,13 @@ export default function LoginPage() {
             className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
             type="submit"
           >
-            Login
+            {t("common.login")}
           </Button>
           <Link
             className="mt-4 inline-block w-full text-center text-sm text-blue-500"
             href={siteConfig.links.register}
           >
-            Inget konto? Registrera
+            {t("common.no_account")}
           </Link>
         </Form>
       )}
