@@ -1,9 +1,14 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import IntlMessageFormat from "intl-messageformat";
 
+import enMessages from "../locales/en.json";
+import svMessages from "../locales/sv.json";
+import deMessages from "../locales/de.json";
+
 type Locale = "en" | "sv" | "de";
 
-type Messages = Record<string, any>;
+type TranslationValue = string | { [key: string]: TranslationValue };
+type Messages = { [key: string]: TranslationValue };
 
 interface IntlContextValue {
   locale: Locale;
@@ -14,9 +19,9 @@ interface IntlContextValue {
 const IntlContext = createContext<IntlContextValue | undefined>(undefined);
 
 const messages: Record<Locale, Messages> = {
-  en: require("../locales/en.json"),
-  sv: require("../locales/sv.json"),
-  de: require("../locales/de.json"),
+  en: enMessages,
+  sv: svMessages,
+  de: deMessages,
 };
 
 const LOCALE_STORAGE_KEY = "preferred-locale";
@@ -26,15 +31,19 @@ export const IntlProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     // Load saved locale from localStorage
-    const savedLocale = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
-    if (savedLocale && (savedLocale === "en" || savedLocale === "sv" || savedLocale === "de")) {
-      setLocaleState(savedLocale);
+    if (typeof window !== "undefined") {
+      const savedLocale = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
+      if (savedLocale && (savedLocale === "en" || savedLocale === "sv" || savedLocale === "de")) {
+        setLocaleState(savedLocale);
+      }
     }
   }, []);
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
-    localStorage.setItem(LOCALE_STORAGE_KEY, newLocale);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(LOCALE_STORAGE_KEY, newLocale);
+    }
   };
 
   const t = (key: string, values?: Record<string, any>): string => {
