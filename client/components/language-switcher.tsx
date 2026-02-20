@@ -1,5 +1,6 @@
 import { Button } from "@heroui/button";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/dropdown";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
+
 import { useIntl } from "@/contexts/IntlContext";
 
 const languages = [
@@ -16,7 +17,7 @@ export const LanguageSwitcher = () => {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant="light" size="sm">
+        <Button variant="ghost" size="sm" color="primary">
           {currentLanguage.label}
         </Button>
       </DropdownTrigger>
