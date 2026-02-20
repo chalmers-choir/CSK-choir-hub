@@ -1,0 +1,31 @@
+{
+  "common": {
+    "login": "Logga in",
+    "logout": "Logga ut",
+    "register": "Registrera",
+    "search": "Sök...",
+    "home": "Hem",
+    "events": "Evenemang",
+    "profile": "Profil",
+    "settings": "Inställningar",
+    "username": "Användarnamn",
+    "password": "Lösenord",
+    "welcome_back": "Välkommen tillbaka, {name}!",
+    "no_account": "Inget konto? Registrera",
+    "create_new_event": "Skapa nytt evenemang"
+  },
+  "home": {
+    "title_part1": "Körsveriges",
+    "title_part2": "fetaste",
+    "title_part3": "medlemsportal.",
+    "subtitle": "Imagine att Klok var en app."
+  },
+  "events": {
+    "title": "Evenemang!"
+  },
+
+  "settings": {
+    "title": "Inställningar",
+    "change_lang": "Byt språk"
+  }
+}

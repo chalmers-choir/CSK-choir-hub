@@ -1,9 +1,6 @@
 import NextLink from "next/link";
 
-import clsx from "clsx";
-
 import {
-  Button,
   Navbar as HeroUINavbar,
   Input,
   Kbd,
@@ -16,17 +13,20 @@ import {
   NavbarMenuToggle,
   link as linkStyles,
 } from "@heroui/react";
+import clsx from "clsx";
 
-import { UserMenu } from "./user";
+import { UserMenu } from "@/components";
 import { Logo, SearchIcon } from "@/components/icons";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { siteConfig } from "@/config/site";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "@/contexts/IntlContext";
 
 export const Navbar = () => {
+  const { t } = useTranslation();
   const searchInput = (
     <Input
-      aria-label="Search"
+      aria-label={t("common.search")}
       classNames={{
         inputWrapper: "bg-default-100",
         input: "text-sm",
@@ -37,7 +37,7 @@ export const Navbar = () => {
         </Kbd>
       }
       labelPlacement="outside"
-      placeholder="Search..."
+      placeholder={t("common.search")}
       startContent={
         <SearchIcon className="text-default-400 pointer-events-none flex-shrink-0 text-base" />
       }
@@ -45,11 +45,6 @@ export const Navbar = () => {
     />
   );
   const { isAuthenticated, logout, user } = useAuth();
-  const logoutButton = (
-    <Button type="submit" color="primary" size="md" variant="ghost" onPress={logout}>
-      Logout
-    </Button>
-  );
 
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
@@ -70,7 +65,7 @@ export const Navbar = () => {
                 color="foreground"
                 href={item.href}
               >
-                {item.label}
+                {t(item.labelKey)}
               </NextLink>
             </NavbarItem>
           ))}
@@ -98,7 +93,7 @@ export const Navbar = () => {
           {siteConfig.navItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link href={item.href} size="lg" color={"foreground"}>
-                {item.label}
+                {t(item.labelKey)}
               </Link>
             </NavbarMenuItem>
           ))}

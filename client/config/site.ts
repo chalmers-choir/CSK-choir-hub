@@ -5,11 +5,11 @@ export const siteConfig = {
   description: "En medlemsportal for Chalmers Sångkör",
   navItems: [
     {
-      label: "Home",
+      labelKey: "common.home",
       href: "/",
     },
     {
-      label: "Events",
+      labelKey: "common.events",
       href: "/events",
     },
   ],

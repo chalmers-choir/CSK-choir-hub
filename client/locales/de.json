@@ -1,0 +1,31 @@
+{
+  "common": {
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "register": "Registrieren",
+    "search": "Suchen...",
+    "home": "Startseite",
+    "events": "Veranstaltungen",
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "welcome_back": "Willkommen zurück, {name}!",
+    "no_account": "Kein Konto? Registrieren",
+    "create_new_event": "Neue Veranstaltung erstellen"
+  },
+  "home": {
+    "title_part1": "Schwedens",
+    "title_part2": "bestes",
+    "title_part3": "Mitgliederportal.",
+    "subtitle": "Stellen Sie sich vor, Klok wäre eine App."
+  },
+  "events": {
+    "title": "Veranstaltungen!"
+  },
+
+  "settings": {
+    "title": "Einstellungen",
+    "change_lang": "Sprache ändern"
+  }
+}

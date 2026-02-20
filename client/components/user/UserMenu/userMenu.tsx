@@ -4,6 +4,7 @@ import { Avatar } from "@heroui/react";
 
 import { LinkDropDownMenuRef, LinkDropdownMenu } from "@/components/menus";
 import { siteConfig } from "@/config/site";
+import { useTranslation } from "@/contexts/IntlContext";
 import { User } from "@/lib/api-client";
 
 export interface UserMenuProps {
@@ -13,6 +14,8 @@ export interface UserMenuProps {
 }
 
 export const UserMenu = ({ isAuthenticated, logout, user }: UserMenuProps) => {
+  const { t } = useTranslation();
+
   const menuTrigger = isAuthenticated ? (
     <Avatar
       isBordered
@@ -28,13 +31,13 @@ export const UserMenu = ({ isAuthenticated, logout, user }: UserMenuProps) => {
 
   const items: LinkDropDownMenuRef[] = isAuthenticated
     ? [
-        { key: "profile", name: "Profile", href: siteConfig.links.profile },
-        { key: "settings", name: "Settings", href: siteConfig.links.settings },
-        { key: "logout", className: "text-danger", name: "Logout", onPress: logout },
+        { key: "profile", name: t("common.profile"), href: siteConfig.links.profile },
+        { key: "settings", name: t("common.settings"), href: siteConfig.links.settings },
+        { key: "logout", className: "text-danger", name: t("common.logout"), onPress: logout },
       ]
     : [
-        { key: "login", name: "Login", href: siteConfig.links.login },
-        { key: "register", name: "Register", href: siteConfig.links.register },
+        { key: "login", name: t("common.login"), href: siteConfig.links.login },
+        { key: "register", name: t("common.register"), href: siteConfig.links.register },
       ];
 
   return <LinkDropdownMenu trigger={menuTrigger} items={items} />;
