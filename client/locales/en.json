@@ -22,5 +22,9 @@
   },
   "events": {
     "title": "Events!"
+  },
+  "settings": {
+    "title": "Settings",
+    "change_lang": "Change Language"
   }
 }

@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import IntlMessageFormat from "intl-messageformat";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
+import deMessages from "../locales/de.json";
 import enMessages from "../locales/en.json";
 import svMessages from "../locales/sv.json";
-import deMessages from "../locales/de.json";
 
 type Locale = "en" | "sv" | "de";
 
@@ -33,6 +33,7 @@ export const IntlProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // Load saved locale from localStorage
     if (typeof window !== "undefined") {
       const savedLocale = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
+
       if (savedLocale && (savedLocale === "en" || savedLocale === "sv" || savedLocale === "de")) {
         setLocaleState(savedLocale);
       }
@@ -61,20 +62,24 @@ export const IntlProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     if (!message) {
       console.warn(`Translation key not found: ${key}`);
+
       return key;
     }
 
     if (typeof message !== "string") {
       console.warn(`Translation value is not a string: ${key}`);
+
       return key;
     }
 
     if (values) {
       try {
         const formatter = new IntlMessageFormat(message, locale);
+
         return formatter.format(values) as string;
       } catch (error) {
         console.error(`Error formatting message for key: ${key}`, error);
+
         return message;
       }
     }
@@ -87,13 +92,16 @@ export const IntlProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 export const useIntl = (): IntlContextValue => {
   const context = useContext(IntlContext);
+
   if (!context) {
     throw new Error("useIntl must be used within IntlProvider");
   }
+
   return context;
 };
 
 export const useTranslation = () => {
   const { t } = useIntl();
+
   return { t };
 };

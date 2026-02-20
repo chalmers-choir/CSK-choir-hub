@@ -22,5 +22,10 @@
   },
   "events": {
     "title": "Veranstaltungen!"
+  },
+
+  "settings": {
+    "title": "Einstellungen",
+    "change_lang": "Sprache ändern"
   }
 }

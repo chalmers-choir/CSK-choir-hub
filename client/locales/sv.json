@@ -22,5 +22,10 @@
   },
   "events": {
     "title": "Evenemang!"
+  },
+
+  "settings": {
+    "title": "Inställningar",
+    "change_lang": "Byt språk"
   }
 }
