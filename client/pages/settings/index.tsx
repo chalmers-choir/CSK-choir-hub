@@ -1,3 +1,5 @@
+import { Card } from "@heroui/react";
+
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useTranslation } from "@/contexts";
 import DefaultLayout from "@/layouts/default";
@@ -7,14 +9,12 @@ export default function SettingsPage() {
 
   return (
     <DefaultLayout>
-      <div>
-        {
-          <label className="mb-1 block text-sm font-medium text-gray-700">
-            {t("settings.change_lang")}
-          </label>
-        }
-        <LanguageSwitcher />
-      </div>
+      <Card className="mx-auto max-w-lg p-4">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-xl font-bold">{t("settings.title")}</h2>
+          <LanguageSwitcher />
+        </div>
+      </Card>
     </DefaultLayout>
   );
 }

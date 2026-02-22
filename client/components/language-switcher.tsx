@@ -1,34 +1,33 @@
-import { Button } from "@heroui/button";
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
+import { Button, ButtonGroup } from "@heroui/react";
 
 import { useIntl } from "@/contexts/IntlContext";
 
 const languages = [
-  { code: "sv", label: "Svenska" },
-  { code: "en", label: "English" },
-  { code: "de", label: "Deutsch" },
+  { code: "sv", label: "SWE 🇸🇪" },
+  { code: "en", label: "ENG 🇬🇧" },
+  { code: "de", label: "DEU 🇧🇪" },
 ] as const;
 
 export const LanguageSwitcher = () => {
   const { locale, setLocale } = useIntl();
 
-  const currentLanguage = languages.find((lang) => lang.code === locale) || languages[0];
-
   return (
-    <Dropdown>
-      <DropdownTrigger>
-        <Button variant="ghost" size="sm" color="primary">
-          {currentLanguage.label}
-        </Button>
-      </DropdownTrigger>
-      <DropdownMenu
-        aria-label="Language selection"
-        onAction={(key) => setLocale(key as "sv" | "en" | "de")}
-      >
-        {languages.map((lang) => (
-          <DropdownItem key={lang.code}>{lang.label}</DropdownItem>
-        ))}
-      </DropdownMenu>
-    </Dropdown>
+    <ButtonGroup aria-label="Language selection" variant="flat">
+      {languages.map((lang) => {
+        const isActive = locale === lang.code;
+
+        return (
+          <Button
+            key={lang.code}
+            aria-pressed={isActive}
+            className={isActive ? "font-bold" : undefined}
+            color={isActive ? "primary" : "default"}
+            onPress={() => setLocale(lang.code)}
+          >
+            {lang.label}
+          </Button>
+        );
+      })}
+    </ButtonGroup>
   );
 };
