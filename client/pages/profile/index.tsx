@@ -1,102 +1,103 @@
-import { useEffect, useState } from "react";
-
-import { Button, Form, addToast } from "@heroui/react";
-
-import { TextField } from "@/components";
+import AuthLoading from "@/components/AuthLoading";
+import RequestLogin from "@/components/request-login";
 import { useAuth } from "@/contexts";
 import DefaultLayout from "@/layouts/default";
-import { UsersService } from "@/lib/api-client";
-import { GroupType } from "@/types/group";
 
 /**
- * Profile page for editing user information.
- * @returns
+ * Profile page for viewing user information.
  */
 export default function ProfilePage() {
-  const { user } = useAuth();
+  const { user, isAuthenticated, loading } = useAuth();
 
-  const [dietPref, setDietPref] = useState<string>();
+  console.log("User data:", user);
+  if (loading) {
+    return (
+      <DefaultLayout>
+        <AuthLoading />
+      </DefaultLayout>
+    );
+  }
 
-  useEffect(() => {
-    setDietPref(user?.dietaryPreferences || "");
-  }, [user?.dietaryPreferences]);
+  if (!isAuthenticated || !user) {
+    return (
+      <DefaultLayout>
+        <section className="flex min-h-[60vh] items-center justify-center">
+          <RequestLogin>Logga in för att se din profil.</RequestLogin>
+        </section>
+      </DefaultLayout>
+    );
+  }
 
-  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const data = {
-        dietaryPreferences: dietPref,
-      };
-
-      console.log("Saving profile with data:", data);
-
-      if (!user) return;
-
-      await UsersService.updateUser({
-        userId: user.id,
-        requestBody: data,
-      });
-
-      addToast({
-        title: "Success",
-        description: "Profile updated successfully!",
-        color: "success",
-        timeout: 2000,
-      });
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      addToast({
-        title: "Error",
-        description: "Failed to update profile. Please try again.",
-        color: "danger",
-        timeout: 2000,
-      });
-    }
-  };
+  const visibleGroups = user.groups.filter(
+    (group) => group.type === "COMMITTEE" || group.type === "OTHER",
+  );
+  const fullName = `${user.firstName} ${user.lastName}`.trim() || user.username;
+  const membershipTags = [
+    ...user.roles.map((role) => ({
+      id: `role-${role.id}`,
+      label: role.name,
+      type: "Roll",
+    })),
+    ...visibleGroups.map((group) => ({
+      id: `group-${group.id}`,
+      label: group.name,
+      type: "Grupp",
+    })),
+  ];
 
   return (
     <DefaultLayout>
-      <h1 className="mb-6 text-2xl font-semibold">Hi {user?.firstName}</h1>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <TextField label="First Name" value={user?.firstName} readOnly />
-        <TextField label="Last Name" value={user?.lastName} readOnly />
-        <TextField label="Email" value={user?.email} readOnly />
+      <section className="mx-auto w-full max-w-4xl py-8 md:py-12">
+        <div className="border-default-200 bg-content1/80 relative overflow-hidden rounded-3xl border p-6 shadow-lg backdrop-blur md:p-8">
+          <div className="bg-primary/15 pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full blur-3xl" />
+          <div className="bg-secondary/15 pointer-events-none absolute -bottom-24 -left-12 h-56 w-56 rounded-full blur-3xl" />
 
-        <TextField
-          readOnly
-          label="Kör(er)"
-          value={user?.groups
-            .filter((g) => g.type == GroupType.CHOIR)
-            ?.map((c) => c.name)
-            .join(", ")}
-        />
-        <TextField
-          readOnly
-          label="Kommittér"
-          value={
-            user?.groups
-              .filter((g) => g.type == GroupType.COMMITTEE)
-              ?.map((c) => c.name)
-              .join(", ") || "Inga kommittéer"
-          }
-        />
-        <TextField
-          readOnly
-          label="Other"
-          value={user?.groups
-            .filter((g) => g.type == GroupType.OTHER)
-            ?.map((c) => c.name)
-            .join(", ")}
-        />
-        <TextField readOnly label="Roller" value={user?.roles?.map((c) => c.name).join(", ")} />
-        <Form onSubmit={handleSave}>
-          <p className="mb-4 mt-8 text-xl font-semibold">Redigera din profil</p>
-          <TextField label="Matpref" value={dietPref} onChange={(val) => setDietPref(val)} />
-          <Button variant="ghost" type="submit" color="primary">
-            Save
-          </Button>
-        </Form>
-      </div>
+          <div className="relative space-y-8">
+            <header className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
+              <div className="border-default-300 bg-background flex h-24 w-24 items-center justify-center rounded-full border text-5xl shadow-sm">
+                🧑‍🎤
+              </div>
+              <div>
+                <p className="text-small text-default-500 uppercase tracking-widest">Profil</p>
+                <h1 className="text-3xl font-bold">{fullName}</h1>
+                <p className="text-default-500">@{user.username}</p>
+              </div>
+            </header>
+
+            <div className="space-y-3">
+              <h2 className="text-small text-default-600 font-semibold uppercase tracking-wider">
+                Roller och grupper
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {membershipTags.length === 0 && (
+                  <p className="text-default-500 text-sm">
+                    Inga roller eller relevanta grupper än.
+                  </p>
+                )}
+                {membershipTags.map((tag) => (
+                  <span
+                    key={tag.id}
+                    className="border-default-300 bg-default-100 inline-flex items-center rounded-full border px-3 py-1 text-sm"
+                  >
+                    <span className="text-default-700 font-semibold">{tag.type}:</span>
+                    <span className="text-default-600 ml-1">{tag.label}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <h2 className="text-small text-default-600 font-semibold uppercase tracking-wider">
+                Bio
+              </h2>
+              <p className="border-default-200 bg-background/60 text-default-600 rounded-2xl border p-4 leading-relaxed">
+                Chalmerskörande nattuggla med en kärlek för stämsång, kaffe i pausen och episka
+                finaler. Den här bio-texten är placeholder tills API:t är kopplat.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
     </DefaultLayout>
   );
 }
