@@ -66,6 +66,14 @@ export default function ProfilePage() {
 
         <TextField
           readOnly
+          label="Stämma"
+          value={user?.groups
+            .filter((g) => g.type == GroupType.VOICE)
+            ?.map((c) => c.name)
+            .join(", ")}
+        />
+        <TextField
+          readOnly
           label="Kör(er)"
           value={user?.groups
             .filter((g) => g.type == GroupType.CHOIR)
