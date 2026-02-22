@@ -12,7 +12,9 @@
     "password": "Passwort",
     "welcome_back": "Willkommen zurück, {name}!",
     "no_account": "Kein Konto? Registrieren",
-    "create_new_event": "Neue Veranstaltung erstellen"
+    "create_new_event": "Neue Veranstaltung erstellen",
+    "users": "Benutzer",
+    "groups": "Gruppen"
   },
   "home": {
     "title_part1": "Schwedens",

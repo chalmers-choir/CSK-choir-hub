@@ -1,6 +1,6 @@
-import { Head } from "next/document";
+import { Navbar } from "@/components/navbar";
 
-import { Navbar } from "@heroui/react";
+import { Head } from "./head";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (

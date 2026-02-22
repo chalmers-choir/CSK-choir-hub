@@ -21,18 +21,20 @@ schemas:
       groups:
         type: array
         items:
-          $ref: '#/schemas/GroupSummary'
+          $ref: "#/schemas/GroupSummary"
       roles:
         type: array
         items:
-          $ref: '#/schemas/RoleSummary'
+          $ref: "#/schemas/RoleSummary"
       knownSongs:
         type: array
         items:
-          $ref: '#/schemas/KnownSong'
+          $ref: "#/schemas/KnownSong"
       dietaryPreferences:
         type: string
         example: Vegetarian
+      webRole:
+        $ref: "#/schemas/WebRole"
 
     required:
       - id
@@ -43,11 +45,17 @@ schemas:
       - groups
       - roles
       - knownSongs
+      - webRole
 
   CSKVoice:
     type: string
     enum: [S, A, T, B, S1, S2, A1, A2, T1, T2, B1, B2]
     example: B1
+
+  WebRole:
+    type: string
+    enum: [USER, ADMIN]
+    example: USER
 
   SongKnowledgeLevel:
     type: string
@@ -58,20 +66,20 @@ schemas:
     type: object
     properties:
       voice:
-        $ref: '#/schemas/CSKVoice'
+        $ref: "#/schemas/CSKVoice"
       level:
-        $ref: '#/schemas/SongKnowledgeLevel'
+        $ref: "#/schemas/SongKnowledgeLevel"
     required:
       - voice
       - level
 
   KnownSong:
     allOf:
-      - $ref: '#/schemas/SongKnowledge'
+      - $ref: "#/schemas/SongKnowledge"
       - type: object
         properties:
           song:
-            $ref: '#/schemas/Song'
+            $ref: "#/schemas/Song"
         required:
           - song
 
@@ -90,7 +98,7 @@ schemas:
     required: [id, name]
   Role:
     allOf:
-      - $ref: '#/schemas/RoleSummary'
+      - $ref: "#/schemas/RoleSummary"
       - type: object
         properties:
         groups:
@@ -130,12 +138,12 @@ schemas:
         type: string
         example: Tenor
       type:
-        $ref: '#/schemas/GroupType'
+        $ref: "#/schemas/GroupType"
     required: [id, name, type]
 
   Group:
     allOf:
-      - $ref: '#/schemas/GroupSummary'
+      - $ref: "#/schemas/GroupSummary"
       - type: object
         properties:
           description:
@@ -178,14 +186,14 @@ schemas:
       songs:
         type: array
         items:
-          $ref: '#/schemas/BookSong'
+          $ref: "#/schemas/BookSong"
     required:
       - id
       - title
 
   BookSong:
     allOf:
-      - $ref: '#/schemas/Song'
+      - $ref: "#/schemas/Song"
       - type: object
         properties:
           page:
@@ -226,7 +234,7 @@ schemas:
         type: string
         example: Rep KK
       type:
-        $ref: '#/schemas/CSKEventType'
+        $ref: "#/schemas/CSKEventType"
       description:
         type: string
         example: Annual Christmas concert
@@ -257,7 +265,7 @@ schemas:
 
   CSKEvent:
     allOf:
-      - $ref: '#/schemas/CSKEventSummary'
+      - $ref: "#/schemas/CSKEventSummary"
       - type: object
         properties:
           id:
@@ -266,16 +274,16 @@ schemas:
           attendees:
             type: array
             items:
-              $ref: '#/schemas/Attendance'
+              $ref: "#/schemas/Attendance"
           registrations:
             type: array
             items:
-              $ref: '#/schemas/Registration'
+              $ref: "#/schemas/Registration"
         required:
           - id
 
   CreateEventInput:
-    $ref: '#/schemas/CSKEventSummary'
+    $ref: "#/schemas/CSKEventSummary"
 
   AttendanceStatus:
     type: string
@@ -286,7 +294,7 @@ schemas:
     type: object
     properties:
       status:
-        $ref: '#/schemas/AttendanceStatus'
+        $ref: "#/schemas/AttendanceStatus"
       userId:
         type: integer
         format: int64
@@ -306,7 +314,7 @@ schemas:
         type: string
         example: Cotton
       status:
-        $ref: '#/schemas/AttendanceStatus'
+        $ref: "#/schemas/AttendanceStatus"
     required:
       - userId
       - firstName
@@ -390,7 +398,7 @@ schemas:
         example: liam@cotton.com
       password:
         type: string
-        example: 'jagkansjunga'
+        example: "jagkansjunga"
     required:
       - firstName
       - lastName
@@ -407,7 +415,7 @@ schemas:
         example: concertmasterkkb1
       password:
         type: string
-        example: 'jagkansjunga'
+        example: "jagkansjunga"
     required:
       - username
       - password
@@ -438,39 +446,39 @@ requestBodies:
     content:
       application/json:
         schema:
-          $ref: '#/schemas/RegisterUserInput'
+          $ref: "#/schemas/RegisterUserInput"
 
   LoginUser:
     required: true
     content:
       application/json:
         schema:
-          $ref: '#/schemas/LoginUserInput'
+          $ref: "#/schemas/LoginUserInput"
 
   UpdateUser:
     required: true
     content:
       application/json:
         schema:
-          $ref: '#/schemas/UpdateUserInput'
+          $ref: "#/schemas/UpdateUserInput"
 
   CreateEvent:
     required: true
     content:
       application/json:
         schema:
-          $ref: '#/schemas/CreateEventInput'
+          $ref: "#/schemas/CreateEventInput"
 
   UpdateAttendance:
     required: true
     content:
       application/json:
         schema:
-          $ref: '#/schemas/UpdateAttendanceInput'
+          $ref: "#/schemas/UpdateAttendanceInput"
 
   MakeRegistration:
     required: true
     content:
       application/json:
         schema:
-          $ref: '#/schemas/MakeRegistrationInput'
+          $ref: "#/schemas/MakeRegistrationInput"

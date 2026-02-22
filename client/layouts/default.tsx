@@ -4,6 +4,8 @@ import { Link } from "@heroui/link";
 
 import { Navbar } from "@/components/navbar";
 
+import { Head } from "./head";
+
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative flex h-screen flex-col">

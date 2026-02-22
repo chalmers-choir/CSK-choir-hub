@@ -1,5 +1,4 @@
 import NextLink from "next/link";
-import { useRouter } from "next/router";
 
 import {
   Navbar as HeroUINavbar,
@@ -22,10 +21,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "@/contexts/IntlContext";
 
 export const Navbar = () => {
-  const router = useRouter();
-  const isAdmin = router.pathname.startsWith("/admin");
   const { t } = useTranslation();
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, logout, user, isAdmin } = useAuth();
 
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
