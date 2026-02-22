@@ -1,11 +1,12 @@
 import { GroupType, PrismaClient } from "@prisma/generated/client";
+
 import { Users } from "./seedUsers";
 
 export default async function seedGroups(prisma: PrismaClient, users: Users): Promise<Groups> {
   const csk = await prisma.group.create({
     data: {
       name: "Chalmers Sångkör",
-      type: GroupType.CHOIR,
+      type: GroupType.OTHER,
       description: "Samtliga medlemmar i Chalmers Sångkör",
     },
   });
