@@ -29,7 +29,12 @@
     "subtitle": "Imagine if Klok was an app."
   },
   "events": {
-    "title": "Events!"
+    "title": "Events",
+    "subtitle": "Overview of upcoming rehearsals, concerts and gigs.",
+    "create_event": "Create Event",
+    "attendance_required": "Attendance Required",
+    "registration_required": "Registration Required",
+    "no_events": "No events to display."
   },
   "settings": {
     "title": "Settings",

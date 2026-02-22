@@ -6,7 +6,6 @@ import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Link } from "@heroui/link";
 import { button as buttonStyles } from "@heroui/theme";
 
-import { siteConfig } from "@/config/site";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "@/contexts/IntlContext";
 import DefaultLayout from "@/layouts/default";
@@ -77,6 +76,7 @@ const getWeekMeta = (isoDate: string) => {
 };
 
 const EventCard = ({ event }: { event: CSKEvent }) => {
+  const { t } = useTranslation();
   const badge = eventTypeMeta[event.type] ?? eventTypeMeta.OTHER;
 
   return (
@@ -108,12 +108,12 @@ const EventCard = ({ event }: { event: CSKEvent }) => {
           <div className="flex flex-wrap gap-2">
             {event.requiresAttendance && (
               <span className="rounded-md bg-red-50 px-2 py-1 text-xs font-semibold text-red-700">
-                Närvarokrav
+                {t("events.attendance_required")}
               </span>
             )}
             {event.requiresRegistration && (
               <span className="rounded-md bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700">
-                Anmälan krävs
+                {t("events.registration_required")}
               </span>
             )}
           </div>
@@ -126,18 +126,13 @@ const EventCard = ({ event }: { event: CSKEvent }) => {
 export default function IndexPage() {
   const { t } = useTranslation();
 
-  const { isAuthenticated, isAdmin, loading: authLoading } = useAuth();
+  const { isAdmin } = useAuth();
 
   const [events, setEvents] = useState<CSKEvent[]>([]);
   const [eventsLoading, setEventsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      setEvents([]);
-      return;
-    }
-
     const fetchEvents = async () => {
       setEventsLoading(true);
       setError(null);
@@ -158,16 +153,14 @@ export default function IndexPage() {
 
         setEvents(sortedEvents);
       } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Något gick fel när evenemangen skulle hämtas.",
-        );
+        setError(err instanceof Error ? err.message : t("events.failed_to_load_events"));
       } finally {
         setEventsLoading(false);
       }
     };
 
     fetchEvents();
-  }, [isAuthenticated]);
+  }, []);
 
   const eventsByWeek = useMemo(() => {
     const grouped = new Map<
@@ -189,49 +182,25 @@ export default function IndexPage() {
     return Array.from(grouped.values());
   }, [events]);
 
-  const loginPrompt = (
-    <div className="flex flex-col items-center gap-4">
-      <div className="text-center">
-        <p className="mb-2 text-lg">Vänligen logga in för att se evenemang.</p>
-      </div>
-      <div className="flex justify-center gap-3">
-        <Link
-          className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
-          href={siteConfig.links.login}
-        >
-          Login
-        </Link>
-        <Link
-          className={buttonStyles({ variant: "bordered", radius: "full" })}
-          href={siteConfig.links.register}
-        >
-          Register
-        </Link>
-      </div>
-    </div>
-  );
-
   return (
     <DefaultLayout>
       <section className="mx-auto flex max-w-3xl flex-col gap-6 py-8 md:py-10">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-center sm:text-left">
-            <h1 className="text-default-900 text-3xl font-bold">Evenemang</h1>
-            <p className="text-default-500 mt-1">Översikt över kommande rep, konserter och gig.</p>
+            <h1 className="text-default-900 text-3xl font-bold">{t("events.title")}</h1>
+            <p className="text-default-500 mt-1">{t("events.subtitle")}</p>
           </div>
-          {isAuthenticated && isAdmin && (
+          {isAdmin && (
             <Link
               className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
               href="/events/create"
             >
-              Skapa evenemang
+              {t("events.create_event")}
             </Link>
           )}
         </div>
 
-        {authLoading ? (
-          <div className="text-default-500 flex justify-center py-10">Laddar innehåll...</div>
-        ) : isAuthenticated ? (
+        {
           <>
             {error && (
               <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
@@ -240,10 +209,12 @@ export default function IndexPage() {
             )}
 
             {eventsLoading ? (
-              <div className="text-default-500 flex justify-center py-10">Laddar evenemang...</div>
+              <div className="text-default-500 flex justify-center py-10">
+                {t("events.loading_events")}
+              </div>
             ) : events.length === 0 ? (
               <div className="border-default-200 bg-default-100/60 text-default-500 rounded-lg border p-6 text-center">
-                Inga kommande evenemang att visa just nu.
+                {t("events.no_events")}
               </div>
             ) : (
               <div className="flex flex-col gap-8">
@@ -251,7 +222,7 @@ export default function IndexPage() {
                   <div key={week.key} className="flex flex-col gap-3">
                     <div className="flex items-baseline justify-between">
                       <h2 className="text-default-900 text-xl font-semibold">
-                        Vecka {week.weekNumber}
+                        {t("utils.week")} {week.weekNumber}
                       </h2>
                       <span className="text-default-500 text-sm">{week.rangeLabel}</span>
                     </div>
@@ -265,9 +236,7 @@ export default function IndexPage() {
               </div>
             )}
           </>
-        ) : (
-          loginPrompt
-        )}
+        }
       </section>
     </DefaultLayout>
   );

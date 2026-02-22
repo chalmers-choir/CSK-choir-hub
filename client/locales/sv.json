@@ -29,7 +29,12 @@
     "subtitle": "Imagine att Klok var en app."
   },
   "events": {
-    "title": "Evenemang!"
+    "title": "Evenemang",
+    "subtitle": "Översikt över kommande rep, konserter och gig.",
+    "create_event": "Skapa evenemang",
+    "attendance_required": "Närvaro krävs",
+    "registration_required": "Anmälan krävs",
+    "no_events": "Inga evenemang att visa."
   },
   "settings": {
     "title": "Inställningar",

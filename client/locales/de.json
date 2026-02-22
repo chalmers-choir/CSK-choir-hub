@@ -29,7 +29,12 @@
     "subtitle": "Stellen Sie sich vor, Klok wäre eine App."
   },
   "events": {
-    "title": "Veranstaltungen!"
+    "title": "Veranstaltungen",
+    "subtitle": "Übersicht über bevorstehende Proben, Konzerte und Auftritte.",
+    "create_event": "Veranstaltung erstellen",
+    "attendance_required": "Anwesenheit erforderlich",
+    "registration_required": "Anmeldung erforderlich",
+    "no_events": "Keine Veranstaltungen zur Anzeige."
   },
   "settings": {
     "title": "Einstellungen",
