@@ -50,15 +50,20 @@ export default function LoginPage() {
       {loading ? (
         <AuthLoading />
       ) : (
-        <Form className="mx-auto mt-20 flex max-w-sm flex-col gap-2" onSubmit={handleSubmit}>
-          <h2 className="w-full text-center text-lg font-semibold">{t("common.login")}</h2>
+        <Form
+          className="mx-auto mt-20 flex max-w-sm flex-col items-center gap-2"
+          onSubmit={handleSubmit}
+        >
+          <h2 className="w-full text-center text-lg font-semibold">{t("welcome.singer")}</h2>
           <Input
+            name="username"
             placeholder={t("common.username")}
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
           <Input
+            name="password"
             placeholder={t("common.password")}
             type="password"
             value={password}
@@ -66,7 +71,9 @@ export default function LoginPage() {
           />
           {error && <p className="text-red-500">{error}</p>}
           <Button
-            className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
+            className={
+              buttonStyles({ color: "primary", radius: "md", variant: "shadow" }) + " px-8"
+            }
             type="submit"
           >
             {t("common.login")}

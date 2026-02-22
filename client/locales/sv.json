@@ -27,5 +27,10 @@
   "settings": {
     "title": "Inställningar",
     "change_lang": "Byt språk"
+  },
+  "welcome": {
+    "title": "Välkommen till KörHubben!",
+    "subtitle": "Din one-stop portal för allt som rör Chalmers Sångkör.",
+    "singer": "Välkommen kära sångare!"
   }
 }

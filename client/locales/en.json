@@ -26,5 +26,10 @@
   "settings": {
     "title": "Settings",
     "change_lang": "Change Language"
+  },
+  "welcome": {
+    "title": "Welcome to the Choir Hub!",
+    "subtitle": "Your one-stop portal for all things related to Chalmers Sångkör.",
+    "singer": "Welcome dear singer!"
   }
 }

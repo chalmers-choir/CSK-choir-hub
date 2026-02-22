@@ -2,7 +2,7 @@ export type SiteConfig = typeof siteConfig;
 
 const links = {
   login: "/login",
-  register: "/login/register",
+  register: "/register",
   profile: "/profile",
   settings: "/settings",
   events: "/events",
