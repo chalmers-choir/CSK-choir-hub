@@ -27,5 +27,10 @@
   "settings": {
     "title": "Einstellungen",
     "change_lang": "Sprache ändern"
+  },
+  "welcome": {
+    "title": "Willkommen im Chor-Hub!",
+    "subtitle": "Ihr One-Stop-Portal für alles rund um den Chalmers Sångkör.",
+    "singer": "Willkommen, lieber Sänger!"
   }
 }

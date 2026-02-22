@@ -7,7 +7,9 @@ import { useRouter } from "next/router";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Link } from "@heroui/link";
+import { Form } from "@heroui/react";
 import { button as buttonStyles } from "@heroui/theme";
+import clsx from "clsx";
 
 import AuthLoading from "@/components/AuthLoading";
 import { siteConfig } from "@/config/site";
@@ -52,7 +54,10 @@ export default function RegisterPage() {
       {loading ? (
         <AuthLoading />
       ) : (
-        <form className="mx-auto mt-20 flex max-w-sm flex-col gap-2" onSubmit={handleSubmit}>
+        <Form
+          className="mx-auto mt-20 flex max-w-sm flex-col items-center gap-2"
+          onSubmit={handleSubmit}
+        >
           <h2 className="w-full text-center text-lg font-semibold">Register</h2>
           <Input
             required
@@ -97,7 +102,10 @@ export default function RegisterPage() {
           {error && <p className="text-red-500">{error}</p>}
 
           <Button
-            className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
+            className={clsx(
+              buttonStyles({ color: "primary", radius: "md", variant: "shadow" }),
+              "px-8",
+            )}
             type="submit"
           >
             Register
@@ -108,7 +116,7 @@ export default function RegisterPage() {
           >
             Already have an account? Login
           </Link>
-        </form>
+        </Form>
       )}
     </DefaultLayout>
   );
