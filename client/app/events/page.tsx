@@ -2,46 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Link } from "@heroui/link";
-import { button as buttonStyles } from "@heroui/theme";
-
+import { EventsListContent } from "@/components/events/EventsListContent";
+import { EventsPageHeader } from "@/components/events/EventsPageHeader";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "@/contexts/IntlContext";
 import DefaultLayout from "@/layouts/default";
-import { CSKEvent, CSKEventType, EventsService } from "@/lib/apiClient";
-
-const eventTypeMeta: Record<CSKEventType, { label: string; color: string }> = {
-  REHEARSAL: { label: "Repetition", color: "bg-sky-100 text-sky-700" },
-  CONCERT: { label: "Konsert", color: "bg-purple-100 text-purple-700" },
-  GIG: { label: "Gig", color: "bg-amber-100 text-amber-800" },
-  PARTY: { label: "Fest", color: "bg-pink-100 text-pink-700" },
-  MEETING: { label: "Möte", color: "bg-emerald-100 text-emerald-700" },
-  OTHER: { label: "Annat", color: "bg-slate-200 text-slate-700" },
-};
-
-const formatDate = (isoDate: string) =>
-  new Intl.DateTimeFormat("sv-SE", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-  }).format(new Date(isoDate));
-
-const formatTimeRange = (start: string, end?: string | null) => {
-  const from = new Intl.DateTimeFormat("sv-SE", {
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(start));
-
-  if (!end) return from;
-
-  const to = new Intl.DateTimeFormat("sv-SE", {
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(end));
-
-  return from === to ? from : `${from}–${to}`;
-};
+import { CSKEvent, EventsService } from "@/lib/apiClient";
 
 const getIsoWeekNumber = (date: Date) => {
   const tempDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -75,54 +41,6 @@ const getWeekMeta = (isoDate: string) => {
   };
 };
 
-const EventCard = ({ event }: { event: CSKEvent }) => {
-  const { t } = useTranslation();
-  const badge = eventTypeMeta[event.type] ?? eventTypeMeta.OTHER;
-
-  return (
-    <Link
-      aria-label={`Visa detaljer för ${event.name}`}
-      className="block"
-      href={`/events/${event.id}`}
-    >
-      <Card className="border-default-100/80 bg-content1/70 hover:border-primary/40 border shadow-sm backdrop-blur transition hover:-translate-y-[1px] hover:shadow-md">
-        <CardHeader className="flex flex-col gap-1">
-          <div className="flex w-full flex-wrap items-center justify-between">
-            <span className="bg-default-100 text-default-500 rounded-full px-3 py-1 text-xs font-medium">
-              {event.place}
-            </span>
-            <div className="text-default-700 font-semibold">{formatDate(event.dateStart)}</div>
-          </div>
-          <div className="text-default-500 flex w-full flex-wrap justify-between text-sm">
-            <span className={`rounded-full px-3 py-1 text-xs font-semibold ${badge.color}`}>
-              {badge.label}
-            </span>
-            <div>{formatTimeRange(event.dateStart, event.dateEnd)}</div>
-          </div>
-        </CardHeader>
-        <CardBody className="gap-3">
-          <div className="flex flex-col gap-1">
-            <h3 className="text-default-900 text-xl font-semibold">{event.name}</h3>
-            {event.description && <p className="text-default-500 text-sm">{event.description}</p>}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {event.requiresAttendance && (
-              <span className="rounded-md bg-red-50 px-2 py-1 text-xs font-semibold text-red-700">
-                {t("events.attendance_required")}
-              </span>
-            )}
-            {event.requiresRegistration && (
-              <span className="rounded-md bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700">
-                {t("events.registration_required")}
-              </span>
-            )}
-          </div>
-        </CardBody>
-      </Card>
-    </Link>
-  );
-};
-
 export default function IndexPage() {
   const { t } = useTranslation();
 
@@ -141,13 +59,7 @@ export default function IndexPage() {
         const response = await EventsService.getEvents();
         const eventList = response.events;
 
-        const now = new Date();
-        const upcomingEvents = eventList.filter(
-          (event) => new Date(event.dateStart).getTime() >= now.getTime(),
-        );
-
         const sortedEvents = [...eventList].sort(
-          // const sortedEvents = [...upcomingEvents].sort(
           (a, b) => new Date(a.dateStart).getTime() - new Date(b.dateStart).getTime(),
         );
 
@@ -185,58 +97,13 @@ export default function IndexPage() {
   return (
     <DefaultLayout>
       <section className="mx-auto flex max-w-3xl flex-col gap-6 py-8 md:py-10">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="text-center sm:text-left">
-            <h1 className="text-default-900 text-3xl font-bold">{t("events.title")}</h1>
-            <p className="text-default-500 mt-1">{t("events.subtitle")}</p>
-          </div>
-          {isAdmin && (
-            <Link
-              className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
-              href="/events/create"
-            >
-              {t("events.create_event")}
-            </Link>
-          )}
-        </div>
-
-        {
-          <>
-            {error && (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-                {error}
-              </div>
-            )}
-
-            {eventsLoading ? (
-              <div className="text-default-500 flex justify-center py-10">
-                {t("events.loading_events")}
-              </div>
-            ) : events.length === 0 ? (
-              <div className="border-default-200 bg-default-100/60 text-default-500 rounded-lg border p-6 text-center">
-                {t("events.no_events")}
-              </div>
-            ) : (
-              <div className="flex flex-col gap-8">
-                {eventsByWeek.map((week) => (
-                  <div key={week.key} className="flex flex-col gap-3">
-                    <div className="flex items-baseline justify-between">
-                      <h2 className="text-default-900 text-xl font-semibold">
-                        {t("utils.week")} {week.weekNumber}
-                      </h2>
-                      <span className="text-default-500 text-sm">{week.rangeLabel}</span>
-                    </div>
-                    <div className="grid grid-cols-1 gap-4">
-                      {week.items.map((event) => (
-                        <EventCard key={event.id} event={event} />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </>
-        }
+        <EventsPageHeader isAdmin={isAdmin} />
+        <EventsListContent
+          error={error}
+          eventsByWeek={eventsByWeek}
+          eventsCount={events.length}
+          eventsLoading={eventsLoading}
+        />
       </section>
     </DefaultLayout>
   );
