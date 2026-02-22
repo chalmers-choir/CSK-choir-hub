@@ -1,4 +1,5 @@
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 
 import {
   Navbar as HeroUINavbar,
@@ -21,6 +22,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "@/contexts/IntlContext";
 
 export const Navbar = () => {
+  const router = useRouter();
+  const isAdmin = router.pathname.startsWith("/admin");
   const { t } = useTranslation();
   const { isAuthenticated, logout, user } = useAuth();
 
@@ -47,6 +50,21 @@ export const Navbar = () => {
               </NextLink>
             </NavbarItem>
           ))}
+          {isAdmin &&
+            siteConfig.admin.navItems.map((item) => (
+              <NavbarItem key={item.href}>
+                <NextLink
+                  className={clsx(
+                    linkStyles({ color: "foreground" }),
+                    "data-[active=true]:text-primary data-[active=true]:font-medium",
+                  )}
+                  color="foreground"
+                  href={item.href}
+                >
+                  {t(item.labelKey)}
+                </NextLink>
+              </NavbarItem>
+            ))}
         </div>
       </NavbarContent>
 
