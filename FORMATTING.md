@@ -50,7 +50,6 @@ In this repo, `eslint.config.mjs` currently handles:
 
 - Base linting rules for JS/TS files
 - Unused imports and unused variables warnings
-- Import grouping/order consistency (`import/order`)
 - General style rules that are not purely "printing" (e.g. padding lines)
 - React rules (client only)
 - React Hooks rules (client only)
@@ -83,25 +82,24 @@ What that means:
 - ESLint can report when a file is not formatted according to Prettier
 - Running ESLint may surface formatting issues, but the formatting rules still come from `.prettierrc`
 
-## Important Overlap: Imports (Current Setup)
+## Import Ordering (Current Setup)
 
-There is intentional overlap right now:
+Import ordering is intentionally owned by Prettier in this repo:
 
 - Prettier sorts imports using `@trivago/prettier-plugin-sort-imports` (`.prettierrc`)
-- ESLint also enforces import grouping/order with `import/order` (`eslint.config.mjs`)
+- ESLint does not enforce `import/order` (removed to avoid formatter/linter conflicts)
 
-This can work well, but it requires the two configs to stay aligned.
+This avoids "format on save vs lint fix" fights.
 
 ### Practical responsibility split for imports
 
 - Prettier plugin: physical ordering/sorting of import statements and specifiers
-- ESLint `import/order`: grouping expectations and blank lines between groups
+- ESLint: import hygiene (unused imports), not import ordering
 
-If import formatting starts "fighting" (format on save changes one way, lint fixes another):
+If import formatting looks wrong:
 
 - First check `.prettierrc` `importOrder`
-- Then check ESLint `import/order` groups/pathGroups
-- Align them rather than adding more rules
+- Then check whether editor Prettier is using the repo plugins/config
 
 ## Which File Should I Edit?
 
@@ -135,4 +133,3 @@ Using both keeps responsibilities clean:
 - Prettier removes style debates and handles formatting fast
 - ESLint enforces correctness and framework/runtime rules
 - One root ESLint config can serve both client and server, while still applying different rules to each area
-

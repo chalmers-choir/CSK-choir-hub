@@ -1,10 +1,11 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { fixupPluginRules } from "@eslint/compat";
 import js from "@eslint/js";
 import nextPlugin from "@next/eslint-plugin-next";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
-import i18next from "eslint-plugin-i18next";
-import _import from "eslint-plugin-import";
 import jsxA11Y from "eslint-plugin-jsx-a11y";
 import prettier from "eslint-plugin-prettier";
 import react from "eslint-plugin-react";
@@ -12,8 +13,6 @@ import reactHooks from "eslint-plugin-react-hooks";
 import unusedImports from "eslint-plugin-unused-imports";
 import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 // ESLint Flat Config notes:
 // - This file is evaluated top-to-bottom.
@@ -62,7 +61,6 @@ export default defineConfig([
     files: ["**/*.{js,jsx,cjs,mjs,ts,tsx}"],
     plugins: {
       "unused-imports": unusedImports,
-      import: fixupPluginRules(_import),
       "@typescript-eslint": typescriptEslint,
       prettier: fixupPluginRules(prettier),
       i18next: fixupPluginRules(i18next),
@@ -97,42 +95,6 @@ export default defineConfig([
           args: "after-used",
           ignoreRestSiblings: false,
           argsIgnorePattern: "^_.*?$",
-        },
-      ],
-      "import/order": [
-        "warn",
-        {
-          // Consistent import grouping across client and server improves scanability.
-          // Example order:
-          // 1) `import type {X} from "..."`
-          // 2) `import fs from "node:fs"`
-          // 3) `import React from "react"`
-          // 4) `import "@/local/module"`
-          groups: [
-            "type",
-            "builtin",
-            "object",
-            "external",
-            "internal",
-            "parent",
-            "sibling",
-            "index",
-          ],
-          pathGroups: [
-            {
-              // Keep "~/" aliases grouped with external-ish imports if used.
-              pattern: "~/**",
-              group: "external",
-              position: "after",
-            },
-          ],
-        },
-      ],
-      "i18next/no-literal-string": [
-        "warn",
-        {
-          markupOnly: true,
-          ignoreAttribute: ["className", "id", "data-testid"],
         },
       ],
       "padding-line-between-statements": [
