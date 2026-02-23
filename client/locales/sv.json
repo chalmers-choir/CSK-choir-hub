@@ -14,7 +14,8 @@
     "no_account": "Inget konto? Registrera",
     "create_new_event": "Skapa nytt evenemang",
     "users": "Användare",
-    "groups": "Grupper"
+    "groups": "Grupper",
+    "week": "Vecka"
   },
   "buttons": {
     "back": "Tillbaka",
