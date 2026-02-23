@@ -97,7 +97,7 @@ export const getUserFromToken = async (token: string) => {
     const { passwordHash, ...userWithoutPWHash } = user;
 
     return userWithoutPWHash;
-  } catch (err) {
+  } catch {
     throw new UnauthorizedError("Invalid token");
   }
 };

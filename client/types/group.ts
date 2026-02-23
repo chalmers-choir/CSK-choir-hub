@@ -10,4 +10,5 @@ export const GroupType = {
 export type GroupType = (typeof GroupType)[keyof typeof GroupType];
 
 // Compile-time check (no runtime effect)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _assert: Record<GroupType, ApiGroupType> = GroupType;

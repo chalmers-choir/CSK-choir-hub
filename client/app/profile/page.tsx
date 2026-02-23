@@ -31,8 +31,6 @@ export default function ProfilePage() {
         dietaryPreferences: dietPref,
       };
 
-      console.log("Saving profile with data:", data);
-
       if (!user) return;
 
       await UsersService.updateUser({
@@ -47,6 +45,7 @@ export default function ProfilePage() {
         timeout: 2000,
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Error updating profile:", error);
 
       let errorMessage = "Failed to update profile. Please try again.";

@@ -25,9 +25,7 @@ export default function IndexPage() {
         const res = await EventsService.getEventById({ eventId });
 
         setEvent(res.event);
-      } catch (err: any) {
-        console.error(err.message || "Failed to fetch event");
-      }
+      } catch {}
     };
 
     fetchEvent();

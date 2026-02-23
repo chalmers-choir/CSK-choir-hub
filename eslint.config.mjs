@@ -93,7 +93,7 @@ export default defineConfig([
         {
           // Example: function foo(_unused: string, used: string) {} -> `_unused` allowed.
           args: "after-used",
-          ignoreRestSiblings: false,
+          ignoreRestSiblings: true,
           argsIgnorePattern: "^_.*?$",
         },
       ],
