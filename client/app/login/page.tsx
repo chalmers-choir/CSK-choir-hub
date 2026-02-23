@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
@@ -16,29 +16,27 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "@/contexts/IntlContext";
 import DefaultLayout from "@/layouts/default";
 
-export default function LoginPage() {
+function LoginPageContent() {
   const { login, isAuthenticated, loading } = useAuth();
   const { t } = useTranslation();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState("");
+  const redirectTo = searchParams.get("next") || "/";
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      const redirectTo = (router.query.next as string) || "/";
-
       router.replace(redirectTo);
     }
-  }, [isAuthenticated, loading, router, router.query.next]);
+  }, [isAuthenticated, loading, redirectTo, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const redirectTo = (router.query.next as string) || "/";
-
       await login(username, password, redirectTo);
     } catch (err: any) {
       setError(err.message);
@@ -87,5 +85,19 @@ export default function LoginPage() {
         </Form>
       )}
     </DefaultLayout>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <DefaultLayout>
+          <AuthLoading />
+        </DefaultLayout>
+      }
+    >
+      <LoginPageContent />
+    </Suspense>
   );
 }

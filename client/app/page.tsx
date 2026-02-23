@@ -1,3 +1,5 @@
+"use client";
+
 import AuthLoading from "@/components/AuthLoading";
 import LoggedOutCta from "@/components/LoggedOutCta";
 import { subtitle, title } from "@/components/primitives";
