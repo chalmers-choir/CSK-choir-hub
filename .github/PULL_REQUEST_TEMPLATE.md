@@ -17,3 +17,4 @@
 ## Checklist
 
 - [ ] I swear I have run `npm run build`
+- [ ] I swear I have run `npm run lint`
