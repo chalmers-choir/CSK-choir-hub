@@ -192,7 +192,7 @@ async function main() {
 
   log("📦 Installing client dependencies...");
   run(npmCmd, ["install"], { cwd: clientDir });
-  run(npmCmd, ["run", "api:generate"], { cwd: clientDir });
+  run(npmCmd, ["run", "api:generate"], { cwd: serverDir });
 
   log("🌱 Setting up Prisma...");
   run(npxCmd, ["prisma", "generate"], { cwd: serverDir });
