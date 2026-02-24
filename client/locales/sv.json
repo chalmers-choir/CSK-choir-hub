@@ -13,9 +13,9 @@
     "welcome_back": "Välkommen tillbaka, {name}!",
     "no_account": "Inget konto? Registrera",
     "create_new_event": "Skapa nytt evenemang",
+    "week": "Vecka",
     "users": "Användare",
-    "groups": "Grupper",
-    "week": "Vecka"
+    "groups": "Grupper"
   },
   "buttons": {
     "back": "Tillbaka",
