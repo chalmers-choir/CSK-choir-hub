@@ -7,7 +7,6 @@
     "start": "node dist/index.js",
     "dev": "nodemon",
     "build": "tsc && tsc-alias",
-    "setup-db": "ts-node src/scripts/setup-database.ts",
     "type-check": "tsc --noEmit",
     "test": "jest"
   },
