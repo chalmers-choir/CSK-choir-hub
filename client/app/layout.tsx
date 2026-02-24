@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { fontSans } from "@/config/fonts";
 import Providers from "@/config/provider";
 import { siteConfig } from "@/config/site";
+import DefaultLayout from "@/layouts/default";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -37,7 +38,9 @@ export default function RootLayout({
   return (
     <html lang="sv" suppressHydrationWarning>
       <body className={clsx("bg-background min-h-screen font-sans antialiased", fontSans.variable)}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <DefaultLayout>{children}</DefaultLayout>
+        </Providers>
       </body>
     </html>
   );

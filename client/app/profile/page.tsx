@@ -6,7 +6,6 @@ import { Button, Form, addToast } from "@heroui/react";
 
 import { TextField } from "@/components";
 import { useAuth, useTranslation } from "@/contexts";
-import DefaultLayout from "@/layouts/default";
 import { ApiError, UsersService } from "@/lib/api-client";
 import { GroupType } from "@/types/group";
 
@@ -66,7 +65,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <DefaultLayout>
+    <>
       <h1 className="mb-6 text-2xl font-semibold">Hi {user?.firstName}</h1>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <TextField label={t("user.firstName")} value={user?.firstName} readOnly />
@@ -124,6 +123,6 @@ export default function ProfilePage() {
           </Button>
         </Form>
       </div>
-    </DefaultLayout>
+    </>
   );
 }
