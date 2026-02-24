@@ -1,3 +1,4 @@
+import { GroupType } from "@prisma/generated/client";
 import { groupService } from "@services";
 import { BadRequestError } from "@utils/errors";
 import { NextFunction, Request, Response } from "express";
@@ -5,7 +6,23 @@ import { NextFunction, Request, Response } from "express";
 // Get all groups
 export const getGroups = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const groups = await groupService.getAllGroups();
+    const type = req.query.type as string | undefined;
+
+    let groups;
+
+    if (type) {
+      // Validate that the type is a valid GroupType enum value
+      const upperType = type.toUpperCase();
+      const validTypes = Object.values(GroupType);
+
+      if (!validTypes.includes(upperType as GroupType)) {
+        return next(new BadRequestError("Invalid group type"));
+      }
+
+      groups = await groupService.getGroupsByType(upperType as GroupType);
+    } else {
+      groups = await groupService.getAllGroups();
+    }
 
     res.json({ groups });
   } catch (error) {

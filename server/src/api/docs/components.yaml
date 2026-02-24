@@ -439,6 +439,12 @@ schemas:
       dietaryPreferences:
         type: string
         example: Vegetarian
+      groupIds:
+        type: array
+        items:
+          type: integer
+        description: Array of group IDs to assign to the user
+        example: [1, 2, 3]
 
 requestBodies:
   RegisterUser:

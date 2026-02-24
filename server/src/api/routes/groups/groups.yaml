@@ -5,8 +5,16 @@ paths:
         - groups
       summary: List groups
       operationId: getGroups
+      parameters:
+        - name: type
+          in: query
+          description: Filter groups by type
+          required: false
+          schema:
+            type: string
+            enum: [VOICE, CHOIR, COMMITTEE, OTHER]
       responses:
-        '200':
+        "200":
           description: Groups fetched
           content:
             application/json:
@@ -16,7 +24,7 @@ paths:
                   groups:
                     type: array
                     items:
-                      $ref: '../../docs/openapi.yaml#/components/schemas/Group'
+                      $ref: "../../docs/openapi.yaml#/components/schemas/Group"
     post:
       tags:
         - groups
@@ -42,7 +50,7 @@ paths:
                 - name
                 - type
       responses:
-        '201':
+        "201":
           description: Group created
           content:
             application/json:
@@ -50,7 +58,7 @@ paths:
                 type: object
                 properties:
                   group:
-                    $ref: '../../docs/openapi.yaml#/components/schemas/Group'
+                    $ref: "../../docs/openapi.yaml#/components/schemas/Group"
 
   /groups/{groupId}:
     parameters:
@@ -80,7 +88,7 @@ paths:
                 description:
                   type: string
       responses:
-        '200':
+        "200":
           description: Group updated
           content:
             application/json:
@@ -88,7 +96,7 @@ paths:
                 type: object
                 properties:
                   group:
-                    $ref: '../../docs/openapi.yaml#/components/schemas/Group'
+                    $ref: "../../docs/openapi.yaml#/components/schemas/Group"
     delete:
       tags:
         - groups
@@ -96,7 +104,7 @@ paths:
       description: Deletes a group (Admins only).
       operationId: deleteGroup
       responses:
-        '204':
+        "204":
           description: Group deleted
 
   /groups/{groupId}/users:
@@ -127,7 +135,7 @@ paths:
               required:
                 - userId
       responses:
-        '204':
+        "204":
           description: User added
     delete:
       tags:
@@ -144,7 +152,7 @@ paths:
             type: integer
             format: int64
       responses:
-        '204':
+        "204":
           description: User removed
 
   /groups/{groupId}/roles:
@@ -175,7 +183,7 @@ paths:
               required:
                 - roleId
       responses:
-        '204':
+        "204":
           description: Role assigned
     delete:
       tags:
@@ -192,7 +200,7 @@ paths:
             type: integer
             format: int64
       responses:
-        '204':
+        "204":
           description: Role removed
 
   /groups/{groupId}/groups:
@@ -223,7 +231,7 @@ paths:
               required:
                 - subgroupId
       responses:
-        '204':
+        "204":
           description: Subgroup added
     delete:
       tags:
@@ -240,5 +248,5 @@ paths:
             type: integer
             format: int64
       responses:
-        '204':
+        "204":
           description: Subgroup removed

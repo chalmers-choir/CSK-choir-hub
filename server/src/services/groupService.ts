@@ -11,6 +11,21 @@ export async function getAllGroups() {
 }
 
 /**
+ * Get groups by type.
+ * @param type - The type of groups to retrieve.
+ * @returns Groups matching the specified type.
+ * @throws NotFoundError if no groups are found for the specified type.
+ */
+export async function getGroupsByType(type: GroupType) {
+  const groups = await groupModel.findBy({ type });
+
+  if (!groups || groups.length === 0)
+    throw new NotFoundError("No groups found for the specified type");
+
+  return groups;
+}
+
+/**
  * Delete a group by ID.
  * @param groupId - The ID of the group to delete.
  */

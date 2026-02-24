@@ -102,7 +102,19 @@ export const getUserFromToken = async (token: string) => {
   }
 };
 
-export const updateUser = async (userId: number, updateData: Partial<User>) => {
+/**
+ * Update user information and group memberships.
+ * @param {number} userId - The user ID.
+ * @param {Partial<User>} updateData - The user fields to update.
+ * @param {number[]} [groupIds] - Optional array of group IDs to set for the user.
+ * @returns {Promise<User>} The updated user.
+ * @throws {Error} If email is already in use by another account.
+ */
+export const updateUser = async (
+  userId: number,
+  updateData: Partial<User>,
+  groupIds?: number[],
+) => {
   const { email } = updateData;
 
   if (email) {
@@ -113,7 +125,39 @@ export const updateUser = async (userId: number, updateData: Partial<User>) => {
     }
   }
 
-  return userModel.updateUser(userId, updateData);
+  // Update basic user fields
+  const updatedUser = await userModel.updateUser(userId, updateData);
+
+  // Sync group memberships if groupIds provided
+  if (groupIds !== undefined) {
+    // Get current groups
+    const currentGroups = await prisma.group.findMany({
+      where: { members: { some: { id: userId } } },
+      select: { id: true },
+    });
+
+    const currentGroupIds = currentGroups.map((g) => g.id);
+    const groupIdsToAdd = groupIds.filter((id) => !currentGroupIds.includes(id));
+    const groupIdsToRemove = currentGroupIds.filter((id) => !groupIds.includes(id));
+
+    // Add user to new groups
+    for (const groupId of groupIdsToAdd) {
+      await prisma.group.update({
+        where: { id: groupId },
+        data: { members: { connect: { id: userId } } },
+      });
+    }
+
+    // Remove user from old groups
+    for (const groupId of groupIdsToRemove) {
+      await prisma.group.update({
+        where: { id: groupId },
+        data: { members: { disconnect: { id: userId } } },
+      });
+    }
+  }
+
+  return updatedUser;
 };
 
 /**
