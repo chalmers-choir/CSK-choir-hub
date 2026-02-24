@@ -89,15 +89,51 @@ function parseEnvFile(filePath) {
   return vars;
 }
 
-function canRun(command) {
-  const checker = process.platform === "win32" ? "where" : "command";
-  const checkerArgs = process.platform === "win32" ? [command] : ["-v", command];
-  const result = spawnSync(checker, checkerArgs, {
-    stdio: "ignore",
-    shell: process.platform !== "win32",
+function getDatabaseUrl() {
+  const envVars = parseEnvFile(path.join(serverDir, ".env"));
+  const databaseUrl = process.env.DATABASE_URL || envVars.DATABASE_URL;
+
+  if (!databaseUrl) {
+    throw new Error(
+      'DATABASE_URL is not set. Add it to server/.env. Example: DATABASE_URL="postgresql://user:pass@localhost:5432/cskdb?schema=public"',
+    );
+  }
+
+  return databaseUrl;
+}
+
+function assertDatabaseRunning(databaseUrl) {
+  const nodeCmd = process.platform === "win32" ? "node.exe" : "node";
+  const checkScript = `
+const { Client } = require("pg");
+const client = new Client({ connectionString: process.env.DATABASE_URL });
+
+(async () => {
+  try {
+    await client.connect();
+    await client.query("SELECT 1");
+    await client.end();
+  } catch (error) {
+    console.error(error?.message || error);
+    process.exit(1);
+  }
+})();
+`;
+
+  const result = spawnSync(nodeCmd, ["-e", checkScript], {
+    cwd: serverDir,
+    stdio: "inherit",
+    shell: false,
+    env: { ...process.env, DATABASE_URL: databaseUrl },
   });
 
-  return result.status === 0;
+  if (result.error) {
+    throw result.error;
+  }
+
+  if (result.status !== 0) {
+    throw new Error("Could not connect to PostgreSQL using DATABASE_URL. Ensure the database is running before setup.");
+  }
 }
 
 async function ask(question) {
@@ -122,47 +158,11 @@ async function maybeResetDatabase() {
     return;
   }
 
-  process.stdout.write("\n");
-  const dbModeInput = await ask("Use Docker Postgres or Local Postgres? [d/L]: ");
-  const dbMode = dbModeInput || "L";
-
-  if (/^d$/i.test(dbMode)) {
-    log("🐳 Using Docker Postgres...");
-    run(npmCmd, ["run", "docker:down"], { allowFailure: true });
-    run("docker", ["volume", "rm", "csk_pgdata"], { allowFailure: true });
-    removeDirIfExists(prismaMigrationsDir);
-    log("⏳ Running database migrations (Docker)...");
-    run(npmCmd, ["run", "docker:up"]);
-    run(npxCmd, ["prisma", "migrate", "dev", "--name", "init"], { cwd: serverDir });
-    run(npxCmd, ["prisma", "db", "seed"], { cwd: serverDir });
-    run(npmCmd, ["run", "docker:down"]);
-
-    return;
-  }
-
-  log("🖥️ Using Local Postgres...");
-  const envVars = parseEnvFile(path.join(serverDir, ".env"));
-  const databaseUrl = process.env.DATABASE_URL || envVars.DATABASE_URL;
-
-  if (!databaseUrl) {
-    log("❌ DATABASE_URL is not set. Add it to server/.env (local Postgres).");
-    log('   Example: DATABASE_URL="postgresql://user:pass@localhost:5432/cskdb?schema=public"');
-    process.exit(1);
-  }
-
-  if (canRun("psql")) {
-    const psqlOk = run("psql", [databaseUrl, "-c", "\\q"], { allowFailure: true });
-
-    if (!psqlOk) {
-      log("⚠️  Could not connect to local Postgres. Ensure it's running.");
-      log("    macOS (Homebrew): brew services start postgresql@15");
-      log("    Windows (Service): start the PostgreSQL service from Services.msc");
-      log("    Continuing anyway; Prisma may create/connect during migrate.");
-    }
-  }
-
+  const databaseUrl = getDatabaseUrl();
+  log("🔎 Verifying PostgreSQL connection...");
+  assertDatabaseRunning(databaseUrl);
   removeDirIfExists(prismaMigrationsDir);
-  log("⏳ Running database migrations (Local)...");
+  log("⏳ Running database migrations...");
   run(npxCmd, ["prisma", "migrate", "reset", "--force", "--skip-seed"], {
     cwd: serverDir,
     allowFailure: false,
