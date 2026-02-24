@@ -34,5 +34,8 @@
     "title": "Välkommen till KörHubben!",
     "subtitle": "Din one-stop portal för allt som rör Chalmers Sångkör.",
     "singer": "Välkommen kära sångare!"
+  },
+  "admin": {
+    "dashboard": "Admin Dashboard"
   }
 }
