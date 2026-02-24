@@ -39,6 +39,8 @@ enum GroupType {
   CHOIR
   VOICE
   COMMITTEE
+  BOARD
+  CONDUCTORS
   OTHER
 }
 
