@@ -1,20 +1,24 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 
 import EventDetailCard from "@/components/events/EventDetailCard";
 import DefaultLayout from "@/layouts/default";
 import { CSKEvent, EventsService } from "@/lib/api-client";
 
 export default function IndexPage() {
-  const { query } = useRouter();
-  const { id } = query;
+  const params = useParams<{ id: string }>();
+  const id = params?.id;
 
   const [event, setEvent] = useState<CSKEvent | undefined>(undefined);
 
   useEffect(() => {
     if (!id) return; // wait until id is available
-    const eventId = parseInt(id as string, 10);
+    const eventId = parseInt(Array.isArray(id) ? id[0] : id, 10);
+
+    if (Number.isNaN(eventId)) return;
 
     const fetchEvent = async () => {
       try {

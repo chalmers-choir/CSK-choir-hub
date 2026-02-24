@@ -1,3 +1,5 @@
+"use client";
+
 import { Card } from "@heroui/react";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
