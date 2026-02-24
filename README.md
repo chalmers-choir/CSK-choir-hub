@@ -9,17 +9,10 @@ A full-stack choir management platform built with **TypeScript**, React frontend
 1. **Create the .env (important)**
    - Create the database configuration in `server/.env` using `server/.env.example`
 
-2. **For macOS/Linux:**
+2. **Run the setup script (macOS/Linux/Windows):**
 
 ```bash
-(chmod +x setup.sh)
-./setup.sh
-```
-
-2. **For Windows:**
-
-```batch
-setup.bat
+npm run setup
 ```
 
 ## Running the Application
