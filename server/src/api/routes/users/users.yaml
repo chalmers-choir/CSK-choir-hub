@@ -5,8 +5,30 @@ paths:
         - users
       summary: List users
       operationId: getUsers
+      parameters:
+        - name: includeRoles
+          in: query
+          description: Include user roles in the response
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: includeGroups
+          in: query
+          description: Include user groups in the response
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: groupId
+          in: query
+          description: Filter users by group ID
+          required: false
+          schema:
+            type: integer
+            format: int64
       responses:
-        '200':
+        "200":
           description: Users fetched
           content:
             application/json:
@@ -16,7 +38,7 @@ paths:
                   users:
                     type: array
                     items:
-                      $ref: '../../docs/openapi.yaml#/components/schemas/User'
+                      $ref: "../../docs/openapi.yaml#/components/schemas/User"
 
   /users/{userId}:
     parameters:
@@ -33,7 +55,7 @@ paths:
       summary: Get user
       operationId: getUser
       responses:
-        '200':
+        "200":
           description: User fetched
           content:
             application/json:
@@ -41,7 +63,7 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: '../../docs/openapi.yaml#/components/schemas/User'
+                    $ref: "../../docs/openapi.yaml#/components/schemas/User"
     delete:
       tags:
         - users
@@ -49,7 +71,7 @@ paths:
       description: Deletes a user (Admins only).
       operationId: deleteUser
       responses:
-        '204':
+        "204":
           description: User deleted
 
     put:
@@ -59,9 +81,9 @@ paths:
       description: Updates a user's information.
       operationId: updateUser
       requestBody:
-        $ref: '../../docs/openapi.yaml#/components/requestBodies/UpdateUser'
+        $ref: "../../docs/openapi.yaml#/components/requestBodies/UpdateUser"
       responses:
-        '200':
+        "200":
           description: User updated
           content:
             application/json:
@@ -69,4 +91,4 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: '../../docs/openapi.yaml#/components/schemas/User'
+                    $ref: "../../docs/openapi.yaml#/components/schemas/User"

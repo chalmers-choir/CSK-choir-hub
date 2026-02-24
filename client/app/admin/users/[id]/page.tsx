@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-import { ArrowBackIos } from "@mui/icons-material";
+import { ArrowBackIosNew } from "@mui/icons-material";
 
 import AdminLayout from "@/layouts/admin";
 import { User, UsersService } from "@/lib/api-client";
@@ -42,7 +42,7 @@ export default function UserDetailPage() {
           href="/admin/users"
           className="text-default-500 hover:text-default-700 text-md flex items-center gap-1 transition-colors"
         >
-          <ArrowBackIos className="cursor-pointer" onClick={() => window.history.back()} />
+          <ArrowBackIosNew className="cursor-pointer" onClick={() => window.history.back()} />
           Back
         </Link>
       </div>

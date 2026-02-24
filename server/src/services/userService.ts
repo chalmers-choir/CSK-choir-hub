@@ -59,8 +59,11 @@ export async function deleteUser(userId: number): Promise<void> {
  * @param {object} filters - Filter options: group.
  * @returns {Promise<any[]>} List of users.
  */
-export async function getUsers(filters?: { groupId?: number }) {
-  return userModel.getUsers(filters);
+export async function getUsers(
+  filters?: { groupId?: number },
+  include?: { roles?: boolean; groups?: boolean },
+) {
+  return userModel.getUsers(filters, include);
 }
 
 export async function getUser(userId: number) {

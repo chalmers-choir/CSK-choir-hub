@@ -5,7 +5,17 @@ import { NextFunction, Request, Response } from "express";
 // Get all users
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = await userService.getUsers();
+    // Parse include query parameters
+    const includeRoles = req.query.includeRoles === "true";
+    const includeGroups = req.query.includeGroups === "true";
+    const include =
+      includeRoles || includeGroups ? { roles: includeRoles, groups: includeGroups } : undefined;
+
+    // Parse filter parameters
+    const groupId = req.query.groupId ? parseInt(req.query.groupId as string, 10) : undefined;
+    const filters = groupId ? { groupId } : undefined;
+
+    const users = await userService.getUsers(filters, include);
 
     return res.json({ users });
   } catch (error) {

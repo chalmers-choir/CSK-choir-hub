@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from 
 import { TextField } from "@/components";
 import AdminLayout from "@/layouts/admin";
 import { User, UsersService } from "@/lib/api-client";
+import { GroupType } from "@/types/group";
 
 export default function AdminUsersPage() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function AdminUsersPage() {
   const [sortDirection, setSortDirection] = useState<"ascending" | "descending">("ascending");
 
   useEffect(() => {
-    UsersService.getUsers().then((response) => {
+    UsersService.getUsers({ includeGroups: true }).then((response) => {
       setUsers(response.users);
       setLoading(false);
     });
@@ -28,13 +29,8 @@ export default function AdminUsersPage() {
   const columns = [
     { name: "NAME", key: "name" },
     { name: "MAIL", key: "mail" },
-    // { name: "CHOIR", key: "choir" },
+    { name: "CHOIR", key: "choir" },
   ];
-
-  // const users = [
-  //   { name: "John Doe", role: "Admin", status: "Active" },
-  //   { name: "Jane Smith", role: "User", status: "Inactive" },
-  // ];
 
   const handleSort = (columnKey: string) => {
     if (sortColumn === columnKey) {
@@ -109,6 +105,9 @@ export default function AdminUsersPage() {
                   >
                     <TableCell>{user.firstName + " " + user.lastName}</TableCell>
                     <TableCell>{user.email}</TableCell>
+                    <TableCell>
+                      {user.groups.find((group) => group.type == GroupType.CHOIR)?.name || "None"}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

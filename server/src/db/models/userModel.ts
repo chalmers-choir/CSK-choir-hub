@@ -63,6 +63,7 @@ export const getUsers = async (
     roleId: number;
     groupId: number;
   }> = {},
+  include?: IncludeParams,
 ) => {
   const where: any = {};
 
@@ -76,7 +77,7 @@ export const getUsers = async (
     where.groups = { some: { id: filter.groupId } };
   }
 
-  return prisma.user.findMany({ where });
+  return prisma.user.findMany({ where, include: { ...include } });
 };
 
 // Finds all users assigned a specific role.
