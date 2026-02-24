@@ -10,6 +10,14 @@
 
 -
 
+### Notice
+
+Requires `npm install` in:
+
+- [ ] Root
+- [ ] Client
+- [ ] Server
+
 ## Screenshots (if UI)
 
 -
