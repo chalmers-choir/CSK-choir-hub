@@ -4,10 +4,11 @@
   "description": "Choir Hub - A project aimed to simplify the communication within CSK",
   "main": "server/dist/index.js",
   "scripts": {
+    "db:up": "cd server && docker compose up -d db",
     "setup": "node scripts/setup.mjs",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "build": "npm run server:build && npm run client:build",
     "prod": "concurrently \"npm run server:prod\" \"npm run client:prod\"",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd server && npm run dev",
     "server:prod": "cd server && npm run start",
     "server:build": "cd server && npm run build",
