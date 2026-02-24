@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-import { ArrowLeft } from "@mui/icons-material";
+import { ArrowBackIos } from "@mui/icons-material";
 
 import AdminLayout from "@/layouts/admin";
 import { User, UsersService } from "@/lib/api-client";
@@ -38,11 +38,11 @@ export default function UserDetailPage() {
   return (
     <AdminLayout>
       <div className="flex items-center gap-2">
-        <ArrowLeft className="cursor-pointer" onClick={() => window.history.back()} />
         <Link
           href="/admin/users"
-          className="text-default-500 hover:text-default-700 text-sm transition-colors"
+          className="text-default-500 hover:text-default-700 text-md flex items-center gap-1 transition-colors"
         >
+          <ArrowBackIos className="cursor-pointer" onClick={() => window.history.back()} />
           Back
         </Link>
       </div>
