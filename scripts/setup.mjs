@@ -1,9 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync, rmSync } from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { createInterface } from "node:readline/promises";
 import process from "node:process";
+import { createInterface } from "node:readline/promises";
+import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -79,7 +79,10 @@ function parseEnvFile(filePath) {
     const key = line.slice(0, equalsIndex).trim();
     let value = line.slice(equalsIndex + 1).trim();
 
-    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
       value = value.slice(1, -1);
     }
 
@@ -163,7 +166,7 @@ async function maybeResetDatabase() {
 
   removeDirIfExists(prismaMigrationsDir);
   log("⏳ Running database migrations (Local)...");
-  run(npxCmd, ["prisma", "migrate", "reset", "--force", "--skip-seed"], {
+  run(npxCmd, ["prisma", "migrate", "reset", "--force"], {
     cwd: serverDir,
     allowFailure: false,
   });
