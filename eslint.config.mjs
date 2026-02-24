@@ -6,6 +6,7 @@ import js from "@eslint/js";
 import nextPlugin from "@next/eslint-plugin-next";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
+import i18next from "eslint-plugin-i18next";
 import jsxA11Y from "eslint-plugin-jsx-a11y";
 import prettier from "eslint-plugin-prettier";
 import react from "eslint-plugin-react";
