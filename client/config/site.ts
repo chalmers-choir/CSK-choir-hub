@@ -31,6 +31,23 @@ export const siteConfig = {
     },
   ],
   navMenuItems: [],
+  bottomNavItems: [
+    {
+      labelKey: "common.home",
+      href: "/",
+      icon: "Home",
+    },
+    {
+      labelKey: "common.events",
+      href: links.events,
+      icon: "Event",
+    },
+    {
+      labelKey: "common.profile",
+      href: links.profile,
+      icon: "Person",
+    },
+  ],
   links,
   admin: {
     navItems: [
