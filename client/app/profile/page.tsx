@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Button, Form, addToast } from "@heroui/react";
 
 import { TextField } from "@/components";
-import { useAuth } from "@/contexts";
+import { useAuth, useTranslation } from "@/contexts";
 import DefaultLayout from "@/layouts/default";
 import { UsersService } from "@/lib/api-client";
 import { GroupType } from "@/types/group";
@@ -16,6 +16,7 @@ import { GroupType } from "@/types/group";
  */
 export default function ProfilePage() {
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   const [dietPref, setDietPref] = useState<string>();
 
@@ -60,13 +61,13 @@ export default function ProfilePage() {
     <DefaultLayout>
       <h1 className="mb-6 text-2xl font-semibold">Hi {user?.firstName}</h1>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <TextField label="First Name" value={user?.firstName} readOnly />
-        <TextField label="Last Name" value={user?.lastName} readOnly />
-        <TextField label="Email" value={user?.email} readOnly />
+        <TextField label={t("user.firstName")} value={user?.firstName} readOnly />
+        <TextField label={t("user.lastName")} value={user?.lastName} readOnly />
+        <TextField label={t("user.email")} value={user?.email} readOnly />
 
         <TextField
           readOnly
-          label="Stämma"
+          label={t("user.voice_group")}
           value={user?.groups
             .filter((g) => g.type == GroupType.VOICE)
             ?.map((c) => c.name)
@@ -74,7 +75,7 @@ export default function ProfilePage() {
         />
         <TextField
           readOnly
-          label="Kör(er)"
+          label={t("user.choirs")}
           value={user?.groups
             .filter((g) => g.type == GroupType.CHOIR)
             ?.map((c) => c.name)
@@ -82,28 +83,36 @@ export default function ProfilePage() {
         />
         <TextField
           readOnly
-          label="Kommittér"
+          label={t("user.committee")}
           value={
             user?.groups
               .filter((g) => g.type == GroupType.COMMITTEE)
               ?.map((c) => c.name)
-              .join(", ") || "Inga kommittéer"
+              .join(", ") || t("profile.no_committees")
           }
         />
         <TextField
           readOnly
-          label="Other"
+          label={t("user.other")}
           value={user?.groups
             .filter((g) => g.type == GroupType.OTHER)
             ?.map((c) => c.name)
             .join(", ")}
         />
-        <TextField readOnly label="Roller" value={user?.roles?.map((c) => c.name).join(", ")} />
+        <TextField
+          readOnly
+          label={t("user.roles")}
+          value={user?.roles?.map((c) => c.name).join(", ")}
+        />
         <Form onSubmit={handleSave}>
-          <p className="mb-4 mt-8 text-xl font-semibold">Redigera din profil</p>
-          <TextField label="Matpref" value={dietPref} onChange={(val) => setDietPref(val)} />
+          <p className="mb-4 mt-8 text-xl font-semibold">{t("profile.edit_profile")}</p>
+          <TextField
+            label={t("user.dietary_preferences")}
+            value={dietPref}
+            onChange={(val) => setDietPref(val)}
+          />
           <Button variant="ghost" type="submit" color="primary">
-            Save
+            {t("buttons.save")}
           </Button>
         </Form>
       </div>

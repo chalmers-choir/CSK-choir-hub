@@ -16,6 +16,12 @@
     "users": "Users",
     "groups": "Groups"
   },
+  "buttons": {
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
   "home": {
     "title_part1": "Sweden's",
     "title_part2": "finest",
@@ -35,6 +41,30 @@
     "singer": "Welcome dear singer!"
   },
   "admin": {
-    "dashboard": "Admin Dashboard"
+    "dashboard": "Admin Dashboard",
+    "users_details": "User Details",
+    "users_title": "Admin - Users",
+    "search_users": "Search users...",
+    "loading": "Loading...",
+    "name_column": "NAME",
+    "choir_column": "CHOIR",
+    "no_choir": "None"
+  },
+  "user": {
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "choirs": "Choirs",
+    "voice_group": "Voice Group",
+    "committee": "Committees",
+    "other": "Other Groups",
+    "roles": "Roles",
+    "dietary_preferences": "Dietary Preferences"
+  },
+  "profile": {
+    "no_committees": "No committees",
+    "edit_profile": "Edit Profile"
   }
 }

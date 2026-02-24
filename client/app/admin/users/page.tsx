@@ -7,11 +7,13 @@ import { useRouter } from "next/navigation";
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 
 import { TextField } from "@/components";
+import { useTranslation } from "@/contexts";
 import AdminLayout from "@/layouts/admin";
 import { User, UsersService } from "@/lib/api-client";
 import { GroupType } from "@/types/group";
 
 export default function AdminUsersPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [users, setUsers] = useState<User[] | undefined>(undefined);
   const [loading, setLoading] = useState(true);
@@ -27,9 +29,8 @@ export default function AdminUsersPage() {
   }, []);
 
   const columns = [
-    { name: "NAME", key: "name" },
-    { name: "MAIL", key: "mail" },
-    { name: "CHOIR", key: "choir" },
+    { name: t("admin.name_column"), key: "name" },
+    { name: t("admin.choir_column"), key: "choir" },
   ];
 
   const handleSort = (columnKey: string) => {
@@ -59,6 +60,25 @@ export default function AdminUsersPage() {
       compareValue = nameA.localeCompare(nameB);
     } else if (sortColumn === "mail") {
       compareValue = a.email.toLowerCase().localeCompare(b.email.toLowerCase());
+    } else if (sortColumn === "choir") {
+      const choirA = a.groups
+        ?.filter((group) => group.type === GroupType.CHOIR)
+        .map((group) => group.name)
+        .join(", ")
+        .toLowerCase();
+      const choirB = b.groups
+        ?.filter((group) => group.type === GroupType.CHOIR)
+        .map((group) => group.name)
+        .join(", ")
+        .toLowerCase();
+
+      // Users with no choir should sort together at the bottom
+      if (!choirA && !choirB) compareValue = 0;
+      else if (!choirA)
+        compareValue = 1; // No choir sorts lower
+      else if (!choirB)
+        compareValue = -1; // No choir sorts higher
+      else compareValue = choirA.localeCompare(choirB);
     }
 
     return sortDirection === "ascending" ? compareValue : -compareValue;
@@ -67,17 +87,17 @@ export default function AdminUsersPage() {
   return (
     <AdminLayout>
       <div>
-        <h1 className="text-2xl font-bold">Admin - Users</h1>
+        <h1 className="text-2xl font-bold">{t("admin.users_title")}</h1>
 
         <TextField
-          placeholder="Search users..."
+          placeholder={t("admin.search_users")}
           value={searchTerm}
           onChange={setSearchTerm}
           className="my-4 max-w-sm"
         />
 
         {loading ? (
-          <p>Loading...</p>
+          <p>{t("admin.loading")}</p>
         ) : (
           sortedUsers && (
             <Table>
@@ -104,9 +124,11 @@ export default function AdminUsersPage() {
                     className="hover:bg-default-100 cursor-pointer transition-colors"
                   >
                     <TableCell>{user.firstName + " " + user.lastName}</TableCell>
-                    <TableCell>{user.email}</TableCell>
                     <TableCell>
-                      {user.groups.find((group) => group.type == GroupType.CHOIR)?.name || "None"}
+                      {user.groups
+                        .filter((group) => group.type === GroupType.CHOIR)
+                        .map((group) => group.name)
+                        .join(", ") || t("admin.no_choir")}
                     </TableCell>
                   </TableRow>
                 ))}
