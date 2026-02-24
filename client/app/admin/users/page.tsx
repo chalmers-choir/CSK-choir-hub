@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 
 import { TextField } from "@/components";
@@ -9,6 +11,7 @@ import AdminLayout from "@/layouts/admin";
 import { User, UsersService } from "@/lib/api-client";
 
 export default function AdminUsersPage() {
+  const router = useRouter();
   const [users, setUsers] = useState<User[] | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -99,7 +102,11 @@ export default function AdminUsersPage() {
 
               <TableBody>
                 {sortedUsers.map((user) => (
-                  <TableRow key={user.id}>
+                  <TableRow
+                    key={user.id}
+                    onClick={() => router.push(`/admin/users/${user.id}`)}
+                    className="hover:bg-default-100 cursor-pointer transition-colors"
+                  >
                     <TableCell>{user.firstName + " " + user.lastName}</TableCell>
                     <TableCell>{user.email}</TableCell>
                   </TableRow>

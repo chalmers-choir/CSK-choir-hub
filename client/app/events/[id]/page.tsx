@@ -26,7 +26,7 @@ export default function IndexPage() {
 
         setEvent(res.event);
       } catch (err: any) {
-        console.log(err.message || "Failed to fetch event");
+        console.error(err.message || "Failed to fetch event");
       }
     };
 
