@@ -1,7 +1,7 @@
 import logger from "@utils/logger";
 import { NextFunction, Request, Response } from "express";
 
-export function errorHandler(err: any, req: Request, res: Response, next: NextFunction) {
+export function errorHandler(err: any, req: Request, res: Response, _next: NextFunction) {
   // Log the error for debugging
   logger.error(err);
 

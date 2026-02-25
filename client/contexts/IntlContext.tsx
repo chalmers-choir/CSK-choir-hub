@@ -60,6 +60,7 @@ export const IntlProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         messages={messages[locale]}
         timeZone={DEFAULT_TIME_ZONE}
         onError={(error) => {
+          // eslint-disable-next-line no-console
           console.error(error);
         }}
       >

@@ -38,7 +38,7 @@ export const authenticateToken = async (token: string) => {
     const user = await userModel.findById(decoded.id);
 
     return user ? { id: user.id, username: user.username, email: user.email } : null;
-  } catch (err) {
+  } catch {
     return null;
   }
 };
