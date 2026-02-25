@@ -1,6 +1,6 @@
-import { GroupType, PrismaClient } from "@prisma/generated/client";
+import { GroupType, type PrismaClient } from "@prisma/generated/client";
 
-import { Users } from "./seedUsers";
+import { type Users } from "./seedUsers";
 
 export default async function seedGroups(prisma: PrismaClient, users: Users): Promise<Groups> {
   const csk = await prisma.group.create({

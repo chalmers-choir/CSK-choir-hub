@@ -1,7 +1,7 @@
 import { userModel } from "@db";
-import { Group, Role } from "@prisma/generated/client";
+import { type Group, type Role } from "@prisma/generated/client";
 import { ForbiddenError, UnauthorizedError } from "@utils";
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 import jwt from "jsonwebtoken";
 
 interface JwtPayload {

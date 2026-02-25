@@ -1,6 +1,6 @@
 import { eventService } from "@services";
 import { BadRequestError, NotFoundError } from "@utils/errors";
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 
 // Get all events
 export const getEvents = async (req: Request, res: Response, next: NextFunction) => {

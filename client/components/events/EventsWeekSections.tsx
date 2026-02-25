@@ -1,6 +1,7 @@
-import { EventListCard } from "./EventListCard";
 import { useTranslation } from "@/contexts/IntlContext";
 import { CSKEvent } from "@/lib/apiClient";
+
+import { EventListCard } from "./EventListCard";
 
 interface EventWeekGroup {
   key: string;

@@ -2,10 +2,11 @@
 
 import React from "react";
 
+import { ThemeProvider } from "next-themes";
+
 import { HeroUIProvider } from "@heroui/system";
 import { ToastProvider } from "@heroui/toast";
 
-import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { IntlProvider } from "@/contexts/IntlContext";
 

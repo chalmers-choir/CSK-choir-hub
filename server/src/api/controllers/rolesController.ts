@@ -1,6 +1,6 @@
 import * as roleService from "@services/roleService";
 import { BadRequestError } from "@utils/errors";
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 
 // Get all roles
 export const getRoles = async (req: Request, res: Response, next: NextFunction) => {

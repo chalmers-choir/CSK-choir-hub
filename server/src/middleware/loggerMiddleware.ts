@@ -1,5 +1,5 @@
 import logger from "@utils/logger";
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 
 type LogLevel = 1 | 2 | 3 | 4;
 

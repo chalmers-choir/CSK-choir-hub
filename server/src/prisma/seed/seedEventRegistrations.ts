@@ -1,6 +1,7 @@
-import { PrismaClient } from "@prisma/generated/client";
-import { Events } from "./seedEvents";
-import { Users } from "./seedUsers";
+import { type PrismaClient } from "@prisma/generated/client";
+
+import { type Events } from "./seedEvents";
+import { type Users } from "./seedUsers";
 
 export default async function seedEventRegistration(
   prisma: PrismaClient,

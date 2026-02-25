@@ -1,6 +1,6 @@
 import { prisma } from "@db";
 import type { Choir, User, Voice } from "@prisma/generated/client";
-import { RegisterInput } from "@services/userService";
+import { type RegisterInput } from "@services/userService";
 
 // Creates a new user with the provided data.
 export const createUser = async (userData: RegisterInput) => {

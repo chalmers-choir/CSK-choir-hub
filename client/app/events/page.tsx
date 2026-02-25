@@ -12,9 +12,11 @@ import { CSKEvent, EventsService } from "@/lib/apiClient";
 const getIsoWeekNumber = (date: Date) => {
   const tempDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
   const dayNumber = tempDate.getUTCDay() || 7;
+
   tempDate.setUTCDate(tempDate.getUTCDate() + 4 - dayNumber);
 
   const yearStart = new Date(Date.UTC(tempDate.getUTCFullYear(), 0, 1));
+
   return Math.ceil(((tempDate.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
 };
 
@@ -25,10 +27,12 @@ const getWeekMeta = (isoDate: string) => {
   const startOfWeek = new Date(date);
   const day = startOfWeek.getDay();
   const diffToMonday = day === 0 ? -6 : 1 - day;
+
   startOfWeek.setDate(startOfWeek.getDate() + diffToMonday);
   startOfWeek.setHours(0, 0, 0, 0);
 
   const endOfWeek = new Date(startOfWeek);
+
   endOfWeek.setDate(startOfWeek.getDate() + 6);
   endOfWeek.setHours(23, 59, 59, 999);
 
