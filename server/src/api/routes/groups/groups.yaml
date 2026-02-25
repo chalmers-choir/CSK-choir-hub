@@ -11,7 +11,7 @@ paths:
           description: Filter groups by type
           required: false
           schema:
-          $ref: "../../docs/openapi.yaml#/components/schemas/GroupType"
+            $ref: "../../docs/openapi.yaml#/components/schemas/GroupType"
       responses:
         "200":
           description: Groups fetched
