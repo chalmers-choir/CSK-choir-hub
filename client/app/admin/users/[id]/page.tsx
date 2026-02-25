@@ -10,7 +10,6 @@ import { ArrowBackIosNew } from "@mui/icons-material";
 
 import { TextField } from "@/components";
 import { useTranslation } from "@/contexts/IntlContext";
-import DefaultLayout from "@/layouts/default";
 import { ApiError, User, UsersService } from "@/lib/api-client";
 
 /**
@@ -97,7 +96,7 @@ export default function UserDetailPage() {
   };
 
   return (
-    <DefaultLayout>
+    <>
       <div className="flex items-center gap-2">
         <Link
           href="/admin/users"
@@ -132,6 +131,6 @@ export default function UserDetailPage() {
       ) : (
         <p>Loading user details...</p>
       )}
-    </DefaultLayout>
+    </>
   );
 }

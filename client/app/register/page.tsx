@@ -14,7 +14,6 @@ import clsx from "clsx";
 import AuthLoading from "@/components/AuthLoading";
 import { siteConfig } from "@/config/site";
 import { useAuth } from "@/contexts/AuthContext";
-import DefaultLayout from "@/layouts/default";
 
 export default function RegisterPage() {
   const { register, isAuthenticated, loading } = useAuth();
@@ -49,75 +48,71 @@ export default function RegisterPage() {
     }
   };
 
-  return (
-    <DefaultLayout>
-      {loading ? (
-        <AuthLoading />
-      ) : (
-        <Form
-          className="mx-auto mt-20 flex max-w-sm flex-col items-center gap-2"
-          onSubmit={handleSubmit}
-        >
-          <h2 className="w-full text-center text-lg font-semibold">Register</h2>
-          <Input
-            required
-            placeholder="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+  return loading ? (
+    <AuthLoading />
+  ) : (
+    <Form
+      className="mx-auto mt-20 flex max-w-sm flex-col items-center gap-2"
+      onSubmit={handleSubmit}
+    >
+      <h2 className="w-full text-center text-lg font-semibold">Register</h2>
+      <Input
+        required
+        placeholder="Email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
-          <Input
-            required
-            placeholder="Username"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+      <Input
+        required
+        placeholder="Username"
+        type="text"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
 
-          <Input
-            required
-            placeholder="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+      <Input
+        required
+        placeholder="Password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-          <Input
-            required
-            placeholder="First Name"
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
+      <Input
+        required
+        placeholder="First Name"
+        type="text"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+      />
 
-          <Input
-            required
-            placeholder="Last Name"
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
+      <Input
+        required
+        placeholder="Last Name"
+        type="text"
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
+      />
 
-          {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-red-500">{error}</p>}
 
-          <Button
-            className={clsx(
-              buttonStyles({ color: "primary", radius: "md", variant: "shadow" }),
-              "px-8",
-            )}
-            type="submit"
-          >
-            Register
-          </Button>
-          <Link
-            className="mt-4 inline-block w-full text-center text-sm text-blue-500"
-            href={siteConfig.links.login}
-          >
-            Already have an account? Login
-          </Link>
-        </Form>
-      )}
-    </DefaultLayout>
+      <Button
+        className={clsx(
+          buttonStyles({ color: "primary", radius: "md", variant: "shadow" }),
+          "px-8",
+        )}
+        type="submit"
+      >
+        Register
+      </Button>
+      <Link
+        className="mt-4 inline-block w-full text-center text-sm text-blue-500"
+        href={siteConfig.links.login}
+      >
+        Already have an account? Login
+      </Link>
+    </Form>
   );
 }
