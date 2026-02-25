@@ -13,6 +13,29 @@ const adminLinks = {
   users: "/admin/users",
 };
 
+/**
+ * Get the API base URL dynamically based on the current environment.
+ * In the browser, it uses the current hostname with port 5050.
+ * On the server (SSR), it uses the environment variable or localhost.
+ */
+export function getApiBaseUrl(): string {
+  // If API_BASE_URL is explicitly set, use it
+  if (process.env.API_BASE_URL) {
+    return process.env.API_BASE_URL;
+  }
+
+  // In the browser, use the current hostname with port 5050
+  if (typeof window !== "undefined") {
+    const protocol = window.location.protocol;
+    const hostname = window.location.hostname;
+
+    return `${protocol}//${hostname}:5050/api`;
+  }
+
+  // Fallback for server-side rendering
+  return "http://localhost:5050/api";
+}
+
 export const siteConfig = {
   name: "CSK Medlemsportal",
   description: "En medlemsportal for Chalmers Sångkör",
@@ -45,6 +68,4 @@ export const siteConfig = {
     ],
     adminLinks,
   },
-  // Default to the same port as the generated OpenAPI spec (5050) so local auth works out of the box.
-  apiBaseUrl: process.env.API_BASE_URL || "http://localhost:5050/api",
 };
