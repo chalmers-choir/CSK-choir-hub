@@ -11,8 +11,7 @@ paths:
           description: Filter groups by type
           required: false
           schema:
-            type: string
-            enum: [VOICE, CHOIR, COMMITTEE, OTHER, BOARD, CONDUCTORS]
+          $ref: "../../docs/openapi.yaml#/components/schemas/GroupType"
       responses:
         "200":
           description: Groups fetched
