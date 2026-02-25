@@ -1,14 +1,17 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@heroui/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { Checkbox } from "@heroui/checkbox";
 import { addToast } from "@heroui/toast";
-
 import { IoClose } from "react-icons/io5";
-import { EventUserEntry, EventUserListAccordion } from "./EventUserListAccordion";
+
 import { useAuth } from "@/contexts/AuthContext";
 import { CSKEvent, CSKEventType, EventsService } from "@/lib/api-client";
+
+import { EventUserEntry, EventUserListAccordion } from "./EventUserListAccordion";
 
 const formatDate = (isoString?: string) => {
   if (!isoString) return "N/A";
