@@ -1,5 +1,3 @@
-import DefaultLayout from "@/layouts/default";
-
 export default function AdminPage() {
-  return <DefaultLayout>Admin page</DefaultLayout>;
+  return <h1 className="text-2xl font-bold">Admin page</h1>;
 }

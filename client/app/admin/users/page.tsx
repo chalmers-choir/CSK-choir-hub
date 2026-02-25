@@ -8,7 +8,6 @@ import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from 
 
 import { TextField } from "@/components";
 import { useTranslation } from "@/contexts";
-import DefaultLayout from "@/layouts/default";
 import { User, UsersService } from "@/lib/api-client";
 import { GroupType } from "@/types/group";
 
@@ -85,7 +84,7 @@ export default function AdminUsersPage() {
   });
 
   return (
-    <DefaultLayout>
+    <>
       <h1 className="text-2xl font-bold">{t("admin.users_title")}</h1>
 
       <TextField
@@ -135,6 +134,6 @@ export default function AdminUsersPage() {
           </Table>
         )
       )}
-    </DefaultLayout>
+    </>
   );
 }
