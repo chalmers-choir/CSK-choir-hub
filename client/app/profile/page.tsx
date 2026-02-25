@@ -7,7 +7,7 @@ import { Button, Form, addToast } from "@heroui/react";
 import { TextField } from "@/components";
 import { useAuth, useTranslation } from "@/contexts";
 import DefaultLayout from "@/layouts/default";
-import { UsersService } from "@/lib/api-client";
+import { ApiError, UsersService } from "@/lib/api-client";
 import { GroupType } from "@/types/group";
 
 /**
@@ -48,9 +48,18 @@ export default function ProfilePage() {
       });
     } catch (error) {
       console.error("Error updating profile:", error);
+
+      let errorMessage = "Failed to update profile. Please try again.";
+
+      if (error instanceof ApiError && error.body?.message) {
+        errorMessage = error.body.message;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
       addToast({
         title: "Error",
-        description: "Failed to update profile. Please try again.",
+        description: errorMessage,
         color: "danger",
         timeout: 2000,
       });

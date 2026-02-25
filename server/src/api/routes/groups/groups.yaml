@@ -12,7 +12,7 @@ paths:
           required: false
           schema:
             type: string
-            enum: [VOICE, CHOIR, COMMITTEE, OTHER]
+            enum: [VOICE, CHOIR, COMMITTEE, OTHER, BOARD, CONDUCTORS]
       responses:
         "200":
           description: Groups fetched
@@ -43,7 +43,7 @@ paths:
                   type: string
                 type:
                   type: string
-                  enum: [VOICE, CHOIR, COMMITTEE, OTHER]
+                  enum: [VOICE, CHOIR, COMMITTEE, OTHER, BOARD, CONDUCTORS]
                 description:
                   type: string
               required:

@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from 
 
 import { TextField } from "@/components";
 import { useTranslation } from "@/contexts";
-import AdminLayout from "@/layouts/admin";
+import DefaultLayout from "@/layouts/default";
 import { User, UsersService } from "@/lib/api-client";
 import { GroupType } from "@/types/group";
 
@@ -85,58 +85,56 @@ export default function AdminUsersPage() {
   });
 
   return (
-    <AdminLayout>
-      <div>
-        <h1 className="text-2xl font-bold">{t("admin.users_title")}</h1>
+    <DefaultLayout>
+      <h1 className="text-2xl font-bold">{t("admin.users_title")}</h1>
 
-        <TextField
-          placeholder={t("admin.search_users")}
-          value={searchTerm}
-          onChange={setSearchTerm}
-          className="my-4 max-w-sm"
-        />
+      <TextField
+        placeholder={t("admin.search_users")}
+        value={searchTerm}
+        onChange={setSearchTerm}
+        className="my-4 max-w-sm"
+      />
 
-        {loading ? (
-          <p>{t("admin.loading")}</p>
-        ) : (
-          sortedUsers && (
-            <Table>
-              <TableHeader>
-                {columns.map((column) => (
-                  <TableColumn
-                    key={column.key}
-                    className="cursor-pointer"
-                    onClick={() => handleSort(column.key)}
-                  >
-                    {column.name}
-                    {sortColumn === column.key && (
-                      <span className="ml-2">{sortDirection === "ascending" ? "↑" : "↓"}</span>
-                    )}
-                  </TableColumn>
-                ))}
-              </TableHeader>
+      {loading ? (
+        <p>{t("admin.loading")}</p>
+      ) : (
+        sortedUsers && (
+          <Table>
+            <TableHeader>
+              {columns.map((column) => (
+                <TableColumn
+                  key={column.key}
+                  className="cursor-pointer"
+                  onClick={() => handleSort(column.key)}
+                >
+                  {column.name}
+                  {sortColumn === column.key && (
+                    <span className="ml-2">{sortDirection === "ascending" ? "↑" : "↓"}</span>
+                  )}
+                </TableColumn>
+              ))}
+            </TableHeader>
 
-              <TableBody>
-                {sortedUsers.map((user) => (
-                  <TableRow
-                    key={user.id}
-                    onClick={() => router.push(`/admin/users/${user.id}`)}
-                    className="hover:bg-default-100 cursor-pointer transition-colors"
-                  >
-                    <TableCell>{user.firstName + " " + user.lastName}</TableCell>
-                    <TableCell>
-                      {user.groups
-                        .filter((group) => group.type === GroupType.CHOIR)
-                        .map((group) => group.name)
-                        .join(", ") || t("admin.no_choir")}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )
-        )}
-      </div>
-    </AdminLayout>
+            <TableBody>
+              {sortedUsers.map((user) => (
+                <TableRow
+                  key={user.id}
+                  onClick={() => router.push(`/admin/users/${user.id}`)}
+                  className="hover:bg-default-100 cursor-pointer transition-colors"
+                >
+                  <TableCell>{user.firstName + " " + user.lastName}</TableCell>
+                  <TableCell>
+                    {user.groups
+                      .filter((group) => group.type === GroupType.CHOIR)
+                      .map((group) => group.name)
+                      .join(", ") || t("admin.no_choir")}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )
+      )}
+    </DefaultLayout>
   );
 }

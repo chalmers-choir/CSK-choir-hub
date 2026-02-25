@@ -19,9 +19,6 @@ export async function getAllGroups() {
 export async function getGroupsByType(type: GroupType) {
   const groups = await groupModel.findBy({ type });
 
-  if (!groups || groups.length === 0)
-    throw new NotFoundError("No groups found for the specified type");
-
   return groups;
 }
 

@@ -47,16 +47,12 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
   const { firstName, lastName, email, dietaryPreferences, groupIds } = req.body;
 
   try {
-    const updatedUser = await userService.updateUser(
-      userId,
-      {
-        firstName,
-        lastName,
-        email,
-        dietaryPreferences,
-      },
-      groupIds,
-    );
+    const updatedUser = await userService.updateUser(userId, {
+      firstName,
+      lastName,
+      email,
+      dietaryPreferences,
+    });
 
     return res.json({ user: updatedUser });
   } catch (error) {

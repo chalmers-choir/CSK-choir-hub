@@ -5,14 +5,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-import { Button, Select, SelectItem, addToast } from "@heroui/react";
+import { Button, addToast } from "@heroui/react";
 import { ArrowBackIosNew } from "@mui/icons-material";
 
 import { TextField } from "@/components";
 import { useTranslation } from "@/contexts/IntlContext";
-import AdminLayout from "@/layouts/admin";
-import { GroupSummary, GroupsService, User, UsersService } from "@/lib/api-client";
-import { GroupType } from "@/types/group";
+import DefaultLayout from "@/layouts/default";
+import { ApiError, User, UsersService } from "@/lib/api-client";
 
 /**
  * Admin page for viewing and editing user details.
@@ -24,8 +23,6 @@ export default function UserDetailPage() {
   const id = params.id;
 
   const [user, setUser] = useState<User | undefined>(undefined);
-  const [currentChoirs, setCurrentChoirs] = useState<Set<string>>(new Set());
-  const [choirs, setChoirs] = useState<GroupSummary[]>([]);
 
   useEffect(() => {
     if (!id) return; // wait until id is available
@@ -38,35 +35,18 @@ export default function UserDetailPage() {
         const res = await UsersService.getUser({ userId });
 
         setUser(res.user);
-        if (res.user && res.user.groups) {
-          const choirIds = res.user.groups
-            .filter((g) => g.type === GroupType.CHOIR)
-            .map((g) => String(g.id));
+      } catch (error) {
+        let errorMessage = "Failed to fetch user details. Please try again.";
 
-          setCurrentChoirs(new Set(choirIds));
+        if (error instanceof ApiError && error.body?.message) {
+          errorMessage = error.body.message;
+        } else if (error instanceof Error) {
+          errorMessage = error.message;
         }
-      } catch (error) {
-        addToast({
-          title: "Error",
-          description:
-            "Failed to fetch user details. Please try again." +
-            (error instanceof Error ? ` (${error.message})` : ""),
-          color: "danger",
-          timeout: 2000,
-        });
-      }
-    };
-    const fetchChoirs = async () => {
-      try {
-        const res = await GroupsService.getGroups({ type: GroupType.CHOIR });
 
-        setChoirs(res.groups ?? []);
-      } catch (error) {
         addToast({
           title: "Error",
-          description:
-            "Failed to fetch choirs. Please try again." +
-            (error instanceof Error ? ` (${error.message})` : ""),
+          description: errorMessage,
           color: "danger",
           timeout: 2000,
         });
@@ -74,7 +54,6 @@ export default function UserDetailPage() {
     };
 
     fetchUser();
-    fetchChoirs();
   }, [id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,7 +69,6 @@ export default function UserDetailPage() {
           lastName: user.lastName,
           email: user.email,
           dietaryPreferences: user.dietaryPreferences,
-          groupIds: Array.from(currentChoirs).map((id) => parseInt(id, 10)),
         },
       });
 
@@ -101,11 +79,17 @@ export default function UserDetailPage() {
         timeout: 2000,
       });
     } catch (error) {
+      let errorMessage = "Failed to update user. Please try again.";
+
+      if (error instanceof ApiError && error.body?.message) {
+        errorMessage = error.body.message;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
       addToast({
         title: "Error",
-        description:
-          "Failed to update user. Please try again." +
-          (error instanceof Error ? ` (${error.message})` : ""),
+        description: errorMessage,
         color: "danger",
         timeout: 2000,
       });
@@ -113,7 +97,7 @@ export default function UserDetailPage() {
   };
 
   return (
-    <AdminLayout>
+    <DefaultLayout>
       <div className="flex items-center gap-2">
         <Link
           href="/admin/users"
@@ -141,18 +125,6 @@ export default function UserDetailPage() {
             value={user.email}
             onChange={(val) => setUser((prev) => (prev ? { ...prev, email: val } : undefined))}
           />
-          <Select
-            selectionMode="multiple"
-            label={t("user.choirs")}
-            selectedKeys={currentChoirs}
-            onSelectionChange={(keys) => {
-              setCurrentChoirs(new Set(Array.from(keys).map(String)));
-            }}
-          >
-            {choirs.map((choir) => (
-              <SelectItem key={choir.id}>{choir.name}</SelectItem>
-            ))}
-          </Select>
           <Button type="submit" color="primary">
             {t("buttons.save")}
           </Button>
@@ -160,6 +132,6 @@ export default function UserDetailPage() {
       ) : (
         <p>Loading user details...</p>
       )}
-    </AdminLayout>
+    </DefaultLayout>
   );
 }
