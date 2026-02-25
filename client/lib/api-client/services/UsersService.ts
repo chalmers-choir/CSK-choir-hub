@@ -13,12 +13,34 @@ export class UsersService {
      * @returns any Users fetched
      * @throws ApiError
      */
-    public static getUsers(): CancelablePromise<{
+    public static getUsers({
+        includeRoles = false,
+        includeGroups = false,
+        groupId,
+    }: {
+        /**
+         * Include user roles in the response
+         */
+        includeRoles?: boolean,
+        /**
+         * Include user groups in the response
+         */
+        includeGroups?: boolean,
+        /**
+         * Filter users by group ID
+         */
+        groupId?: number,
+    }): CancelablePromise<{
         users?: Array<User>;
     }> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/users',
+            query: {
+                'includeRoles': includeRoles,
+                'includeGroups': includeGroups,
+                'groupId': groupId,
+            },
         });
     }
     /**

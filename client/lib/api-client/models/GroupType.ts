@@ -2,4 +2,4 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type GroupType = 'VOICE' | 'CHOIR' | 'COMMITTEE' | 'OTHER';
+export type GroupType = 'VOICE' | 'CHOIR' | 'COMMITTEE' | 'OTHER' | 'CONDUCTORS' | 'BOARD';

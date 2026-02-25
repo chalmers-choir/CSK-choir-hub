@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Group } from '../models/Group';
+import type { GroupType } from '../models/GroupType';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
@@ -12,12 +13,22 @@ export class GroupsService {
      * @returns any Groups fetched
      * @throws ApiError
      */
-    public static getGroups(): CancelablePromise<{
+    public static getGroups({
+        type,
+    }: {
+        /**
+         * Filter groups by type
+         */
+        type?: GroupType,
+    }): CancelablePromise<{
         groups?: Array<Group>;
     }> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/groups',
+            query: {
+                'type': type,
+            },
         });
     }
     /**
@@ -34,7 +45,7 @@ export class GroupsService {
          */
         requestBody: {
             name: string;
-            type: 'VOICE' | 'CHOIR' | 'COMMITTEE' | 'OTHER';
+            type: GroupType;
             description?: string;
         },
     }): CancelablePromise<{

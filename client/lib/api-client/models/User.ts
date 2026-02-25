@@ -15,5 +15,6 @@ export type User = {
     roles: Array<RoleSummary>;
     knownSongs: Array<KnownSong>;
     dietaryPreferences?: string;
+    webRole: 'USER' | 'ADMIN';
 };
 
