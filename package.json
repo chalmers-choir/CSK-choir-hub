@@ -5,7 +5,11 @@
   "main": "server/dist/index.js",
   "scripts": {
     "db:up": "cd server && docker compose up -d db",
-    "setup": "node scripts/setup.mjs",
+    "db:reset": "node scripts/db-reset.mjs",
+    "setup": "npm run setup:dev",
+    "setup:dev": "node scripts/setup-dev.mjs",
+    "setup:prod": "node scripts/setup-prod.mjs",
+    "check": "node scripts/check.mjs",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "build": "npm run server:build && npm run client:build",
     "prod": "concurrently \"npm run server:prod\" \"npm run client:prod\"",
