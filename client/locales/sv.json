@@ -13,6 +13,7 @@
     "welcome_back": "Välkommen tillbaka, {name}!",
     "no_account": "Inget konto? Registrera",
     "create_new_event": "Skapa nytt evenemang",
+    "week": "Vecka",
     "users": "Användare",
     "groups": "Grupper"
   },
@@ -29,7 +30,12 @@
     "subtitle": "Imagine att Klok var en app."
   },
   "events": {
-    "title": "Evenemang!"
+    "title": "Evenemang",
+    "subtitle": "Översikt över kommande rep, konserter och gig.",
+    "create_event": "Skapa evenemang",
+    "attendance_required": "Närvaro krävs",
+    "registration_required": "Anmälan krävs",
+    "no_events": "Inga evenemang att visa."
   },
   "settings": {
     "title": "Inställningar",
