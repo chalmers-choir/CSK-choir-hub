@@ -13,6 +13,7 @@ export interface TextFieldProps {
   multiline?: boolean;
   rows?: number;
   readOnly?: boolean;
+  className?: string;
 }
 
 export const TextField = ({ onChange, readOnly, ...props }: TextFieldProps) =>

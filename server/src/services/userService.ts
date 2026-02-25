@@ -59,8 +59,11 @@ export async function deleteUser(userId: number): Promise<void> {
  * @param {object} filters - Filter options: group.
  * @returns {Promise<any[]>} List of users.
  */
-export async function getUsers(filters?: { groupId?: number }) {
-  return userModel.getUsers(filters);
+export async function getUsers(
+  filters?: { groupId?: number },
+  include?: { roles?: boolean; groups?: boolean },
+) {
+  return userModel.getUsers(filters, include);
 }
 
 export async function getUser(userId: number) {
@@ -99,6 +102,14 @@ export const getUserFromToken = async (token: string) => {
   }
 };
 
+/**
+ * Update user information and group memberships.
+ * @param {number} userId - The user ID.
+ * @param {Partial<User>} updateData - The user fields to update.
+ * @param {number[]} [groupIds] - Optional array of group IDs to set for the user.
+ * @returns {Promise<User>} The updated user.
+ * @throws {Error} If email is already in use by another account.
+ */
 export const updateUser = async (userId: number, updateData: Partial<User>) => {
   const { email } = updateData;
 
@@ -110,7 +121,10 @@ export const updateUser = async (userId: number, updateData: Partial<User>) => {
     }
   }
 
-  return userModel.updateUser(userId, updateData);
+  // Update basic user fields
+  const updatedUser = await userModel.updateUser(userId, updateData);
+
+  return updatedUser;
 };
 
 /**

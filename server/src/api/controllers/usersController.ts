@@ -5,7 +5,17 @@ import { NextFunction, Request, Response } from "express";
 // Get all users
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = await userService.getUsers();
+    // Parse include query parameters
+    const includeRoles = req.query.includeRoles === "true";
+    const includeGroups = req.query.includeGroups === "true";
+    const include =
+      includeRoles || includeGroups ? { roles: includeRoles, groups: includeGroups } : undefined;
+
+    // Parse filter parameters
+    const groupId = req.query.groupId ? parseInt(req.query.groupId as string, 10) : undefined;
+    const filters = groupId ? { groupId } : undefined;
+
+    const users = await userService.getUsers(filters, include);
 
     return res.json({ users });
   } catch (error) {
@@ -28,12 +38,13 @@ export const getUserWithId = async (req: Request, res: Response, next: NextFunct
   }
 };
 
+// Update a user by ID
 export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
   const userId = parseInt(req.params.userId, 10);
 
   if (isNaN(userId)) return next(new BadRequestError("Invalid user ID"));
 
-  const { firstName, lastName, email, dietaryPreferences } = req.body;
+  const { firstName, lastName, email, dietaryPreferences, groupIds } = req.body;
 
   try {
     const updatedUser = await userService.updateUser(userId, {

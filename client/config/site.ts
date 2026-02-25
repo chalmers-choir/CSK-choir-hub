@@ -8,6 +8,11 @@ const links = {
   events: "/events",
 };
 
+const adminLinks = {
+  dashboard: "/admin",
+  users: "/admin/users",
+};
+
 export const siteConfig = {
   name: "CSK Medlemsportal",
   description: "En medlemsportal for Chalmers Sångkör",
@@ -27,6 +32,19 @@ export const siteConfig = {
   ],
   navMenuItems: [],
   links,
+  admin: {
+    navItems: [
+      {
+        labelKey: "admin.dashboard",
+        href: adminLinks.dashboard,
+      },
+      {
+        labelKey: "common.users",
+        href: adminLinks.users,
+      },
+    ],
+    adminLinks,
+  },
   // Default to the same port as the generated OpenAPI spec (5050) so local auth works out of the box.
   apiBaseUrl: process.env.API_BASE_URL || "http://localhost:5050/api",
 };

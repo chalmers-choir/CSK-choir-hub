@@ -12,7 +12,15 @@
     "password": "Passwort",
     "welcome_back": "Willkommen zurück, {name}!",
     "no_account": "Kein Konto? Registrieren",
-    "create_new_event": "Neue Veranstaltung erstellen"
+    "create_new_event": "Neue Veranstaltung erstellen",
+    "users": "Benutzer",
+    "groups": "Gruppen"
+  },
+  "buttons": {
+    "back": "Zurück",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen"
   },
   "home": {
     "title_part1": "Schwedens",
@@ -23,7 +31,6 @@
   "events": {
     "title": "Veranstaltungen!"
   },
-
   "settings": {
     "title": "Einstellungen",
     "change_lang": "Sprache ändern"
@@ -32,5 +39,32 @@
     "title": "Willkommen im Chor-Hub!",
     "subtitle": "Ihr One-Stop-Portal für alles rund um den Chalmers Sångkör.",
     "singer": "Willkommen, lieber Sänger!"
+  },
+  "admin": {
+    "dashboard": "Admin-Dashboard",
+    "users_details": "Benutzerdetails",
+    "users_title": "Admin - Benutzer",
+    "search_users": "Benutzer suchen...",
+    "loading": "Lädt...",
+    "name_column": "NAME",
+    "choir_column": "CHOR",
+    "no_choir": "Keine"
+  },
+  "user": {
+    "first_name": "Vorname",
+    "last_name": "Nachname",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "email": "E-Mail",
+    "choirs": "Chöre",
+    "voice_group": "Stimmgruppe",
+    "committee": "Ausschüsse",
+    "other": "Andere Gruppen",
+    "roles": "Rollen",
+    "dietary_preferences": "Ernährungspräferenzen"
+  },
+  "profile": {
+    "no_committees": "Keine Ausschüsse",
+    "edit_profile": "Profil bearbeiten"
   }
 }

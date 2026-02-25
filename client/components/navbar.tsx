@@ -22,7 +22,7 @@ import { useTranslation } from "@/contexts/IntlContext";
 
 export const Navbar = () => {
   const { t } = useTranslation();
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, logout, user, isAdmin } = useAuth();
 
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
@@ -47,6 +47,21 @@ export const Navbar = () => {
               </NextLink>
             </NavbarItem>
           ))}
+          {isAdmin &&
+            siteConfig.admin.navItems.map((item) => (
+              <NavbarItem key={item.href}>
+                <NextLink
+                  className={clsx(
+                    linkStyles({ color: "foreground" }),
+                    "data-[active=true]:text-primary data-[active=true]:font-medium",
+                  )}
+                  color="foreground"
+                  href={item.href}
+                >
+                  {t(item.labelKey)}
+                </NextLink>
+              </NavbarItem>
+            ))}
         </div>
       </NavbarContent>
 

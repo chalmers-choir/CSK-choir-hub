@@ -12,7 +12,15 @@
     "password": "Lösenord",
     "welcome_back": "Välkommen tillbaka, {name}!",
     "no_account": "Inget konto? Registrera",
-    "create_new_event": "Skapa nytt evenemang"
+    "create_new_event": "Skapa nytt evenemang",
+    "users": "Användare",
+    "groups": "Grupper"
+  },
+  "buttons": {
+    "back": "Tillbaka",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "delete": "Radera"
   },
   "home": {
     "title_part1": "Körsveriges",
@@ -23,7 +31,6 @@
   "events": {
     "title": "Evenemang!"
   },
-
   "settings": {
     "title": "Inställningar",
     "change_lang": "Byt språk"
@@ -32,5 +39,32 @@
     "title": "Välkommen till KörHubben!",
     "subtitle": "Din one-stop portal för allt som rör Chalmers Sångkör.",
     "singer": "Välkommen kära sångare!"
+  },
+  "admin": {
+    "dashboard": "Admin Dashboard",
+    "users_details": "Användardetaljer",
+    "users_title": "Admin - Användare",
+    "search_users": "Sök användare...",
+    "loading": "Laddar...",
+    "name_column": "NAMN",
+    "choir_column": "KÖR",
+    "no_choir": "Ingen"
+  },
+  "user": {
+    "first_name": "Förnamn",
+    "last_name": "Efternamn",
+    "firstName": "Förnamn",
+    "lastName": "Efternamn",
+    "email": "E-post",
+    "choirs": "Körer",
+    "voice_group": "Stämma",
+    "committee": "Kommittéer",
+    "other": "Andra grupper",
+    "roles": "Roller",
+    "dietary_preferences": "Kostpreferenser"
+  },
+  "profile": {
+    "no_committees": "Inga kommittéer",
+    "edit_profile": "Redigera profil"
   }
 }

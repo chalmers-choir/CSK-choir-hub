@@ -56,6 +56,20 @@ export async function findAll() {
 }
 
 /**
+ * Finds groups matching the given filters.
+ * @param filters - The filters to apply (type and/or name).
+ * @returns An array of groups matching the filters.
+ */
+export async function findBy(filters: { type?: GroupType; name?: string }) {
+  const where: any = {};
+
+  if (filters.type) where.type = filters.type;
+  if (filters.name) where.name = { contains: filters.name, mode: "insensitive" };
+
+  return await prisma.group.findMany({ where });
+}
+
+/**
  * Lists members of a group.
  * @param groupId - The ID of the group.
  * @returns An array of users who are members of the group.
