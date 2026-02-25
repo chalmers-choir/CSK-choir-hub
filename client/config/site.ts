@@ -6,6 +6,7 @@ const links = {
   profile: "/profile",
   settings: "/settings",
   events: "/events",
+  songs: "/songs",
 };
 
 const adminLinks = {
@@ -33,19 +34,29 @@ export const siteConfig = {
   navMenuItems: [],
   bottomNavItems: [
     {
-      labelKey: "common.home",
-      href: "/",
-      icon: "Home",
-    },
-    {
       labelKey: "common.events",
       href: links.events,
-      icon: "Event",
+      icon: "event",
+    },
+    {
+      labelKey: "common.songs",
+      href: links.songs,
+      icon: "music_note",
+    },
+    {
+      labelKey: "common.home",
+      href: "/",
+      icon: "home",
+    },
+    {
+      labelKey: "common.settings",
+      href: links.settings,
+      icon: "settings",
     },
     {
       labelKey: "common.profile",
       href: links.profile,
-      icon: "Person",
+      icon: "person",
     },
   ],
   links,
