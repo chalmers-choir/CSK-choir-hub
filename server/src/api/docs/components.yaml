@@ -125,7 +125,7 @@ schemas:
 
   GroupType:
     type: string
-    enum: [VOICE, CHOIR, COMMITTEE, OTHER]
+    enum: [VOICE, CHOIR, COMMITTEE, OTHER, CONDUCTORS, BOARD]
     example: VOICE
 
   GroupSummary:

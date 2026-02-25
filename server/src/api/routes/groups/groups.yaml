@@ -41,8 +41,7 @@ paths:
                 name:
                   type: string
                 type:
-                  type: string
-                  enum: [VOICE, CHOIR, COMMITTEE, OTHER, BOARD, CONDUCTORS]
+                  $ref: "../../docs/openapi.yaml#/components/schemas/GroupType"
                 description:
                   type: string
               required:
