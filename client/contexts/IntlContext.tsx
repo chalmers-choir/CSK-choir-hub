@@ -29,6 +29,7 @@ const messages: Record<Locale, Messages> = {
 };
 
 const LOCALE_STORAGE_KEY = "preferred-locale";
+const DEFAULT_TIME_ZONE = "Europe/Stockholm";
 
 export const IntlProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [locale, setLocaleState] = useState<Locale>("sv"); // Default to Swedish
@@ -57,6 +58,7 @@ export const IntlProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         getMessageFallback={({ key }) => key}
         locale={locale}
         messages={messages[locale]}
+        timeZone={DEFAULT_TIME_ZONE}
         onError={(error) => {
           console.error(error);
         }}
