@@ -1,6 +1,11 @@
+"use client";
+
+import { useLocale } from "next-intl";
+import { useRouter } from "next/navigation";
+
 import { Button, ButtonGroup } from "@heroui/react";
 
-import { useIntl } from "@/contexts/IntlContext";
+import { DEFAULT_LOCALE, LOCALE_COOKIE_KEY, type Locale, isLocale } from "@/contexts/intl-config";
 
 const languages = [
   { code: "sv", label: "SWE 🇸🇪" },
@@ -9,7 +14,14 @@ const languages = [
 ] as const;
 
 export const LanguageSwitcher = () => {
-  const { locale, setLocale } = useIntl();
+  const router = useRouter();
+  const activeLocale = useLocale();
+  const locale = isLocale(activeLocale) ? activeLocale : DEFAULT_LOCALE;
+
+  const setLocale = (nextLocale: Locale) => {
+    document.cookie = `${LOCALE_COOKIE_KEY}=${nextLocale}; Path=/; Max-Age=31536000; SameSite=Lax`;
+    router.refresh();
+  };
 
   return (
     <ButtonGroup aria-label="Language selection" variant="flat">
