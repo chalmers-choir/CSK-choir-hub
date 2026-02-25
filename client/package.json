@@ -3,12 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently -k -n api,web \"npm run api:watch\" \"npm run dev:app\"",
-    "dev:app": "next dev --turbopack",
+    "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "next start",
-    "api:generate": "openapi --input ../server/src/api/docs/openapi.yaml --output ./lib/api-client --client fetch --useOptions --useUnionTypes",
-    "api:watch": "chokidar \"../server/src/api/**/*.yaml\" -c \"npm run api:generate\""
+    "start": "next start"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -35,10 +32,7 @@
     "@types/node": "20.5.7",
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
-    "chokidar-cli": "^3.0.0",
-    "concurrently": "^9.2.1",
     "globals": "16.0.0",
-    "openapi-typescript-codegen": "^0.30.0",
     "postcss": "8.5.6",
     "tailwind-variants": "3.1.1",
     "tailwindcss": "4.1.11",

@@ -5,7 +5,10 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "dev": "nodemon",
+    "dev": "concurrently -k -n api,server \"npm run api:watch\" \"npm run dev:server\"",
+    "dev:server": "nodemon",
+    "api:generate": "openapi --input ./src/api/docs/openapi.yaml --output ../client/lib/api-client --client fetch --useOptions --useUnionTypes",
+    "api:watch": "chokidar \"src/api/**/*.yaml\" -c \"npm run api:generate\"",
     "build": "tsc && tsc-alias",
     "setup-db": "ts-node src/scripts/setup-database.ts",
     "type-check": "tsc --noEmit",
@@ -28,6 +31,8 @@
     "zod": "^4.1.5"
   },
   "devDependencies": {
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^8.2.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.17",
@@ -38,6 +43,7 @@
     "@types/pg": "^8.15.5",
     "jest": "^30.1.3",
     "nodemon": "^3.0.2",
+    "openapi-typescript-codegen": "^0.30.0",
     "prisma": "^7.3.0",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.1",
