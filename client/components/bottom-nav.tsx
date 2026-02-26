@@ -14,7 +14,7 @@ export const BottomNav = () => {
       aria-label="Mobilnavigering"
       className="fixed bottom-4 left-0 right-0 z-50 mx-auto flex h-auto max-w-md items-center justify-around px-2 sm:hidden"
     >
-      <div className="flex w-full flex-row items-center justify-around rounded-2xl border border-white/20 bg-neutral-400/20 py-3 shadow-lg backdrop-blur">
+      <div className="flex w-full flex-row items-center justify-around rounded-3xl border border-white/80 bg-neutral-200/20 py-3 shadow-lg backdrop-blur">
         {siteConfig.bottomNavItems.map((item) => {
           const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
@@ -22,17 +22,19 @@ export const BottomNav = () => {
             <Link
               key={item.href}
               href={item.href}
-              className="relative flex items-center justify-center transition-transform active:scale-95"
+              className={
+                "relative flex items-center justify-center transition-transform active:scale-95"
+              }
               aria-current={isActive ? "page" : undefined}
             >
               {/* Glass pill background for active state */}
               {isActive && (
-                <div className="animate-in fade-in zoom-in-95 bg-primary/40 absolute -inset-2 aspect-square rounded-2xl border border-white/20 shadow-lg duration-200" />
+                <div className="animate-in fade-in zoom-in-95 duration-400 absolute -inset-2 aspect-square rounded-3xl border border-white/80 bg-gray-300/30 shadow-lg" />
               )}
 
               {/* Icon */}
               <div
-                className={`relative z-10 rounded-2xl px-3 transition-all duration-200 ${
+                className={`relative z-10 flex h-12 w-12 items-center justify-center rounded-2xl transition-all duration-200 ${
                   isActive ? "scale-110" : "scale-100 hover:scale-105"
                 }`}
               >
