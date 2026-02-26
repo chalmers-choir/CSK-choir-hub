@@ -14,7 +14,6 @@ yarn-error.log*
 # Build outputs
 client/build/
 client/dist/
-client/lib/api-client/
 server/dist/
 
 # Logs
