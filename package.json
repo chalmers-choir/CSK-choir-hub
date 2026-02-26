@@ -13,6 +13,7 @@
     "install-all": "npm install && cd server && npm install && cd ../client && npm install",
     "setup-db": "cd server && npm run setup-db",
     "setup": "node scripts/setup.mjs",
+    "setup:clean": "node scripts/setup.mjs --clean",
     "type-check": "cd server && npm run type-check && cd ../client && npm run type-check",
     "docker:up": "cd server && docker-compose up -d",
     "docker:down": "cd server && docker-compose down",

@@ -11,6 +11,7 @@ const rootDir = path.resolve(__dirname, "..");
 const serverDir = path.join(rootDir, "server");
 const clientDir = path.join(rootDir, "client");
 const prismaMigrationsDir = path.join(serverDir, "src", "prisma", "migrations");
+const shouldDeepClean = process.argv.includes("--clean");
 
 const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
 const npxCmd = process.platform === "win32" ? "npx.cmd" : "npx";
@@ -21,12 +22,20 @@ function log(message) {
 
 function run(command, args, options = {}) {
   const { cwd = rootDir, allowFailure = false } = options;
-  const result = spawnSync(command, args, {
-    cwd,
-    stdio: "inherit",
-    shell: false,
-    env: process.env,
-  });
+  const shouldUseWindowsCmd = process.platform === "win32" && /\.(cmd|bat)$/i.test(command);
+  const result = shouldUseWindowsCmd
+    ? spawnSync(process.env.ComSpec || "cmd.exe", ["/d", "/s", "/c", command, ...args], {
+      cwd,
+      stdio: "inherit",
+      shell: false,
+      env: process.env,
+    })
+    : spawnSync(command, args, {
+      cwd,
+      stdio: "inherit",
+      shell: false,
+      env: process.env,
+    });
 
   if (result.error) {
     if (allowFailure) {
@@ -53,6 +62,20 @@ function removeDirIfExists(targetPath) {
   if (existsSync(targetPath)) {
     rmSync(targetPath, { force: true, recursive: true });
   }
+}
+
+function installDeps(dir, label) {
+  const hasLockFile = existsSync(path.join(dir, "package-lock.json"));
+
+  if (hasLockFile) {
+    log(`📦 Installing ${label} dependencies with npm ci...`);
+    run(npmCmd, ["ci", "--no-audit", "--no-fund"], { cwd: dir });
+
+    return;
+  }
+
+  log(`📦 Installing ${label} dependencies with npm install...`);
+  run(npmCmd, ["install", "--no-audit", "--no-fund"], { cwd: dir });
 }
 
 function parseEnvFile(filePath) {
@@ -179,19 +202,18 @@ async function main() {
   process.chdir(rootDir);
 
   log("🚀 Setting up Project...");
-  log("🧹 Cleaning up existing dependencies...");
-  removeDirIfExists(path.join(rootDir, "node_modules"));
-  removeDirIfExists(path.join(serverDir, "node_modules"));
-  removeDirIfExists(path.join(clientDir, "node_modules"));
+  if (shouldDeepClean) {
+    log("🧹 Cleaning up existing dependencies (--clean)...");
+    removeDirIfExists(path.join(rootDir, "node_modules"));
+    removeDirIfExists(path.join(serverDir, "node_modules"));
+    removeDirIfExists(path.join(clientDir, "node_modules"));
+  } else {
+    log("⏭️  Skipping node_modules cleanup (pass --clean for a full wipe).");
+  }
 
-  log("📦 Installing root dependencies...");
-  run(npmCmd, ["install"]);
-
-  log("📦 Installing server dependencies...");
-  run(npmCmd, ["install"], { cwd: serverDir });
-
-  log("📦 Installing client dependencies...");
-  run(npmCmd, ["install"], { cwd: clientDir });
+  installDeps(rootDir, "root");
+  installDeps(serverDir, "server");
+  installDeps(clientDir, "client");
   run(npmCmd, ["run", "api:generate"], { cwd: serverDir });
 
   log("🌱 Setting up Prisma...");
