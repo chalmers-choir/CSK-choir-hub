@@ -1,6 +1,6 @@
 import { prisma } from "@db";
 import * as userModel from "@db/models/userModel";
-import { User } from "@prisma/generated/client";
+import { type User } from "@prisma/generated/client";
 import { NotFoundError, UnauthorizedError } from "@utils";
 import { generateToken } from "@utils/generateToken";
 import logger from "@utils/logger";

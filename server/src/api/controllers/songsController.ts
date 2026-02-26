@@ -1,6 +1,6 @@
 import * as songService from "@services/songService";
 import { BadRequestError } from "@utils/errors";
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 
 // Get all songs
 export const getSongs = async (req: Request, res: Response, next: NextFunction) => {

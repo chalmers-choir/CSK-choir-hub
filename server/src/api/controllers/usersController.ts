@@ -1,6 +1,6 @@
 import * as userService from "@services/userService";
 import { BadRequestError } from "@utils/errors";
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 
 // Get all users
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
@@ -44,7 +44,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 
   if (isNaN(userId)) return next(new BadRequestError("Invalid user ID"));
 
-  const { firstName, lastName, email, dietaryPreferences, groupIds } = req.body;
+  const { firstName, lastName, email, dietaryPreferences } = req.body;
 
   try {
     const updatedUser = await userService.updateUser(userId, {

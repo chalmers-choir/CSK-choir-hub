@@ -1,5 +1,5 @@
-import type { Role } from "@prisma/generated/client";
 import { prisma } from "@db";
+import type { Role } from "@prisma/generated/client";
 
 /**
  * Create a new role.

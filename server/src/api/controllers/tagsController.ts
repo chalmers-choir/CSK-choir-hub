@@ -1,6 +1,6 @@
 import * as tagService from "@services/tagService";
 import { BadRequestError } from "@utils/errors";
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 
 // Get all tags
 export const getTags = async (req: Request, res: Response, next: NextFunction) => {

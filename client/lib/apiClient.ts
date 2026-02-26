@@ -1,5 +1,6 @@
-import { OpenAPI } from "./api-client/core/OpenAPI";
 import { siteConfig } from "@/config/site";
+
+import { OpenAPI } from "./api-client/core/OpenAPI";
 
 export * from "./api-client";
 

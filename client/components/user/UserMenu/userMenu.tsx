@@ -1,6 +1,5 @@
-import { AccountCircleOutlined } from "@mui/icons-material";
-
 import { Avatar } from "@heroui/react";
+import { AccountCircleOutlined } from "@mui/icons-material";
 
 import { LinkDropDownMenuRef, LinkDropdownMenu } from "@/components/menus";
 import { siteConfig } from "@/config/site";

@@ -1,7 +1,7 @@
 import * as authService from "@services/authService";
 import * as userService from "@services/userService";
 import { BadRequestError, UnauthorizedError } from "@utils";
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 import { z } from "zod";
 
 type CookieOptions = {

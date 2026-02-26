@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/generated/client";
-import { Event, EventType } from "@prisma/generated/client";
+import { type PrismaClient } from "@prisma/generated/client";
+import { type Event, EventType } from "@prisma/generated/client";
 
 export default async function seedUsers(prisma: PrismaClient): Promise<Events> {
   const rehearsal1 = await prisma.event.create({

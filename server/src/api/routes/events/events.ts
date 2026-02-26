@@ -7,8 +7,9 @@ import {
 } from "@api/controllers/eventsController";
 import { requireAuth } from "@middleware/authMiddleware";
 import { Router } from "express";
-import registrationRoutes from "./registrations";
+
 import attendanceRoutes from "./attendance";
+import registrationRoutes from "./registrations";
 
 const router = Router();
 

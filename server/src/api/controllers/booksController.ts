@@ -1,6 +1,6 @@
 import * as bookService from "@services/bookService";
 import { BadRequestError } from "@utils/errors";
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 
 // Get all books
 export const getBooks = async (req: Request, res: Response, next: NextFunction) => {

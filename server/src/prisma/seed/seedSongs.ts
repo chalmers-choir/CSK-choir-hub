@@ -1,7 +1,8 @@
-import { PrismaClient } from "@prisma/generated/client";
-import { Song, Voice } from "@prisma/generated/client";
-import { Books } from "./seedBooks";
-import { Tags } from "./seedTags";
+import { type PrismaClient } from "@prisma/generated/client";
+import { type Song, Voice } from "@prisma/generated/client";
+
+import { type Books } from "./seedBooks";
+import { type Tags } from "./seedTags";
 
 export default async function seedRoles(
   prisma: PrismaClient,

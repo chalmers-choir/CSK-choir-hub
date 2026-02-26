@@ -1,5 +1,5 @@
 import { groupModel } from "@db";
-import { GroupType } from "@prisma/generated/client";
+import { type GroupType } from "@prisma/generated/client";
 import { NotFoundError } from "@utils";
 
 /**

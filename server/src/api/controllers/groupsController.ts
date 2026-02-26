@@ -1,7 +1,7 @@
 import { GroupType } from "@prisma/generated/client";
 import { groupService } from "@services";
 import { BadRequestError } from "@utils/errors";
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 
 // Get all groups
 export const getGroups = async (req: Request, res: Response, next: NextFunction) => {

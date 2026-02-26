@@ -1,6 +1,7 @@
-import { PrismaClient } from "@prisma/generated/client";
-import { Groups } from "./seedGroups";
-import { Users } from "./seedUsers";
+import { type PrismaClient } from "@prisma/generated/client";
+
+import { type Groups } from "./seedGroups";
+import { type Users } from "./seedUsers";
 
 export default async function seedRoles(
   prisma: PrismaClient,

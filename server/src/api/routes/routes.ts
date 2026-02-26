@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import authRoutes from "./auth";
 import bookRoutes from "./books";
 import eventRoutes from "./events";

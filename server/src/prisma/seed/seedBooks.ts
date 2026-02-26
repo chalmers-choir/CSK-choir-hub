@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/generated/client";
-import { Book } from "@prisma/generated/client";
+import { type PrismaClient } from "@prisma/generated/client";
+import { type Book } from "@prisma/generated/client";
 
 export default async function seedBooks(prisma: PrismaClient): Promise<Books> {
   // Create Books
