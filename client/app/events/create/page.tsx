@@ -2,6 +2,8 @@
 
 import { startTransition, useActionState, useEffect, useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
 import { Button } from "@heroui/button";
 import { DatePicker } from "@heroui/date-picker";
@@ -13,7 +15,12 @@ import { I18nProvider } from "@react-aria/i18n";
 
 import { CSKEventType } from "@/lib/apiClient";
 
-import { type CreateEventActionState, createEventAction } from "./actions";
+import {
+  type CreateEventActionState,
+  createEventAction,
+  initialCreateEventActionState,
+} from "./actions";
+import type { CreateEventActionInput } from "./schema";
 
 const eventTypeDbKeyToName: Record<CSKEventType, string> = {
   REHEARSAL: "Rep",
@@ -34,15 +41,21 @@ const autocompletePlaceNames: Record<string, string> = {
 };
 
 export default function CreateEventPage() {
-  // name, type, description, dateStart, place
+  const router = useRouter();
+
   const [name, setName] = useState("");
+
   const [type, setType] = useState<CSKEventType | undefined>(undefined);
   const [typeIsInvalid, setTypeIsInvalid] = useState(false);
+
   const [description, setDescription] = useState("");
+
   const [dateStart, setDateStart] = useState<DateValue | null>(null);
   const [dateIsInvalid, setDateIsInvalid] = useState(false);
+
   const [place, setPlace] = useState("");
   const [placeIsInvalid, setPlaceIsInvalid] = useState(false);
+
   const resetState = () => {
     setName("");
     setType(undefined);
@@ -54,48 +67,59 @@ export default function CreateEventPage() {
     setPlaceIsInvalid(false);
   };
 
+  const [clientValidationMessage, setClientValidationMessage] = useState<string | null>(null);
+
   const [actionState, submitCreateEvent, isSubmitting] = useActionState<
     CreateEventActionState,
-    Parameters<typeof createEventAction>[1]
-  >(createEventAction, null);
+    CreateEventActionInput
+  >(createEventAction, initialCreateEventActionState);
 
   useEffect(() => {
-    if (!actionState?.ok) {
+    if (actionState.status !== "success" || !actionState.eventId) {
       return;
     }
 
     resetState();
-    window.location.href = `/events/${actionState.eventId}`;
-  }, [actionState]);
+    router.push(`/events/${actionState.eventId}`);
+  }, [actionState, router]);
 
   const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
+    setClientValidationMessage(null);
 
-    if (!type) {
-      setTypeIsInvalid(true);
-    }
-    if (!dateStart) {
-      setDateIsInvalid(true);
-    }
-    if (!place) {
-      setPlaceIsInvalid(true);
-    }
-    if (!type || !dateStart || !place) {
+    const missingType = !type;
+    const missingDate = !dateStart;
+    const missingPlace = !place.trim();
+
+    setTypeIsInvalid(missingType);
+    setDateIsInvalid(missingDate);
+    setPlaceIsInvalid(missingPlace);
+
+    if (missingType || missingDate || missingPlace) {
+      setClientValidationMessage("Vänligen fyll i alla obligatoriska fält.");
+
       return;
     }
 
+    const payload: CreateEventActionInput = {
+      name,
+      type,
+      description,
+      dateStart: dateStart.toString(),
+      place,
+    };
+
     startTransition(() => {
-      submitCreateEvent({
-        name,
-        type,
-        description,
-        dateStart: dateStart.toString(),
-        place,
-      });
+      submitCreateEvent(payload);
     });
   };
 
   const defaultVariant = "bordered";
+  const fieldErrors = actionState.fieldErrors;
+  const formErrorMessage = clientValidationMessage ?? actionState.formError ?? null;
+  const typeErrorMessage = fieldErrors?.type;
+  const dateStartErrorMessage = fieldErrors?.dateStart;
+  const placeErrorMessage = fieldErrors?.place;
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -104,6 +128,8 @@ export default function CreateEventPage() {
 
         <Input
           required
+          errorMessage={fieldErrors?.name}
+          isInvalid={Boolean(fieldErrors?.name)}
           label="Namn på evenemanget"
           type="text"
           value={name}
@@ -114,23 +140,32 @@ export default function CreateEventPage() {
         <Dropdown>
           <DropdownTrigger>
             <Button
-              color={typeIsInvalid ? "danger" : "default"}
+              color={typeIsInvalid || Boolean(typeErrorMessage) ? "danger" : "default"}
               variant={defaultVariant}
-              onPress={() => setTypeIsInvalid(false)}
+              onPress={() => {
+                setTypeIsInvalid(false);
+                setClientValidationMessage(null);
+              }}
             >
               {type ? eventTypeDbKeyToName[type] : "Välj typ"}
             </Button>
           </DropdownTrigger>
           <DropdownMenu
             items={Object.entries(eventTypeDbKeyToName)}
-            onAction={(key) => setType(key as CSKEventType)}
+            onAction={(key) => {
+              setType(key as CSKEventType);
+              setTypeIsInvalid(false);
+              setClientValidationMessage(null);
+            }}
           >
             {(item) => <DropdownItem key={item[0]}>{item[1]}</DropdownItem>}
           </DropdownMenu>
         </Dropdown>
+        {typeErrorMessage && <p className="text-sm text-red-500">{typeErrorMessage}</p>}
 
         <Textarea
-          required
+          errorMessage={fieldErrors?.description}
+          isInvalid={Boolean(fieldErrors?.description)}
           label="Beskrivning"
           type="text"
           value={description}
@@ -142,27 +177,42 @@ export default function CreateEventPage() {
           <DatePicker
             classNames={{ label: "after:content-none" }}
             granularity="minute"
-            isInvalid={dateIsInvalid}
+            isInvalid={dateIsInvalid || Boolean(dateStartErrorMessage)}
             label="Datum och tid"
             value={dateStart}
             variant={defaultVariant}
             onChange={(e) => e && setDateStart(e)}
-            onFocus={() => setDateIsInvalid(false)}
+            onFocus={() => {
+              setDateIsInvalid(false);
+              setClientValidationMessage(null);
+            }}
           />
         </I18nProvider>
+        {dateStartErrorMessage && <p className="text-sm text-red-500">{dateStartErrorMessage}</p>}
 
         <Autocomplete
           allowsCustomValue
           inputValue={place}
-          isInvalid={placeIsInvalid}
+          isInvalid={placeIsInvalid || Boolean(placeErrorMessage)}
           items={Object.entries(autocompletePlaceNames)}
           label="Plats (välj från listan eller skriv egen)"
           variant={defaultVariant}
-          onFocus={() => setPlaceIsInvalid(false)}
-          onInputChange={(e) => setPlace(e)}
+          onFocus={() => {
+            setPlaceIsInvalid(false);
+            setClientValidationMessage(null);
+          }}
+          onInputChange={(e) => {
+            setPlace(e);
+            if (e.trim()) {
+              setPlaceIsInvalid(false);
+            }
+          }}
         >
           {(item) => <AutocompleteItem key={item[0]}>{item[1]}</AutocompleteItem>}
         </Autocomplete>
+        {placeErrorMessage && <p className="text-sm text-red-500">{placeErrorMessage}</p>}
+
+        {formErrorMessage && <p className="text-sm text-red-500">{formErrorMessage}</p>}
 
         <Button
           className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}

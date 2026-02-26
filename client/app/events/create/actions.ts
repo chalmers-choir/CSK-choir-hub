@@ -3,44 +3,114 @@
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
-import { z } from "zod";
+import { request as apiRequest } from "@/lib/api-client/core/request";
+import {
+  ApiError,
+  type CSKEvent,
+  type CSKEventSummary,
+  OpenAPI,
+  type OpenAPIConfig,
+} from "@/lib/apiClient";
 
-import { EventsService, OpenAPI } from "@/lib/apiClient";
+import {
+  type CreateEventActionInput,
+  type CreateEventFieldErrors,
+  type CreateEventRequestBody,
+  createEventSchema,
+} from "./schema";
 
-const eventTypeSchema = z.enum(["REHEARSAL", "CONCERT", "GIG", "PARTY", "MEETING", "OTHER"]);
+type ActionStatus = "idle" | "success" | "error";
 
-const createEventSchema = z.object({
-  name: z.string().trim().min(1, "Namn på evenemanget krävs."),
-  type: eventTypeSchema,
-  description: z.string().trim().optional(),
-  dateStart: z
-    .string()
-    .trim()
-    .min(1, "Datum och tid krävs.")
-    .refine((value) => !Number.isNaN(Date.parse(value)), "Ogiltigt datum eller tid."),
-  place: z.string().trim().min(1, "Plats krävs."),
-});
+export type CreateEventActionState = {
+  status: ActionStatus;
+  message?: string;
+  formError?: string;
+  eventId?: number;
+  fieldErrors?: CreateEventFieldErrors;
+};
 
-export type CreateEventActionInput = z.input<typeof createEventSchema>;
+export const initialCreateEventActionState: CreateEventActionState = {
+  status: "idle",
+};
 
-export type CreateEventActionResult =
-  | { ok: true; eventId: number }
-  | { ok: false; message: string };
+function getFieldErrors(inputErrors: Record<string, string[] | undefined>): CreateEventFieldErrors {
+  return {
+    name: inputErrors.name?.[0],
+    type: inputErrors.type?.[0],
+    description: inputErrors.description?.[0],
+    dateStart: inputErrors.dateStart?.[0],
+    place: inputErrors.place?.[0],
+  };
+}
 
-export type CreateEventActionState = CreateEventActionResult | null;
+function toApiRequestBody(input: CreateEventRequestBody): CSKEventSummary {
+  return {
+    ...input,
+    requiresRegistration: false,
+    requiresAttendance: false,
+  };
+}
+
+async function addEventWithRequestScopedHeaders(
+  requestBody: CSKEventSummary,
+  cookie: string | null,
+): Promise<{ event: CSKEvent }> {
+  const baseHeadersConfig = OpenAPI.HEADERS;
+
+  const requestConfig: OpenAPIConfig = {
+    ...OpenAPI,
+    HEADERS: async (options) => {
+      const baseHeaders =
+        typeof baseHeadersConfig === "function"
+          ? await baseHeadersConfig(options)
+          : (baseHeadersConfig ?? {});
+
+      return cookie ? { ...baseHeaders, cookie } : { ...baseHeaders };
+    },
+  };
+
+  return apiRequest<{ event: CSKEvent }>(requestConfig, {
+    method: "POST",
+    url: "/events",
+    body: requestBody,
+    mediaType: "application/json",
+    errors: {
+      400: "Invalid event data",
+      401: "Unauthorized",
+      403: "Forbidden",
+    },
+  });
+}
+
+function getActionErrorMessage(error: unknown): string {
+  if (error instanceof ApiError) {
+    const bodyMessage =
+      typeof error.body === "object" && error.body && "message" in error.body
+        ? (error.body.message as string | undefined)
+        : undefined;
+
+    return bodyMessage || error.message || "Kunde inte skapa evenemang.";
+  }
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return "Kunde inte skapa evenemang.";
+}
 
 export async function createEventAction(
   _prevState: CreateEventActionState,
   input: CreateEventActionInput,
-): Promise<CreateEventActionResult> {
+): Promise<CreateEventActionState> {
   const parsed = createEventSchema.safeParse(input);
 
   if (!parsed.success) {
-    const firstIssue = parsed.error.issues[0];
+    const { fieldErrors } = parsed.error.flatten();
 
     return {
-      ok: false,
-      message: firstIssue?.message ?? "Ogiltiga fält.",
+      status: "error",
+      fieldErrors: getFieldErrors(fieldErrors),
     };
   }
 
@@ -48,29 +118,20 @@ export async function createEventAction(
   const cookie = requestHeaders.get("cookie");
 
   try {
-    if (cookie) {
-      OpenAPI.HEADERS = { cookie };
-    }
-
-    const { event } = await EventsService.addEvent({
-      requestBody: {
-        name: parsed.data.name,
-        type: parsed.data.type,
-        description: parsed.data.description || undefined,
-        dateStart: parsed.data.dateStart,
-        place: parsed.data.place,
-        requiresRegistration: false,
-        requiresAttendance: false,
-      },
-    });
+    const { event } = await addEventWithRequestScopedHeaders(toApiRequestBody(parsed.data), cookie);
 
     revalidatePath("/events");
     revalidatePath(`/events/${event.id}`);
 
-    return { ok: true, eventId: event.id };
+    return {
+      status: "success",
+      message: "Evenemang skapat!",
+      eventId: event.id,
+    };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Kunde inte skapa evenemang.";
-
-    return { ok: false, message };
+    return {
+      status: "error",
+      formError: getActionErrorMessage(error),
+    };
   }
 }
