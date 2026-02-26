@@ -5,10 +5,11 @@ export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
   const isAdminSection = pathname.startsWith("/admin");
   const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:5050/api";
+  const isStaticAsset = /\.[^/]+$/.test(pathname);
 
   // Paths that should stay reachable without authentication
   const PUBLIC_PATHS = ["/", "/login", "/register", "/favicon.ico"];
-  const isPublic = PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/_next");
+  const isPublic = PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/_next") || isStaticAsset;
 
   // Skip protection for public routes and API routes
   if (isPublic || pathname.startsWith("/api")) return NextResponse.next();

@@ -27,12 +27,12 @@ export const Navbar = () => {
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-        <NavbarBrand className="max-w-fit gap-3">
-          <NextLink className="flex items-center justify-start gap-1" href="/">
+        <NavbarBrand className="max-w-fit shrink-0 gap-3">
+          <NextLink className="flex shrink-0 items-center justify-start gap-1" href="/">
             <Logo />
           </NextLink>
         </NavbarBrand>
-        <div className="ml-2 hidden justify-start gap-4 md:flex">
+        <div className="ml-2 hidden min-w-0 justify-start gap-4 md:flex">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink

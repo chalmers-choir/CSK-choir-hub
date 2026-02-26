@@ -16,7 +16,7 @@ export const Logo = () => {
   const logoSrc =
     !isMounted || resolvedTheme === "light" ? "/logo/small.png" : "/logo/small_invert.png";
 
-  return <Image alt="Logo" height={36} src={logoSrc} unoptimized width={36} />;
+  return <Image alt="Logo" className="shrink-0" height={36} src={logoSrc} unoptimized width={36} />;
 };
 
 export const DiscordIcon: React.FC<IconSvgProps> = ({ size = 24, width, height, ...props }) => {
