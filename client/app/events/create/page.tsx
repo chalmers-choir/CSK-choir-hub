@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { startTransition, useActionState, useEffect, useState } from "react";
 
 import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
 import { Button } from "@heroui/button";
@@ -11,16 +11,9 @@ import { button as buttonStyles } from "@heroui/theme";
 import { DateValue } from "@internationalized/date";
 import { I18nProvider } from "@react-aria/i18n";
 
-import RequestLogin from "@/components/request-login";
-import { useAuth } from "@/contexts/AuthContext";
-import { CSKEventType, EventsService } from "@/lib/apiClient";
+import { CSKEventType } from "@/lib/apiClient";
 
-interface ResultData {
-  type: "success" | "error";
-  message: string;
-}
-
-type Result = ResultData | undefined;
+import { type CreateEventActionState, createEventAction } from "./actions";
 
 const eventTypeDbKeyToName: Record<CSKEventType, string> = {
   REHEARSAL: "Rep",
@@ -41,8 +34,6 @@ const autocompletePlaceNames: Record<string, string> = {
 };
 
 export default function CreateEventPage() {
-  const { loading, isAdmin } = useAuth();
-
   // name, type, description, dateStart, place
   const [name, setName] = useState("");
   const [type, setType] = useState<CSKEventType | undefined>(undefined);
@@ -63,133 +54,124 @@ export default function CreateEventPage() {
     setPlaceIsInvalid(false);
   };
 
-  const [result, setResult] = useState<Result>(undefined);
+  const [actionState, submitCreateEvent, isSubmitting] = useActionState<
+    CreateEventActionState,
+    Parameters<typeof createEventAction>[1]
+  >(createEventAction, null);
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  useEffect(() => {
+    if (!actionState?.ok) {
+      return;
+    }
+
+    resetState();
+    window.location.href = `/events/${actionState.eventId}`;
+  }, [actionState]);
+
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
-    try {
-      if (!type) {
-        setTypeIsInvalid(true);
-      }
-      if (!dateStart) {
-        setDateIsInvalid(true);
-      }
-      if (!place) {
-        setPlaceIsInvalid(true);
-      }
-      if (!type || !dateStart || !place) {
-        throw new Error("Vänligen fyll i alla fält.");
-      }
 
-      const eventData = {
+    if (!type) {
+      setTypeIsInvalid(true);
+    }
+    if (!dateStart) {
+      setDateIsInvalid(true);
+    }
+    if (!place) {
+      setPlaceIsInvalid(true);
+    }
+    if (!type || !dateStart || !place) {
+      return;
+    }
+
+    startTransition(() => {
+      submitCreateEvent({
         name,
         type,
         description,
-        dateStart: dateStart?.toString(),
+        dateStart: dateStart.toString(),
         place,
-        requiresRegistration: false,
-        requiresAttendance: false,
-      };
-
-      const { event: newEvent } = await EventsService.addEvent({ requestBody: eventData }); // Invalidate cache
-      const eventId = newEvent.id;
-
-      resetState();
-      setResult({ type: "success", message: "Evenemang skapat!" });
-      window.location.href = `/events/${eventId}`;
-    } catch (err: any) {
-      setResult({ type: "error", message: err.message });
-    }
+      });
+    });
   };
 
   const defaultVariant = "bordered";
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      {isAdmin ? (
-        <form className="w-md mx-auto mt-20 flex max-w-full flex-col gap-2" onSubmit={handleSubmit}>
-          <h2 className="w-full text-center text-lg font-semibold">Skapa nytt evenemang</h2>
+      <form className="w-md mx-auto mt-20 flex max-w-full flex-col gap-2" onSubmit={handleSubmit}>
+        <h2 className="w-full text-center text-lg font-semibold">Skapa nytt evenemang</h2>
 
-          <Input
-            required
-            label="Namn på evenemanget"
-            type="text"
-            value={name}
-            variant={defaultVariant}
-            onChange={(e) => setName(e.target.value)}
-          />
+        <Input
+          required
+          label="Namn på evenemanget"
+          type="text"
+          value={name}
+          variant={defaultVariant}
+          onChange={(e) => setName(e.target.value)}
+        />
 
-          <Dropdown>
-            <DropdownTrigger>
-              <Button
-                color={typeIsInvalid ? "danger" : "default"}
-                variant={defaultVariant}
-                onPress={() => setTypeIsInvalid(false)}
-              >
-                {type ? eventTypeDbKeyToName[type] : "Välj typ"}
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              items={Object.entries(eventTypeDbKeyToName)}
-              onAction={(key) => setType(key as CSKEventType)}
-            >
-              {(item) => <DropdownItem key={item[0]}>{item[1]}</DropdownItem>}
-            </DropdownMenu>
-          </Dropdown>
-
-          <Textarea
-            required
-            label="Beskrivning"
-            type="text"
-            value={description}
-            variant={defaultVariant}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-
-          <I18nProvider locale="sv-SE">
-            <DatePicker
-              classNames={{ label: "after:content-none" }}
-              granularity="minute"
-              isInvalid={dateIsInvalid}
-              label="Datum och tid"
-              value={dateStart}
+        <Dropdown>
+          <DropdownTrigger>
+            <Button
+              color={typeIsInvalid ? "danger" : "default"}
               variant={defaultVariant}
-              onChange={(e) => e && setDateStart(e)}
-              onFocus={() => setDateIsInvalid(false)}
-            />
-          </I18nProvider>
+              onPress={() => setTypeIsInvalid(false)}
+            >
+              {type ? eventTypeDbKeyToName[type] : "Välj typ"}
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu
+            items={Object.entries(eventTypeDbKeyToName)}
+            onAction={(key) => setType(key as CSKEventType)}
+          >
+            {(item) => <DropdownItem key={item[0]}>{item[1]}</DropdownItem>}
+          </DropdownMenu>
+        </Dropdown>
 
-          <Autocomplete
-            allowsCustomValue
-            inputValue={place}
-            isInvalid={placeIsInvalid}
-            items={Object.entries(autocompletePlaceNames)}
-            label="Plats (välj från listan eller skriv egen)"
+        <Textarea
+          required
+          label="Beskrivning"
+          type="text"
+          value={description}
+          variant={defaultVariant}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+
+        <I18nProvider locale="sv-SE">
+          <DatePicker
+            classNames={{ label: "after:content-none" }}
+            granularity="minute"
+            isInvalid={dateIsInvalid}
+            label="Datum och tid"
+            value={dateStart}
             variant={defaultVariant}
-            onFocus={() => setPlaceIsInvalid(false)}
-            onInputChange={(e) => setPlace(e)}
-          >
-            {(item) => <AutocompleteItem key={item[0]}>{item[1]}</AutocompleteItem>}
-          </Autocomplete>
+            onChange={(e) => e && setDateStart(e)}
+            onFocus={() => setDateIsInvalid(false)}
+          />
+        </I18nProvider>
 
-          {result && (
-            <p className={result.type == "success" ? "text-green-500" : "text-red-500"}>
-              {result.message}
-            </p>
-          )}
+        <Autocomplete
+          allowsCustomValue
+          inputValue={place}
+          isInvalid={placeIsInvalid}
+          items={Object.entries(autocompletePlaceNames)}
+          label="Plats (välj från listan eller skriv egen)"
+          variant={defaultVariant}
+          onFocus={() => setPlaceIsInvalid(false)}
+          onInputChange={(e) => setPlace(e)}
+        >
+          {(item) => <AutocompleteItem key={item[0]}>{item[1]}</AutocompleteItem>}
+        </Autocomplete>
 
-          <Button
-            className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
-            type="submit"
-          >
-            Skapa
-          </Button>
-        </form>
-      ) : loading ? (
-        <>Loading...</>
-      ) : (
-        <RequestLogin>Vänligen logga in som administratör för att skapa evenemang.</RequestLogin>
-      )}
+        <Button
+          className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
+          isDisabled={isSubmitting}
+          type="submit"
+        >
+          {isSubmitting ? "Skapar..." : "Skapa"}
+        </Button>
+      </form>
     </section>
   );
 }
