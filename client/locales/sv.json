@@ -35,7 +35,8 @@
     "create_event": "Skapa evenemang",
     "attendance_required": "Närvaro krävs",
     "registration_required": "Anmälan krävs",
-    "no_events": "Inga evenemang att visa."
+    "no_events": "Inga evenemang att visa.",
+    "loading_events": "Laddar evenemang..."
   },
   "settings": {
     "title": "Inställningar",
