@@ -12,9 +12,9 @@ export const BottomNav = () => {
   return (
     <nav
       aria-label="Mobilnavigering"
-      className="fixed bottom-4 left-0 right-0 z-50 mx-auto flex h-auto max-w-md items-center justify-around px-2 sm:hidden"
+      className="fixed bottom-2 left-0 right-0 z-50 mx-auto flex h-auto max-w-md items-center justify-around px-1 sm:hidden"
     >
-      <div className="flex w-full flex-row items-center justify-around rounded-3xl border border-white/80 bg-neutral-200/20 py-3 shadow-lg backdrop-blur">
+      <div className="backdrop-blur-xs backdrop-saturate-40 flex w-full flex-row items-center justify-between rounded-[21] border border-white/80 bg-neutral-200/15 p-3 shadow-lg">
         {siteConfig.bottomNavItems.map((item) => {
           const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
@@ -29,7 +29,7 @@ export const BottomNav = () => {
             >
               {/* Glass pill background for active state */}
               {isActive && (
-                <div className="animate-in fade-in zoom-in-95 duration-400 absolute -inset-2 aspect-square rounded-3xl border border-white/80 bg-gray-300/30 shadow-lg" />
+                <div className="animate-in fade-in zoom-in-95 duration-400 absolute -inset-2 aspect-square rounded-[20] border border-white/80 bg-gray-400/30 shadow-lg" />
               )}
 
               {/* Icon */}
