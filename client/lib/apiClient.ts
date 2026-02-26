@@ -1,8 +1,10 @@
+import { getApiBaseUrl } from "@/config/site";
+
 import { OpenAPI } from "./api-client/core/OpenAPI";
-import { siteConfig } from "@/config/site";
 
 export * from "./api-client";
 
-OpenAPI.BASE = siteConfig.apiBaseUrl;
+// Set the API base URL dynamically
+OpenAPI.BASE = getApiBaseUrl();
 OpenAPI.WITH_CREDENTIALS = true;
 OpenAPI.CREDENTIALS = "include";
