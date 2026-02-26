@@ -5,39 +5,52 @@ import { usePathname } from "next/navigation";
 
 import { Icon } from "@/components/Icon";
 import { siteConfig } from "@/config/site";
-import { useTranslation } from "@/contexts/IntlContext";
 
 export const BottomNav = () => {
   const pathname = usePathname();
-  const { t } = useTranslation();
 
   return (
     <nav
       aria-label="Mobilnavigering"
-      className="border-divider bg-background/80 safe-area-inset-bottom fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t backdrop-blur-md sm:hidden"
+      className="fixed bottom-4 left-0 right-0 z-50 mx-auto flex h-auto max-w-md items-center justify-around px-2 sm:hidden"
     >
-      {siteConfig.bottomNavItems.map((item) => {
-        const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+      <div className="flex w-full flex-row items-center justify-around rounded-2xl border border-white/20 bg-neutral-400/20 py-3 shadow-lg backdrop-blur">
+        {siteConfig.bottomNavItems.map((item) => {
+          const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`flex flex-1 flex-col items-center justify-center gap-0.5 py-1 text-xs transition-colors ${
-              isActive ? "text-primary" : "text-default-500 hover:text-default-800"
-            }`}
-            aria-current={isActive ? "page" : undefined}
-          >
-            <Icon
-              name={item.icon}
-              aria-hidden={true}
-              fontSize="large"
-              className={isActive ? "text-primary" : "text-default-500"}
-            />
-            {/* <span>{t(item.labelKey)}</span> */}
-          </Link>
-        );
-      })}
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="relative flex items-center justify-center transition-transform active:scale-95"
+              aria-current={isActive ? "page" : undefined}
+            >
+              {/* Glass pill background for active state */}
+              {isActive && (
+                <div className="animate-in fade-in zoom-in-95 bg-primary/40 absolute -inset-2 aspect-square rounded-2xl border border-white/20 shadow-lg duration-200" />
+              )}
+
+              {/* Icon */}
+              <div
+                className={`relative z-10 rounded-2xl px-3 transition-all duration-200 ${
+                  isActive ? "scale-110" : "scale-100 hover:scale-105"
+                }`}
+              >
+                <Icon
+                  name={item.icon}
+                  aria-hidden={true}
+                  fontSize="large"
+                  className={`transition-all duration-200 ${
+                    isActive
+                      ? "text-primary drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
+                      : "text-default-400"
+                  }`}
+                />
+              </div>
+            </Link>
+          );
+        })}
+      </div>
     </nav>
   );
 };
