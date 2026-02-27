@@ -9,7 +9,8 @@ export async function proxy(req: NextRequest) {
 
   // Paths that should stay reachable without authentication
   const PUBLIC_PATHS = ["/", "/login", "/register", "/favicon.ico"];
-  const isPublic = PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/_next") || isStaticAsset;
+  const isPublic =
+    PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/_next") || isStaticAsset;
 
   // Skip protection for public routes and API routes
   if (isPublic || pathname.startsWith("/api")) return NextResponse.next();

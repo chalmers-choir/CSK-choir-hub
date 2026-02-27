@@ -13,7 +13,6 @@ import { I18nProvider } from "@react-aria/i18n";
 
 import RequestLogin from "@/components/request-login";
 import { useAuth } from "@/contexts/AuthContext";
-import DefaultLayout from "@/layouts/default";
 import { CSKEventType, EventsService } from "@/lib/apiClient";
 
 interface ResultData {

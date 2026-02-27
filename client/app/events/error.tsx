@@ -13,7 +13,7 @@ export default function EventsPageError({
       <button
         type="button"
         onClick={() => reset()}
-        className="w-fit rounded-md bg-foreground px-4 py-2 text-background"
+        className="bg-foreground text-background w-fit rounded-md px-4 py-2"
       >
         Try again
       </button>
