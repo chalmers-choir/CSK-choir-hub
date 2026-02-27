@@ -17,14 +17,14 @@ const getIsoWeekNumber = (date: Date) => {
 };
 
 const getWeekMeta = (isoDate: string) => {
-  const date = new Date(isoDate);
-  const weekNumber = getIsoWeekNumber(date);
+  const eventDate = new Date(isoDate);
+  const weekNumber = getIsoWeekNumber(eventDate);
 
-  const startOfWeek = new Date(date);
-  const day = startOfWeek.getDay();
-  const diffToMonday = day === 0 ? -6 : 1 - day;
+  const startOfWeek = new Date(eventDate);
+  const weekdayIndex = startOfWeek.getDay();
+  const daysToMonday = weekdayIndex === 0 ? -6 : 1 - weekdayIndex;
 
-  startOfWeek.setDate(startOfWeek.getDate() + diffToMonday);
+  startOfWeek.setDate(startOfWeek.getDate() + daysToMonday);
   startOfWeek.setHours(0, 0, 0, 0);
 
   const endOfWeek = new Date(startOfWeek);
@@ -48,23 +48,23 @@ interface EventsListContentProps {
 export const EventsListContent = ({ events }: EventsListContentProps) => {
   const { t } = useTranslation();
 
-  const grouped = new Map<
+  const eventsGroupedByWeek = new Map<
     string,
     { key: string; weekNumber: number; rangeLabel: string; items: CSKEvent[] }
   >();
 
   events.forEach((event) => {
     const weekMeta = getWeekMeta(event.dateStart);
-    const existing = grouped.get(weekMeta.key);
+    const existingWeekGroup = eventsGroupedByWeek.get(weekMeta.key);
 
-    if (existing) {
-      existing.items.push(event);
+    if (existingWeekGroup) {
+      existingWeekGroup.items.push(event);
     } else {
-      grouped.set(weekMeta.key, { ...weekMeta, items: [event] });
+      eventsGroupedByWeek.set(weekMeta.key, { ...weekMeta, items: [event] });
     }
   });
 
-  const eventsByWeek = Array.from(grouped.values());
+  const eventsByWeek = Array.from(eventsGroupedByWeek.values());
 
   return (
     <>

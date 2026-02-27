@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import EventDetailCard from "@/components/events/EventDetailCard";
+import EventDetailCard from "@/components/events/detail/EventDetailCard";
 import { ApiError, CSKEvent, EventsService } from "@/lib/serverApiClient";
 
 function EventNotFound() {

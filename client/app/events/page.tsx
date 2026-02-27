@@ -1,5 +1,5 @@
-import { EventsListContent } from "@/components/events/EventsListContent";
-import { EventsPageHeader } from "@/components/events/EventsPageHeader";
+import { EventsListContent } from "@/components/events/overview/EventsListContent";
+import { EventsPageHeader } from "@/components/events/overview/EventsPageHeader";
 import { EventsService } from "@/lib/serverApiClient";
 
 export default async function IndexPage() {
