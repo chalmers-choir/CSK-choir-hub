@@ -1,14 +1,14 @@
+"use client";
+
 import { Link } from "@heroui/link";
 import { button as buttonStyles } from "@heroui/theme";
 
+import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "@/contexts/IntlContext";
 
-interface EventsPageHeaderProps {
-  isAdmin: boolean;
-}
-
-export const EventsPageHeader = ({ isAdmin }: EventsPageHeaderProps) => {
+export const EventsPageHeader = () => {
   const { t } = useTranslation();
+  const { isAdmin } = useAuth();
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

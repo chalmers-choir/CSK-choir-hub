@@ -1,3 +1,5 @@
+"use client";
+
 import React, { ReactNode, createContext, useContext, useEffect, useState } from "react";
 
 import { NextIntlClientProvider, useTranslations } from "next-intl";
