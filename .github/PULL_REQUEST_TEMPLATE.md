@@ -6,6 +6,10 @@
 
 -
 
+## Screenshots (if UI)
+
+-
+
 ## Changes (If applicable)
 
 -
@@ -18,11 +22,9 @@ Requires `npm install` in:
 - [ ] Client
 - [ ] Server
 
-## Screenshots (if UI)
-
--
-
 ## Checklist
 
-- [ ] I swear I have run `npm run build`
-- [ ] I swear I have run `npm run lint`
+- [ ] 1. I swear I have rebased
+- [ ] 2. I swear I have run `npm run lint`
+- [ ] 3. I swear I have run `npm run build`
+- [ ] 4. I swear I have tested my solution, it works like a charm.
