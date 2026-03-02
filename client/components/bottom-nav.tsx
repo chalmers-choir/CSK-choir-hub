@@ -74,6 +74,7 @@ export const BottomNav = () => {
               >
                 <Icon
                   name={item.icon}
+                  variant={item.iconVariant}
                   aria-hidden={true}
                   fontSize="large"
                   className={`transition-all duration-200 ${

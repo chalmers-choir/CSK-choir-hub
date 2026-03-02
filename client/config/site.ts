@@ -14,6 +14,46 @@ const adminLinks = {
   users: "/admin/users",
 };
 
+type BottomNavItem = {
+  labelKey: string;
+  href: string;
+  icon: string;
+  iconVariant: "filled" | "outlined" | "rounded" | "sharp" | "two-tone";
+};
+
+const bottomNavItems: BottomNavItem[] = [
+  {
+    labelKey: "common.events",
+    href: links.events,
+    icon: "event",
+    iconVariant: "outlined",
+  },
+  {
+    labelKey: "common.songs",
+    href: links.songs,
+    icon: "music_note",
+    iconVariant: "outlined",
+  },
+  {
+    labelKey: "common.home",
+    href: "/",
+    icon: "home",
+    iconVariant: "outlined",
+  },
+  {
+    labelKey: "common.settings",
+    href: links.settings,
+    icon: "settings",
+    iconVariant: "outlined",
+  },
+  {
+    labelKey: "common.profile",
+    href: links.profile,
+    icon: "person",
+    iconVariant: "outlined",
+  },
+];
+
 export const siteConfig = {
   name: "CSK Medlemsportal",
   description: "En medlemsportal for Chalmers Sångkör",
@@ -32,33 +72,7 @@ export const siteConfig = {
     },
   ],
   navMenuItems: [],
-  bottomNavItems: [
-    {
-      labelKey: "common.events",
-      href: links.events,
-      icon: "event",
-    },
-    {
-      labelKey: "common.songs",
-      href: links.songs,
-      icon: "music_note",
-    },
-    {
-      labelKey: "common.home",
-      href: "/",
-      icon: "home",
-    },
-    {
-      labelKey: "common.settings",
-      href: links.settings,
-      icon: "settings",
-    },
-    {
-      labelKey: "common.profile",
-      href: links.profile,
-      icon: "person",
-    },
-  ],
+  bottomNavItems,
   links,
   admin: {
     navItems: [
