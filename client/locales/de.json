@@ -6,6 +6,7 @@
     "search": "Suchen...",
     "home": "Startseite",
     "events": "Veranstaltungen",
+    "songs": "Lieder",
     "profile": "Profil",
     "settings": "Einstellungen",
     "username": "Benutzername",
@@ -40,6 +41,8 @@
   },
   "settings": {
     "title": "Einstellungen",
+    "language": "Sprache",
+    "theme": "Design",
     "change_lang": "Sprache ändern"
   },
   "welcome": {

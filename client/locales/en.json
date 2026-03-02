@@ -6,6 +6,7 @@
     "search": "Search...",
     "home": "Home",
     "events": "Events",
+    "songs": "Songs",
     "profile": "Profile",
     "settings": "Settings",
     "username": "Username",
@@ -40,6 +41,8 @@
   },
   "settings": {
     "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
     "change_lang": "Change Language"
   },
   "welcome": {

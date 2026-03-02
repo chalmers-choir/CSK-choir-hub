@@ -6,6 +6,7 @@
     "search": "Sök...",
     "home": "Hem",
     "events": "Evenemang",
+    "songs": "Sånger",
     "profile": "Profil",
     "settings": "Inställningar",
     "username": "Användarnamn",
@@ -40,6 +41,8 @@
   },
   "settings": {
     "title": "Inställningar",
+    "language": "Språk",
+    "theme": "Tema",
     "change_lang": "Byt språk"
   },
   "welcome": {
