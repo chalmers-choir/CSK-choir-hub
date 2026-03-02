@@ -33,14 +33,8 @@ const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000').spli
 const isLocalDevelopment = (origin: string | undefined): boolean => {
   if (!origin) return false;
 
-  // Allow localhost and local network IPs on port 3000 (Next.js dev server)
-  const localPatterns = [
-    /^http:\/\/localhost:3000$/,
-    /^http:\/\/127\.0\.0\.1:3000$/,
-    /^http:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:3000$/, // Any IP with port 3000
-  ];
-
-  return localPatterns.some((pattern) => pattern.test(origin));
+  // If NODE_ENV is explicitly set to development, allow local development patterns
+  return process.env.NODE_ENV === "development";
 };
 
 app.use(
