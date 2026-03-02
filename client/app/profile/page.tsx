@@ -17,7 +17,7 @@ export default function ProfilePage() {
   const { user } = useAuth();
   const { t } = useTranslation();
 
-  const [dietPref, setDietPref] = useState<string>();
+  const [dietPref, setDietPref] = useState<string>("");
 
   useEffect(() => {
     setDietPref(user?.dietaryPreferences || "");
