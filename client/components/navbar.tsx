@@ -2,13 +2,9 @@ import NextLink from "next/link";
 
 import {
   Navbar as HeroUINavbar,
-  Link,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  NavbarMenu,
-  NavbarMenuItem,
-  NavbarMenuToggle,
   link as linkStyles,
 } from "@heroui/react";
 import clsx from "clsx";
@@ -74,11 +70,10 @@ export const Navbar = () => {
 
       <NavbarContent className="basis-1 pl-4 sm:hidden" justify="end">
         <UserMenu isAuthenticated={isAuthenticated} logout={logout} user={user} />
-        <NavbarMenuToggle />
+        {/* <NavbarMenuToggle /> */}
       </NavbarContent>
 
-      <NavbarMenu>
-        {/* <UserInfo /> */}
+      {/* <NavbarMenu>
         <div className="w-75 mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
@@ -91,7 +86,7 @@ export const Navbar = () => {
             <ThemeSwitch />
           </NavbarMenuItem>
         </div>
-      </NavbarMenu>
+      </NavbarMenu> */}
     </HeroUINavbar>
   );
 };
