@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar } from "@heroui/react";
 import { AccountCircleOutlined } from "@mui/icons-material";
 

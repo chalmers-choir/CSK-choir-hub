@@ -1,3 +1,5 @@
+"use client";
+
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
 
 export interface LinkDropdownMenuProps {
