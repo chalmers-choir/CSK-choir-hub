@@ -1,19 +1,18 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
+import { AuthService } from "./lib/serverApiClient";
+
 export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
-  const isAdminSection = pathname.startsWith("/admin");
-  const API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:5050/api";
-  const isStaticAsset = /\.[^/]+$/.test(pathname);
 
   // Paths that should stay reachable without authentication
-  const PUBLIC_PATHS = ["/", "/login", "/register", "/favicon.ico"];
-  const isPublic =
-    PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/_next") || isStaticAsset;
+  // Determine if the request is for a static asset (e.g., .js, .css, .png)
+  const isStaticAsset = /\.[^/]+$/.test(pathname);
+  const PUBLIC_PATHS = ["/", "/login", "/register"];
+  const isPublic = PUBLIC_PATHS.includes(pathname) || isStaticAsset;
 
-  // Skip protection for public routes and API routes
-  if (isPublic || pathname.startsWith("/api")) return NextResponse.next();
+  if (isPublic) return NextResponse.next();
 
   const token = req.cookies.get("token")?.value;
 
@@ -26,19 +25,14 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
+  const isAdminSection = pathname.startsWith("/admin");
+
   // Admin-only guard: verify user groups via authenticate endpoint
   if (isAdminSection) {
     try {
-      const authUrl = `${API_BASE_URL.replace(/\/$/, "")}/auth/authenticate`;
-      const res = await fetch(authUrl, {
-        headers: { cookie: req.headers.get("cookie") ?? "" },
-        credentials: "include",
-      });
+      const res = await AuthService.authenticate();
 
-      if (!res.ok) throw new Error("Unauthenticated");
-
-      const data = await res.json();
-      const groups: { name: string }[] = data?.user?.groups ?? [];
+      const groups: { name: string }[] = res.user?.groups ?? [];
       const isAdmin = groups.some((g) => g.name === "Admins");
 
       if (!isAdmin) {
