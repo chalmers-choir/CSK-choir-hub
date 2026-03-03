@@ -1,7 +1,7 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Link } from "@heroui/link";
 
-import { useTranslation } from "@/contexts/IntlContext";
+import { useIntl } from "@/contexts/IntlContext";
 import { CSKEvent, CSKEventType } from "@/lib/apiClient";
 
 const eventTypeMeta: Record<CSKEventType, { label: string; color: string }> = {
@@ -13,22 +13,22 @@ const eventTypeMeta: Record<CSKEventType, { label: string; color: string }> = {
   OTHER: { label: "Annat", color: "bg-slate-200 text-slate-700" },
 };
 
-const formatDate = (isoDate: string) =>
-  new Intl.DateTimeFormat("sv-SE", {
+const formatDate = (isoDate: string, locale: string) =>
+  new Intl.DateTimeFormat(locale, {
     weekday: "short",
     month: "short",
     day: "numeric",
   }).format(new Date(isoDate));
 
-const formatTimeRange = (start: string, end?: string | null) => {
-  const from = new Intl.DateTimeFormat("sv-SE", {
+const formatTimeRange = (start: string, locale: string, end?: string | null) => {
+  const from = new Intl.DateTimeFormat(locale, {
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(start));
 
   if (!end) return from;
 
-  const to = new Intl.DateTimeFormat("sv-SE", {
+  const to = new Intl.DateTimeFormat(locale, {
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(end));
@@ -41,7 +41,7 @@ interface EventListCardProps {
 }
 
 export const EventListCard = ({ event }: EventListCardProps) => {
-  const { t } = useTranslation();
+  const { locale, t } = useIntl();
   const badge = eventTypeMeta[event.type] ?? eventTypeMeta.OTHER;
 
   return (
@@ -56,13 +56,15 @@ export const EventListCard = ({ event }: EventListCardProps) => {
             <span className="bg-default-100 text-default-500 rounded-full px-3 py-1 text-xs font-medium">
               {event.place}
             </span>
-            <div className="text-default-700 font-semibold">{formatDate(event.dateStart)}</div>
+            <div className="text-default-700 font-semibold">
+              {formatDate(event.dateStart, locale)}
+            </div>
           </div>
           <div className="text-default-500 flex w-full flex-wrap justify-between text-sm">
             <span className={`rounded-full px-3 py-1 text-xs font-semibold ${badge.color}`}>
               {badge.label}
             </span>
-            <div>{formatTimeRange(event.dateStart, event.dateEnd)}</div>
+            <div>{formatTimeRange(event.dateStart, locale, event.dateEnd)}</div>
           </div>
         </CardHeader>
         <CardBody className="gap-3">

@@ -9,30 +9,31 @@ import { addToast } from "@heroui/toast";
 import { IoClose } from "react-icons/io5";
 
 import { useAuth } from "@/contexts/AuthContext";
+import { useIntl } from "@/contexts/IntlContext";
 import { CSKEvent, CSKEventType, EventsService } from "@/lib/api-client";
 
 import { EventUserEntry, EventUserListAccordion } from "./EventUserListAccordion";
 
-const formatDate = (isoString?: string) => {
+const formatDate = (isoString: string | undefined, locale: string) => {
   if (!isoString) return "N/A";
   const date = new Date(isoString);
 
   if (Number.isNaN(date.getTime())) return "N/A";
 
-  return new Intl.DateTimeFormat("sv-SE", {
+  return new Intl.DateTimeFormat(locale, {
     weekday: "short",
     day: "numeric",
     month: "short",
   }).format(date);
 };
 
-const formatTime = (isoString?: string) => {
+const formatTime = (isoString: string | undefined, locale: string) => {
   if (!isoString) return "N/A";
   const date = new Date(isoString);
 
   if (Number.isNaN(date.getTime())) return "N/A";
 
-  return new Intl.DateTimeFormat("sv-SE", {
+  return new Intl.DateTimeFormat(locale, {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
@@ -54,6 +55,7 @@ const CSKEventTypeString: Record<CSKEventType, string> = {
 
 export default function EventDetailCard({ event }: EventDetailCardProps) {
   const { user } = useAuth();
+  const { locale } = useIntl();
 
   type AttendanceChoice = "yes" | "no" | undefined;
   const statusToChoice = (status?: string | null): AttendanceChoice =>
@@ -94,9 +96,9 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
   const eventName = event?.name ?? "Loading event...";
   const eventPlace = event?.place ?? "";
   const eventDescription = event?.description ?? "No description available.";
-  const eventDate = formatDate(event?.dateStart);
-  const eventStartTime = formatTime(event?.dateStart);
-  const eventEndTime = formatTime(event?.dateEnd);
+  const eventDate = formatDate(event?.dateStart, locale);
+  const eventStartTime = formatTime(event?.dateStart, locale);
+  const eventEndTime = formatTime(event?.dateEnd, locale);
   const eventTimeRange =
     eventEndTime !== "N/A" ? `${eventStartTime} - ${eventEndTime}` : eventStartTime;
   const registrationRequired = !!event?.requiresRegistration;
