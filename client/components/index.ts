@@ -6,4 +6,3 @@ export * from "./icons/Icon";
 export * from "./menus";
 export * from "./navigation";
 export * from "./settings";
-export * from "./user";
