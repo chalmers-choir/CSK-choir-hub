@@ -5,5 +5,5 @@ export * from "./icons";
 export * from "./icons/Icon";
 export * from "./menus";
 export * from "./navigation";
-export * from "./switches";
+export * from "./settings";
 export * from "./user";

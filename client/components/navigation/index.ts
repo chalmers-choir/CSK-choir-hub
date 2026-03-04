@@ -1,2 +1,3 @@
-export * from "./BottomNav/BottomNav";
-export * from "./Navbar/Navbar";
+export * from "./BottomNav";
+export * from "./Navbar";
+export * from "./UserMenu";
