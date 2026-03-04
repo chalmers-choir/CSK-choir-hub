@@ -2,10 +2,7 @@
 
 import { useState } from "react";
 
-import Link from "next/link";
-
 import { Button, addToast } from "@heroui/react";
-import { ArrowBackIosNew } from "@mui/icons-material";
 
 import { TextField } from "@/components";
 import { useTranslation } from "@/contexts/IntlContext";
@@ -63,37 +60,25 @@ export function AdminUserDetails({ initialUser }: AdminUserDetailsProps) {
   };
 
   return (
-    <>
-      <div className="flex items-center gap-2">
-        <Link
-          href="/admin/users"
-          className="text-default-500 hover:text-default-700 text-md flex items-center gap-1 transition-colors"
-        >
-          <ArrowBackIosNew className="cursor-pointer" onClick={() => window.history.back()} />
-          {t("buttons.back")}
-        </Link>
-      </div>
-      <h1 className="mb-6 mt-4 text-2xl font-semibold">{t("admin.users_details")}</h1>
-      <form className="max-w-md space-y-4" onSubmit={handleSubmit}>
-        <TextField
-          label={t("user.firstName")}
-          value={user.firstName}
-          onChange={(val) => setUser((prev) => ({ ...prev, firstName: val }))}
-        />
-        <TextField
-          label={t("user.lastName")}
-          value={user.lastName}
-          onChange={(val) => setUser((prev) => ({ ...prev, lastName: val }))}
-        />
-        <TextField
-          label={t("user.email")}
-          value={user.email}
-          onChange={(val) => setUser((prev) => ({ ...prev, email: val }))}
-        />
-        <Button type="submit" color="primary">
-          {t("buttons.save")}
-        </Button>
-      </form>
-    </>
+    <form className="max-w-md space-y-4" onSubmit={handleSubmit}>
+      <TextField
+        label={t("user.firstName")}
+        value={user.firstName}
+        onChange={(val) => setUser((prev) => ({ ...prev, firstName: val }))}
+      />
+      <TextField
+        label={t("user.lastName")}
+        value={user.lastName}
+        onChange={(val) => setUser((prev) => ({ ...prev, lastName: val }))}
+      />
+      <TextField
+        label={t("user.email")}
+        value={user.email}
+        onChange={(val) => setUser((prev) => ({ ...prev, email: val }))}
+      />
+      <Button type="submit" color="primary">
+        {t("buttons.save")}
+      </Button>
+    </form>
   );
 }
