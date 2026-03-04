@@ -9,12 +9,9 @@ import {
 } from "@heroui/react";
 import clsx from "clsx";
 
-import { UserMenu } from "@/components";
-import { Logo } from "@/components/icons/icons";
-import { ThemeSwitch } from "@/components/switches/ThemeSwitcher";
+import { Logo, ThemeSwitch, UserMenu } from "@/components";
 import { siteConfig } from "@/config/site";
-import { useAuth } from "@/contexts/AuthContext/AuthContext";
-import { useTranslation } from "@/contexts/IntlContext";
+import { useAuth, useTranslation } from "@/contexts";
 
 export const Navbar = () => {
   const { t } = useTranslation();
