@@ -1,4 +1,6 @@
-import { Card, CardBody, CardHeader, Link } from "@heroui/react";
+import Link from "next/link";
+
+import { Card, CardBody, CardHeader } from "@heroui/card";
 
 import { useIntl } from "@/contexts";
 import { CSKEvent, CSKEventType } from "@/lib/apiClient";
