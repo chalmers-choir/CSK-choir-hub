@@ -2,7 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { Button, Card, CardBody, CardFooter, CardHeader, Checkbox, addToast } from "@heroui/react";
+import { Button } from "@heroui/button";
+import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { Checkbox } from "@heroui/checkbox";
+import { addToast } from "@heroui/toast";
 import { IoClose } from "react-icons/io5";
 
 import { useAuth, useIntl } from "@/contexts";
