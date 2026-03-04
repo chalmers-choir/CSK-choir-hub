@@ -11,8 +11,6 @@ import { button as buttonStyles } from '@heroui/theme';
 import { DateValue } from '@internationalized/date';
 import { I18nProvider } from '@react-aria/i18n';
 
-import { RequestLogin } from '@/components';
-import { useAuth } from '@/contexts';
 import { CSKEventType, EventsService } from '@/lib/apiClient';
 
 interface ResultData {
@@ -41,8 +39,6 @@ const autocompletePlaceNames: Record<string, string> = {
 };
 
 export default function CreateEventPage() {
-  const { loading, isAdmin } = useAuth();
-
   // name, type, description, dateStart, place
   const [name, setName] = useState('');
   const [type, setType] = useState<CSKEventType | undefined>(undefined);
@@ -106,90 +102,84 @@ export default function CreateEventPage() {
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      {isAdmin ? (
-        <form className="w-md mx-auto mt-20 flex max-w-full flex-col gap-2" onSubmit={handleSubmit}>
-          <h2 className="w-full text-center text-lg font-semibold">Skapa nytt evenemang</h2>
+      <form className="w-md mx-auto mt-20 flex max-w-full flex-col gap-2" onSubmit={handleSubmit}>
+        <h2 className="w-full text-center text-lg font-semibold">Skapa nytt evenemang</h2>
 
-          <Input
-            required
-            label="Namn på evenemanget"
-            type="text"
-            value={name}
-            variant={defaultVariant}
-            onChange={(e) => setName(e.target.value)}
-          />
+        <Input
+          required
+          label="Namn på evenemanget"
+          type="text"
+          value={name}
+          variant={defaultVariant}
+          onChange={(e) => setName(e.target.value)}
+        />
 
-          <Dropdown>
-            <DropdownTrigger>
-              <Button
-                color={typeIsInvalid ? 'danger' : 'default'}
-                variant={defaultVariant}
-                onPress={() => setTypeIsInvalid(false)}
-              >
-                {type ? eventTypeDbKeyToName[type] : 'Välj typ'}
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              items={Object.entries(eventTypeDbKeyToName)}
-              onAction={(key) => setType(key as CSKEventType)}
-            >
-              {(item) => <DropdownItem key={item[0]}>{item[1]}</DropdownItem>}
-            </DropdownMenu>
-          </Dropdown>
-
-          <Textarea
-            required
-            label="Beskrivning"
-            type="text"
-            value={description}
-            variant={defaultVariant}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-
-          <I18nProvider locale="sv-SE">
-            <DatePicker
-              classNames={{ label: 'after:content-none' }}
-              granularity="minute"
-              isInvalid={dateIsInvalid}
-              label="Datum och tid"
-              value={dateStart}
+        <Dropdown>
+          <DropdownTrigger>
+            <Button
+              color={typeIsInvalid ? 'danger' : 'default'}
               variant={defaultVariant}
-              onChange={(e) => e && setDateStart(e)}
-              onFocus={() => setDateIsInvalid(false)}
-            />
-          </I18nProvider>
+              onPress={() => setTypeIsInvalid(false)}
+            >
+              {type ? eventTypeDbKeyToName[type] : 'Välj typ'}
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu
+            items={Object.entries(eventTypeDbKeyToName)}
+            onAction={(key) => setType(key as CSKEventType)}
+          >
+            {(item) => <DropdownItem key={item[0]}>{item[1]}</DropdownItem>}
+          </DropdownMenu>
+        </Dropdown>
 
-          <Autocomplete
-            allowsCustomValue
-            inputValue={place}
-            isInvalid={placeIsInvalid}
-            items={Object.entries(autocompletePlaceNames)}
-            label="Plats (välj från listan eller skriv egen)"
+        <Textarea
+          required
+          label="Beskrivning"
+          type="text"
+          value={description}
+          variant={defaultVariant}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+
+        <I18nProvider locale="sv-SE">
+          <DatePicker
+            classNames={{ label: 'after:content-none' }}
+            granularity="minute"
+            isInvalid={dateIsInvalid}
+            label="Datum och tid"
+            value={dateStart}
             variant={defaultVariant}
-            onFocus={() => setPlaceIsInvalid(false)}
-            onInputChange={(e) => setPlace(e)}
-          >
-            {(item) => <AutocompleteItem key={item[0]}>{item[1]}</AutocompleteItem>}
-          </Autocomplete>
+            onChange={(e) => e && setDateStart(e)}
+            onFocus={() => setDateIsInvalid(false)}
+          />
+        </I18nProvider>
 
-          {result && (
-            <p className={result.type == 'success' ? 'text-green-500' : 'text-red-500'}>
-              {result.message}
-            </p>
-          )}
+        <Autocomplete
+          allowsCustomValue
+          inputValue={place}
+          isInvalid={placeIsInvalid}
+          items={Object.entries(autocompletePlaceNames)}
+          label="Plats (välj från listan eller skriv egen)"
+          variant={defaultVariant}
+          onFocus={() => setPlaceIsInvalid(false)}
+          onInputChange={(e) => setPlace(e)}
+        >
+          {(item) => <AutocompleteItem key={item[0]}>{item[1]}</AutocompleteItem>}
+        </Autocomplete>
 
-          <Button
-            className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
-            type="submit"
-          >
-            Skapa
-          </Button>
-        </form>
-      ) : loading ? (
-        <>Loading...</>
-      ) : (
-        <RequestLogin>Vänligen logga in som administratör för att skapa evenemang.</RequestLogin>
-      )}
+        {result && (
+          <p className={result.type == 'success' ? 'text-green-500' : 'text-red-500'}>
+            {result.message}
+          </p>
+        )}
+
+        <Button
+          className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
+          type="submit"
+        >
+          Skapa
+        </Button>
+      </form>
     </section>
   );
 }

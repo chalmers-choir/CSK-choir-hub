@@ -1,114 +1,56 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useActionState } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { type FormState, signup } from '@/app/register/actions';
 
-import { Button, Form, Input, Link, button as buttonStyles } from '@heroui/react';
-import clsx from 'clsx';
+export default function SignupForm() {
+  const initialState: FormState = {};
+  const [state, action, pending] = useActionState(signup, initialState);
 
-import { AuthLoading } from '@/components';
-import { siteConfig } from '@/config/site';
-import { useAuth } from '@/contexts';
+  return (
+    <form action={action}>
+      <div>
+        <label htmlFor="username">Username</label>
+        <input id="username" name="username" placeholder="Username" />
+      </div>
+      {state?.errors?.username && <p>{state.errors.username}</p>}
 
-export default function RegisterPage() {
-  const { register, isAuthenticated, loading } = useAuth();
-  const router = useRouter();
+      <div>
+        <label htmlFor="firstName">First Name</label>
+        <input id="firstName" name="firstName" placeholder="First Name" />
+      </div>
+      {state?.errors?.firstName && <p>{state.errors.firstName}</p>}
 
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+      <div>
+        <label htmlFor="lastName">Last Name</label>
+        <input id="lastName" name="lastName" placeholder="Last Name" />
+      </div>
+      {state?.errors?.lastName && <p>{state.errors.lastName}</p>}
 
-  const [error, setError] = useState('');
+      <div>
+        <label htmlFor="email">Email</label>
+        <input id="email" name="email" placeholder="Email" />
+      </div>
+      {state?.errors?.email && <p>{state.errors.email}</p>}
 
-  useEffect(() => {
-    if (!loading && isAuthenticated) {
-      router.replace('/');
-    }
-  }, [isAuthenticated, loading, router]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await register({
-        username,
-        password,
-        email,
-        firstName,
-        lastName,
-      });
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
-
-  return loading ? (
-    <AuthLoading />
-  ) : (
-    <Form
-      className="mx-auto mt-20 flex max-w-sm flex-col items-center gap-2"
-      onSubmit={handleSubmit}
-    >
-      <h2 className="w-full text-center text-lg font-semibold">Register</h2>
-      <Input
-        required
-        placeholder="Email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-
-      <Input
-        required
-        placeholder="Username"
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-
-      <Input
-        required
-        placeholder="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
-      <Input
-        required
-        placeholder="First Name"
-        type="text"
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-      />
-
-      <Input
-        required
-        placeholder="Last Name"
-        type="text"
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-      />
-
-      {error && <p className="text-red-500">{error}</p>}
-
-      <Button
-        className={clsx(
-          buttonStyles({ color: 'primary', radius: 'md', variant: 'shadow' }),
-          'px-8',
-        )}
-        type="submit"
-      >
-        Register
-      </Button>
-      <Link
-        className="mt-4 inline-block w-full text-center text-sm text-blue-500"
-        href={siteConfig.links.login}
-      >
-        Already have an account? Login
-      </Link>
-    </Form>
+      <div>
+        <label htmlFor="password">Password</label>
+        <input id="password" name="password" type="password" />
+      </div>
+      {state?.errors?.password && (
+        <div>
+          <p>Password must:</p>
+          <ul>
+            {state.errors.password.map((error) => (
+              <li key={error}>- {error}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <button disabled={pending} type="submit">
+        Sign Up
+      </button>
+    </form>
   );
 }

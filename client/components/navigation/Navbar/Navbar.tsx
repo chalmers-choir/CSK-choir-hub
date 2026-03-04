@@ -9,13 +9,14 @@ import {
 } from '@heroui/react';
 import clsx from 'clsx';
 
-import { Logo, ThemeSwitch, UserMenu } from '@/components';
+import { ThemeSwitch } from '@/components';
+import { Logo } from '@/components/icons';
 import { siteConfig } from '@/config/site';
-import { useAuth, useTranslation } from '@/contexts';
+import { useTranslation } from '@/contexts';
 
 export const Navbar = () => {
   const { t } = useTranslation();
-  const { isAuthenticated, logout, user, isAdmin } = useAuth();
+  const isAdmin = false; // Replace with actual admin check
 
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
@@ -62,11 +63,11 @@ export const Navbar = () => {
         <NavbarItem className="hidden gap-2 sm:flex">
           <ThemeSwitch />
         </NavbarItem>
-        <UserMenu isAuthenticated={isAuthenticated} logout={logout} user={user} />
+        {/*<UserMenu isAuthenticated={isAuthenticated} logout={logout} user={user} /> */}
       </NavbarContent>
 
       <NavbarContent className="basis-1 pl-4 sm:hidden" justify="end">
-        <UserMenu isAuthenticated={isAuthenticated} logout={logout} user={user} />
+        {/* <UserMenu isAuthenticated={isAuthenticated} logout={logout} user={user} /> */}
         {/* <NavbarMenuToggle /> */}
       </NavbarContent>
 
