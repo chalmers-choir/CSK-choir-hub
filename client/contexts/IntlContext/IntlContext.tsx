@@ -4,9 +4,9 @@ import React, { ReactNode, createContext, useContext, useEffect, useState } from
 
 import { NextIntlClientProvider, useTranslations } from "next-intl";
 
-import deMessages from "../locales/de.json";
-import enMessages from "../locales/en.json";
-import svMessages from "../locales/sv.json";
+import deMessages from "@/locales/de.json";
+import enMessages from "@/locales/en.json";
+import svMessages from "@/locales/sv.json";
 
 type Locale = "en" | "sv" | "de";
 

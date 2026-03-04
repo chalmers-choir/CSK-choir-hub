@@ -1,10 +1,8 @@
 "use client";
 
-import { Link } from "@heroui/link";
-import { button as buttonStyles } from "@heroui/theme";
+import { Link, button as buttonStyles } from "@heroui/react";
 
-import { useAuth } from "@/contexts/AuthContext";
-import { useTranslation } from "@/contexts/IntlContext";
+import { useAuth, useTranslation } from "@/contexts";
 
 export const EventsPageHeader = () => {
   const { t } = useTranslation();

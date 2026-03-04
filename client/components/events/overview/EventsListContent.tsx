@@ -1,6 +1,6 @@
 "use client";
 
-import { useIntl } from "@/contexts/IntlContext";
+import { useIntl } from "@/contexts";
 import { CSKEvent } from "@/lib/apiClient";
 
 import { EventsWeekSections } from "./EventsWeekSections";

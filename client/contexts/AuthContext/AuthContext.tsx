@@ -5,8 +5,7 @@ import React, { ReactNode, createContext, useContext, useEffect, useState } from
 import { useRouter } from "next/navigation";
 
 import { AuthService, User } from "@/lib/apiClient";
-
-import { AuthContextType, RegisterForm } from "../types/auth";
+import { AuthContextType, RegisterForm } from "@/types/auth";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

@@ -1,11 +1,11 @@
 import { Link } from "@heroui/link";
 import { button as buttonStyles } from "@heroui/theme";
 
-interface Props {
+interface RequestLoginProps {
   children?: string;
 }
 
-export default function RequestLogin({ children }: Props) {
+export const RequestLogin = ({ children }: RequestLoginProps) => {
   return (
     <div>
       <div className="text-center">
@@ -24,4 +24,4 @@ export default function RequestLogin({ children }: Props) {
       </div>
     </div>
   );
-}
+};

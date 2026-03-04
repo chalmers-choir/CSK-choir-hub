@@ -1,10 +1,8 @@
 "use client";
 
-import AuthLoading from "@/components/AuthLoading";
-import LoggedOutCta from "@/components/LoggedOutCta";
-import { subtitle, title } from "@/components/primitives";
-import { useAuth } from "@/contexts/AuthContext";
-import { useTranslation } from "@/contexts/IntlContext";
+import { AuthLoading, LoggedOutCta } from "@/components";
+import { useAuth, useTranslation } from "@/contexts";
+import { subtitle, title } from "@/styles/primitives";
 
 export default function IndexPage() {
   const { user, isAuthenticated, loading } = useAuth();

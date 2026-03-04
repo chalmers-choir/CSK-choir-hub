@@ -4,16 +4,12 @@ import { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { Button } from "@heroui/button";
-import { Input } from "@heroui/input";
-import { Link } from "@heroui/link";
-import { Form } from "@heroui/react";
-import { button as buttonStyles } from "@heroui/theme";
+import { Button, Form, Input, Link, button as buttonStyles } from "@heroui/react";
 import clsx from "clsx";
 
-import AuthLoading from "@/components/AuthLoading";
+import { AuthLoading } from "@/components";
 import { siteConfig } from "@/config/site";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts";
 
 export default function RegisterPage() {
   const { register, isAuthenticated, loading } = useAuth();

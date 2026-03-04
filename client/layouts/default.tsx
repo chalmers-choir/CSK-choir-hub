@@ -2,8 +2,7 @@
 
 import { Link } from "@heroui/link";
 
-import { BottomNav } from "@/components/bottom-nav";
-import { Navbar } from "@/components/navbar";
+import { BottomNav, Navbar } from "@/components";
 
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   return (

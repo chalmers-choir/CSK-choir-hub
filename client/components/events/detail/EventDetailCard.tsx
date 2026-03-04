@@ -2,14 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { Button } from "@heroui/button";
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { Checkbox } from "@heroui/checkbox";
-import { addToast } from "@heroui/toast";
+import { Button, Card, CardBody, CardFooter, CardHeader, Checkbox, addToast } from "@heroui/react";
 import { IoClose } from "react-icons/io5";
 
-import { useAuth } from "@/contexts/AuthContext";
-import { useIntl } from "@/contexts/IntlContext";
+import { useAuth, useIntl } from "@/contexts";
 import { CSKEvent, CSKEventType, EventsService } from "@/lib/api-client";
 
 import { EventUserEntry, EventUserListAccordion } from "./EventUserListAccordion";
@@ -53,7 +49,7 @@ const CSKEventTypeString: Record<CSKEventType, string> = {
   OTHER: "Övrigt",
 };
 
-export default function EventDetailCard({ event }: EventDetailCardProps) {
+export const EventDetailCard = ({ event }: EventDetailCardProps) => {
   const { user } = useAuth();
   const { locale } = useIntl();
 
@@ -315,4 +311,4 @@ export default function EventDetailCard({ event }: EventDetailCardProps) {
       </CardFooter>
     </Card>
   );
-}
+};

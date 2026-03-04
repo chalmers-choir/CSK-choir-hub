@@ -1,4 +1,4 @@
-import { useTranslation } from "@/contexts/IntlContext";
+import { useTranslation } from "@/contexts";
 import { CSKEvent } from "@/lib/apiClient";
 
 import { EventListCard } from "./EventListCard";

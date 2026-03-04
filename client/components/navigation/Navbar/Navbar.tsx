@@ -13,7 +13,7 @@ import { UserMenu } from "@/components";
 import { Logo } from "@/components/icons/icons";
 import { ThemeSwitch } from "@/components/switches/ThemeSwitcher";
 import { siteConfig } from "@/config/site";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext/AuthContext";
 import { useTranslation } from "@/contexts/IntlContext";
 
 export const Navbar = () => {

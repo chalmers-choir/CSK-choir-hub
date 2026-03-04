@@ -1,5 +1,4 @@
-import { Button } from "@heroui/button";
-import { Link } from "@heroui/link";
+import { Button, Link } from "@heroui/react";
 
 export default function UnauthorizedPage() {
   return (

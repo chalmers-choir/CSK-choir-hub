@@ -2,8 +2,7 @@
 
 import { Card } from "@heroui/react";
 
-import { LanguageSwitcher } from "@/components/language-switcher";
-import { ThemeSwitch } from "@/components/theme-switch";
+import { LanguageSwitcher, ThemeSwitch } from "@/components";
 import { useTranslation } from "@/contexts";
 
 export default function SettingsPage() {

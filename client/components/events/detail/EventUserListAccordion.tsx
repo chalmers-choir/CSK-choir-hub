@@ -1,4 +1,4 @@
-import { Accordion, AccordionItem } from "@heroui/accordion";
+import { Accordion, AccordionItem } from "@heroui/react";
 import { IoCheckmarkCircle, IoCloseCircle, IoEllipseOutline } from "react-icons/io5";
 
 export type EventUserEntry = {

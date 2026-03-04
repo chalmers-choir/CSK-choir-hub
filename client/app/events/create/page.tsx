@@ -11,8 +11,8 @@ import { button as buttonStyles } from "@heroui/theme";
 import { DateValue } from "@internationalized/date";
 import { I18nProvider } from "@react-aria/i18n";
 
-import RequestLogin from "@/components/request-login";
-import { useAuth } from "@/contexts/AuthContext";
+import { RequestLogin } from "@/components";
+import { useAuth } from "@/contexts";
 import { CSKEventType, EventsService } from "@/lib/apiClient";
 
 interface ResultData {

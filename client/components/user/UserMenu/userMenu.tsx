@@ -1,9 +1,9 @@
 import { Avatar } from "@heroui/react";
 import { AccountCircleOutlined } from "@mui/icons-material";
 
-import { LinkDropDownMenuRef, LinkDropdownMenu } from "@/components/menus";
+import { LinkDropDownMenuRef, LinkDropdownMenu } from "@/components";
 import { siteConfig } from "@/config/site";
-import { useTranslation } from "@/contexts/IntlContext";
+import { useTranslation } from "@/contexts";
 import { User } from "@/lib/api-client";
 
 export interface UserMenuProps {
