@@ -1,3 +1,5 @@
+"use client";
+
 import { Input } from "@heroui/react";
 
 import { ReadOnlyTextField } from "./ReadOnlyTextField";

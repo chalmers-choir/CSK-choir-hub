@@ -1,51 +1,64 @@
-import Link from "next/link";
+import { Suspense } from "react";
+
+import { notFound } from "next/navigation";
 
 import EventDetailCard from "@/components/events/detail/EventDetailCard";
-import { ApiError, CSKEvent, EventsService } from "@/lib/serverApiClient";
+import { ApiError, EventsService } from "@/lib/serverApiClient";
 
-function EventNotFound() {
+/**
+ * Server component that fetches event data.
+ * Wrapped in Suspense to enable streaming.
+ */
+async function EventDataLoader({ eventId }: { eventId: number }) {
+  try {
+    const res = await EventsService.getEventById({ eventId });
+
+    if (!res.event) {
+      notFound();
+    }
+
+    return <EventDetailCard event={res.event} />;
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) {
+      notFound();
+    }
+
+    throw error;
+  }
+}
+
+/**
+ * Loading skeleton for event details.
+ */
+function EventDetailsLoadingSkeleton() {
   return (
-    <section className="mx-auto flex max-w-3xl flex-col gap-3 py-8 md:py-10">
-      <h1 className="text-2xl font-semibold">Event not found</h1>
-      <p className="text-default-600">The event may have been removed or the link is invalid.</p>
-      <Link href="/events" className="bg-foreground text-background w-fit rounded-md px-4 py-2">
-        Back to events
-      </Link>
-    </section>
+    <div className="w-full max-w-2xl space-y-4">
+      <div className="bg-default-100 h-64 animate-pulse rounded-lg" />
+      <div className="space-y-2">
+        <div className="bg-default-100 h-8 w-3/4 animate-pulse rounded" />
+        <div className="bg-default-100 h-4 w-1/2 animate-pulse rounded" />
+      </div>
+    </div>
   );
 }
 
+/**
+ * Event detail page.
+ * Static layout renders immediately, event data streams in when ready.
+ */
 export default async function EventDetailPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const eventId = Number.parseInt(params.id, 10);
 
   if (Number.isNaN(eventId)) {
-    return <EventNotFound />;
-  }
-
-  let event: CSKEvent;
-
-  try {
-    const res = await EventsService.getEventById({ eventId });
-
-    if (!res.event) {
-      return <EventNotFound />;
-    }
-
-    event = res.event;
-  } catch (error) {
-    if (error instanceof ApiError && error.status === 404) {
-      return <EventNotFound />;
-    }
-
-    throw error;
+    notFound();
   }
 
   return (
     <section className="flex min-h-[70vh] w-full items-center justify-center py-8">
-      <div className="w-full max-w-2xl">
-        <EventDetailCard event={event} />
-      </div>
+      <Suspense fallback={<EventDetailsLoadingSkeleton />}>
+        <EventDataLoader eventId={eventId} />
+      </Suspense>
     </section>
   );
 }

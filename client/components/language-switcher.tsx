@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, ButtonGroup } from "@heroui/react";
 
 import { useIntl } from "@/contexts/IntlContext";

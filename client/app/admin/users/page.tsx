@@ -1,139 +1,46 @@
-"use client";
+import { Suspense } from "react";
 
-import { useEffect, useState } from "react";
+import { AdminUsersTable } from "@/components";
+import { UsersService } from "@/lib/serverApiClient";
 
-import { useRouter } from "next/navigation";
+/**
+ * Server component that fetches users data.
+ * Wrapped in Suspense to enable streaming.
+ */
+async function UsersDataLoader() {
+  const response = await UsersService.getUsers({ includeGroups: true });
+  const users = response.users || [];
 
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
+  return <AdminUsersTable users={users} />;
+}
 
-import { TextField } from "@/components";
-import { useTranslation } from "@/contexts";
-import { User, UsersService } from "@/lib/api-client";
-import { GroupType } from "@/types/group";
+/**
+ * Loading skeleton for the users table.
+ */
+function UsersLoadingSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="bg-default-100 h-10 w-64 animate-pulse rounded-lg" />
+      <div className="space-y-2">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="bg-default-100 h-16 animate-pulse rounded-lg" />
+        ))}
+      </div>
+    </div>
+  );
+}
 
+/**
+ * Admin users page.
+ * Static content renders immediately, users data streams in when ready.
+ */
 export default function AdminUsersPage() {
-  const { t } = useTranslation();
-  const router = useRouter();
-  const [users, setUsers] = useState<User[] | undefined>(undefined);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortColumn, setSortColumn] = useState<string>("name");
-  const [sortDirection, setSortDirection] = useState<"ascending" | "descending">("ascending");
-
-  useEffect(() => {
-    UsersService.getUsers({ includeGroups: true }).then((response) => {
-      setUsers(response.users);
-      setLoading(false);
-    });
-  }, []);
-
-  const columns = [
-    { name: t("admin.name_column"), key: "name" },
-    { name: t("admin.choir_column"), key: "choir" },
-  ];
-
-  const handleSort = (columnKey: string) => {
-    if (sortColumn === columnKey) {
-      setSortDirection(sortDirection === "ascending" ? "descending" : "ascending");
-    } else {
-      setSortColumn(columnKey);
-      setSortDirection("ascending");
-    }
-  };
-
-  const filteredUsers = users?.filter((user) => {
-    return (
-      user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
-
-  const sortedUsers = filteredUsers?.sort((a, b) => {
-    let compareValue = 0;
-
-    if (sortColumn === "name") {
-      const nameA = `${a.firstName} ${a.lastName}`.toLowerCase();
-      const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
-
-      compareValue = nameA.localeCompare(nameB);
-    } else if (sortColumn === "mail") {
-      compareValue = a.email.toLowerCase().localeCompare(b.email.toLowerCase());
-    } else if (sortColumn === "choir") {
-      const choirA = a.groups
-        ?.filter((group) => group.type === GroupType.CHOIR)
-        .map((group) => group.name)
-        .join(", ")
-        .toLowerCase();
-      const choirB = b.groups
-        ?.filter((group) => group.type === GroupType.CHOIR)
-        .map((group) => group.name)
-        .join(", ")
-        .toLowerCase();
-
-      // Users with no choir should sort together at the bottom
-      if (!choirA && !choirB) compareValue = 0;
-      else if (!choirA)
-        compareValue = 1; // No choir sorts lower
-      else if (!choirB)
-        compareValue = -1; // No choir sorts higher
-      else compareValue = choirA.localeCompare(choirB);
-    }
-
-    return sortDirection === "ascending" ? compareValue : -compareValue;
-  });
-
   return (
     <>
-      <h1 className="text-2xl font-bold">{t("admin.users_title")}</h1>
-
-      <TextField
-        placeholder={t("admin.search_users")}
-        value={searchTerm}
-        onChange={setSearchTerm}
-        className="my-4 max-w-sm"
-      />
-
-      {loading ? (
-        <p>{t("admin.loading")}</p>
-      ) : (
-        sortedUsers && (
-          <Table>
-            <TableHeader>
-              {columns.map((column) => (
-                <TableColumn
-                  key={column.key}
-                  className="cursor-pointer"
-                  onClick={() => handleSort(column.key)}
-                >
-                  {column.name}
-                  {sortColumn === column.key && (
-                    <span className="ml-2">{sortDirection === "ascending" ? "↑" : "↓"}</span>
-                  )}
-                </TableColumn>
-              ))}
-            </TableHeader>
-
-            <TableBody>
-              {sortedUsers.map((user) => (
-                <TableRow
-                  key={user.id}
-                  onClick={() => router.push(`/admin/users/${user.id}`)}
-                  className="hover:bg-default-100 cursor-pointer transition-colors"
-                >
-                  <TableCell>{user.firstName + " " + user.lastName}</TableCell>
-                  <TableCell>
-                    {user.groups
-                      .filter((group) => group.type === GroupType.CHOIR)
-                      .map((group) => group.name)
-                      .join(", ") || t("admin.no_choir")}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )
-      )}
+      <h1 className="text-2xl font-bold">Users</h1>
+      <Suspense fallback={<UsersLoadingSkeleton />}>
+        <UsersDataLoader />
+      </Suspense>
     </>
   );
 }
