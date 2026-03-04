@@ -1,3 +1,5 @@
+"use client";
+
 import { Accordion, AccordionItem } from "@heroui/accordion";
 import { IoCheckmarkCircle, IoCloseCircle, IoEllipseOutline } from "react-icons/io5";
 

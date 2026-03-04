@@ -4,11 +4,9 @@ import React from "react";
 
 import { ThemeProvider } from "next-themes";
 
-import { HeroUIProvider } from "@heroui/system";
-import { ToastProvider } from "@heroui/toast";
+import { HeroUIProvider, ToastProvider } from "@heroui/react";
 
-import { AuthProvider } from "@/contexts/AuthContext";
-import { IntlProvider } from "@/contexts/IntlContext";
+import { AuthProvider, IntlProvider } from "@/contexts";
 
 /**
  * A wrapper component that provides authentication, theming, and UI context to its children.

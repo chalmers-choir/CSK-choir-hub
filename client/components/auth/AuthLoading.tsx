@@ -1,7 +1,7 @@
 /**
  * Consistent loading indicator for auth-dependent views.
  */
-const AuthLoading = () => (
+export const AuthLoading = () => (
   <div className="text-default-500 flex h-32 items-center justify-center">
     <div
       aria-label="Laddar"
@@ -10,5 +10,3 @@ const AuthLoading = () => (
     <span>Kontrollerar inloggning...</span>
   </div>
 );
-
-export default AuthLoading;

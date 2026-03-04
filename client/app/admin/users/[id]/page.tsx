@@ -9,7 +9,7 @@ import { Button, addToast } from "@heroui/react";
 import { ArrowBackIosNew } from "@mui/icons-material";
 
 import { TextField } from "@/components";
-import { useTranslation } from "@/contexts/IntlContext";
+import { useTranslation } from "@/contexts";
 import { ApiError, User, UsersService } from "@/lib/api-client";
 
 /**

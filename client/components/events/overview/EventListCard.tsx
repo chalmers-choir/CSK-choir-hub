@@ -1,7 +1,6 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Link } from "@heroui/link";
+import { Card, CardBody, CardHeader, Link } from "@heroui/react";
 
-import { useIntl } from "@/contexts/IntlContext";
+import { useIntl } from "@/contexts";
 import { CSKEvent, CSKEventType } from "@/lib/apiClient";
 
 const eventTypeMeta: Record<CSKEventType, { label: string; color: string }> = {

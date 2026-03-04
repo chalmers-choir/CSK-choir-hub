@@ -1,3 +1,5 @@
+"use client";
+
 import { FC, useEffect, useState } from "react";
 
 import { useTheme } from "next-themes";
@@ -6,7 +8,7 @@ import { SwitchProps, useSwitch } from "@heroui/switch";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
 import clsx from "clsx";
 
-import { MoonFilledIcon, SunFilledIcon } from "@/components/icons";
+import { MoonFilledIcon, SunFilledIcon } from "@/components";
 
 export interface ThemeSwitchProps {
   className?: string;

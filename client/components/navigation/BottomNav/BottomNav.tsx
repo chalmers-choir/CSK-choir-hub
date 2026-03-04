@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Icon } from "@/components/Icon";
+import { Icon } from "@/components/icons/Icon";
 import { siteConfig } from "@/config/site";
 
 export const BottomNav = () => {

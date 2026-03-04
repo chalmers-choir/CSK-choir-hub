@@ -4,16 +4,11 @@ import { Suspense, useEffect, useState } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { Button } from "@heroui/button";
-import { Input } from "@heroui/input";
-import { Link } from "@heroui/link";
-import { Form } from "@heroui/react";
-import { button as buttonStyles } from "@heroui/theme";
+import { Button, Form, Input, Link, button as buttonStyles } from "@heroui/react";
 
-import AuthLoading from "@/components/AuthLoading";
+import { AuthLoading } from "@/components";
 import { siteConfig } from "@/config/site";
-import { useAuth } from "@/contexts/AuthContext";
-import { useTranslation } from "@/contexts/IntlContext";
+import { useAuth, useTranslation } from "@/contexts";
 
 function LoginPageContent() {
   const { login, isAuthenticated, loading } = useAuth();

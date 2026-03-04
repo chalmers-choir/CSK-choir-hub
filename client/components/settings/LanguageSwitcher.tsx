@@ -1,6 +1,8 @@
+"use client";
+
 import { Button, ButtonGroup } from "@heroui/react";
 
-import { useIntl } from "@/contexts/IntlContext";
+import { useIntl } from "@/contexts";
 
 const languages = [
   { code: "sv", label: "SWE 🇸🇪" },

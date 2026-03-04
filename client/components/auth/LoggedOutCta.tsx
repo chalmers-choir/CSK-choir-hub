@@ -11,7 +11,7 @@ type LoggedOutCtaProps = {
 /**
  * Reusable call-to-action for unauthenticated visitors.
  */
-const LoggedOutCta = ({ message }: LoggedOutCtaProps) => {
+export const LoggedOutCta = ({ message }: LoggedOutCtaProps) => {
   const { t } = useTranslation();
 
   return (
@@ -34,5 +34,3 @@ const LoggedOutCta = ({ message }: LoggedOutCtaProps) => {
     </div>
   );
 };
-
-export default LoggedOutCta;
