@@ -482,3 +482,18 @@ requestBodies:
       application/json:
         schema:
           $ref: "#/schemas/MakeRegistrationInput"
+
+responses:
+  DefaultError:
+    description: Unexpected error
+    content:
+      application/json:
+        schema:
+          $ref: "#/schemas/Error"
+
+securitySchemes:
+  authCookie:
+    type: apiKey
+    description: Authentication via JWT stored in a cookie
+    in: cookie
+    name: token
