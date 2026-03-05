@@ -1,5 +1,5 @@
-import { prisma } from "@db";
-import { type GroupType } from "@prisma/generated/client";
+import { prisma } from '@db';
+import { type GroupType } from '@prisma/generated/client';
 
 /**
  * Creates a new group with the given data.
@@ -64,7 +64,7 @@ export async function findBy(filters: { type?: GroupType; name?: string }) {
   const where: any = {};
 
   if (filters.type) where.type = filters.type;
-  if (filters.name) where.name = { contains: filters.name, mode: "insensitive" };
+  if (filters.name) where.name = { contains: filters.name, mode: 'insensitive' };
 
   return await prisma.group.findMany({ where });
 }

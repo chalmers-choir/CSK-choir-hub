@@ -1,6 +1,6 @@
-import * as songService from "@services/songService";
-import { BadRequestError } from "@utils/errors";
-import { type NextFunction, type Request, type Response } from "express";
+import * as songService from '@services/songService';
+import { BadRequestError } from '@utils/errors';
+import { type NextFunction, type Request, type Response } from 'express';
 
 // Get all songs
 export const getSongs = async (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +17,7 @@ export const getSongs = async (req: Request, res: Response, next: NextFunction) 
 export const createSong = async (req: Request, res: Response, next: NextFunction) => {
   const { title } = req.body;
 
-  if (!title) return next(new BadRequestError("Song title is required"));
+  if (!title) return next(new BadRequestError('Song title is required'));
 
   try {
     const newSong = await songService.createSong({ title });
@@ -32,7 +32,7 @@ export const createSong = async (req: Request, res: Response, next: NextFunction
 export const deleteSong = async (req: Request, res: Response, next: NextFunction) => {
   const songId = parseInt(req.params.id, 10);
 
-  if (isNaN(songId)) return next(new BadRequestError("Invalid song ID"));
+  if (isNaN(songId)) return next(new BadRequestError('Invalid song ID'));
 
   try {
     await songService.deleteSong(songId);
@@ -49,7 +49,7 @@ export const assignTagToSong = async (req: Request, res: Response, next: NextFun
   const { tagId } = req.body;
 
   if (isNaN(songId) || !tagId) {
-    return next(new BadRequestError("Invalid song ID or tag ID"));
+    return next(new BadRequestError('Invalid song ID or tag ID'));
   }
 
   try {
@@ -66,7 +66,7 @@ export const removeTagFromSong = async (req: Request, res: Response, next: NextF
   const songId = parseInt(req.params.id, 10);
   const { tagId } = req.body;
 
-  if (isNaN(songId) || !tagId) return next(new BadRequestError("Invalid song ID or tag ID"));
+  if (isNaN(songId) || !tagId) return next(new BadRequestError('Invalid song ID or tag ID'));
 
   try {
     await songService.removeTag(songId, tagId);

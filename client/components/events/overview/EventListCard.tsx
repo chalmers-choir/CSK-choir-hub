@@ -1,37 +1,37 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card, CardBody, CardHeader } from '@heroui/card';
 
-import { useIntl } from "@/contexts";
-import { CSKEvent, CSKEventType } from "@/lib/apiClient";
+import { useIntl } from '@/contexts';
+import { CSKEvent, CSKEventType } from '@/lib/apiClient';
 
 const eventTypeMeta: Record<CSKEventType, { label: string; color: string }> = {
-  REHEARSAL: { label: "Repetition", color: "bg-sky-100 text-sky-700" },
-  CONCERT: { label: "Konsert", color: "bg-purple-100 text-purple-700" },
-  GIG: { label: "Gig", color: "bg-amber-100 text-amber-800" },
-  PARTY: { label: "Fest", color: "bg-pink-100 text-pink-700" },
-  MEETING: { label: "Möte", color: "bg-emerald-100 text-emerald-700" },
-  OTHER: { label: "Annat", color: "bg-slate-200 text-slate-700" },
+  REHEARSAL: { label: 'Repetition', color: 'bg-sky-100 text-sky-700' },
+  CONCERT: { label: 'Konsert', color: 'bg-purple-100 text-purple-700' },
+  GIG: { label: 'Gig', color: 'bg-amber-100 text-amber-800' },
+  PARTY: { label: 'Fest', color: 'bg-pink-100 text-pink-700' },
+  MEETING: { label: 'Möte', color: 'bg-emerald-100 text-emerald-700' },
+  OTHER: { label: 'Annat', color: 'bg-slate-200 text-slate-700' },
 };
 
 const formatDate = (isoDate: string, locale: string) =>
   new Intl.DateTimeFormat(locale, {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
   }).format(new Date(isoDate));
 
 const formatTimeRange = (start: string, locale: string, end?: string | null) => {
   const from = new Intl.DateTimeFormat(locale, {
-    hour: "2-digit",
-    minute: "2-digit",
+    hour: '2-digit',
+    minute: '2-digit',
   }).format(new Date(start));
 
   if (!end) return from;
 
   const to = new Intl.DateTimeFormat(locale, {
-    hour: "2-digit",
-    minute: "2-digit",
+    hour: '2-digit',
+    minute: '2-digit',
   }).format(new Date(end));
 
   return from === to ? from : `${from}–${to}`;
@@ -76,12 +76,12 @@ export const EventListCard = ({ event }: EventListCardProps) => {
           <div className="flex flex-wrap gap-2">
             {event.requiresAttendance && (
               <span className="rounded-md bg-red-50 px-2 py-1 text-xs font-semibold text-red-700">
-                {t("events.attendance_required")}
+                {t('events.attendance_required')}
               </span>
             )}
             {event.requiresRegistration && (
               <span className="rounded-md bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700">
-                {t("events.registration_required")}
+                {t('events.registration_required')}
               </span>
             )}
           </div>

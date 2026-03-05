@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
-import { Button, addToast } from "@heroui/react";
-import { ArrowBackIosNew } from "@mui/icons-material";
+import { Button, addToast } from '@heroui/react';
+import { ArrowBackIosNew } from '@mui/icons-material';
 
-import { TextField } from "@/components";
-import { useTranslation } from "@/contexts";
-import { ApiError, User, UsersService } from "@/lib/api-client";
+import { TextField } from '@/components';
+import { useTranslation } from '@/contexts';
+import { ApiError, User, UsersService } from '@/lib/api-client';
 
 /**
  * Admin page for viewing and editing user details.
@@ -35,7 +35,7 @@ export default function UserDetailPage() {
 
         setUser(res.user);
       } catch (error) {
-        let errorMessage = "Failed to fetch user details. Please try again.";
+        let errorMessage = 'Failed to fetch user details. Please try again.';
 
         if (error instanceof ApiError && error.body?.message) {
           errorMessage = error.body.message;
@@ -44,9 +44,9 @@ export default function UserDetailPage() {
         }
 
         addToast({
-          title: "Error",
+          title: 'Error',
           description: errorMessage,
-          color: "danger",
+          color: 'danger',
           timeout: 2000,
         });
       }
@@ -72,13 +72,13 @@ export default function UserDetailPage() {
       });
 
       addToast({
-        title: "Success",
-        description: "User updated successfully!",
-        color: "success",
+        title: 'Success',
+        description: 'User updated successfully!',
+        color: 'success',
         timeout: 2000,
       });
     } catch (error) {
-      let errorMessage = "Failed to update user. Please try again.";
+      let errorMessage = 'Failed to update user. Please try again.';
 
       if (error instanceof ApiError && error.body?.message) {
         errorMessage = error.body.message;
@@ -87,9 +87,9 @@ export default function UserDetailPage() {
       }
 
       addToast({
-        title: "Error",
+        title: 'Error',
         description: errorMessage,
-        color: "danger",
+        color: 'danger',
         timeout: 2000,
       });
     }
@@ -103,29 +103,29 @@ export default function UserDetailPage() {
           className="text-default-500 hover:text-default-700 text-md flex items-center gap-1 transition-colors"
         >
           <ArrowBackIosNew className="cursor-pointer" onClick={() => window.history.back()} />
-          {t("buttons.back")}
+          {t('buttons.back')}
         </Link>
       </div>
-      <h1 className="mb-6 mt-4 text-2xl font-semibold">{t("admin.users_details")}</h1>
+      <h1 className="mb-6 mt-4 text-2xl font-semibold">{t('admin.users_details')}</h1>
       {user ? (
         <form className="max-w-md space-y-4" onSubmit={handleSubmit}>
           <TextField
-            label={t("user.firstName")}
+            label={t('user.firstName')}
             value={user.firstName}
             onChange={(val) => setUser((prev) => (prev ? { ...prev, firstName: val } : undefined))}
           />
           <TextField
-            label={t("user.lastName")}
+            label={t('user.lastName')}
             value={user.lastName}
             onChange={(val) => setUser((prev) => (prev ? { ...prev, lastName: val } : undefined))}
           />
           <TextField
-            label={t("user.email")}
+            label={t('user.email')}
             value={user.email}
             onChange={(val) => setUser((prev) => (prev ? { ...prev, email: val } : undefined))}
           />
           <Button type="submit" color="primary">
-            {t("buttons.save")}
+            {t('buttons.save')}
           </Button>
         </form>
       ) : (

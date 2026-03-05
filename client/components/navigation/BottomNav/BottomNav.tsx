@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-import { Icon } from "@/components/icons/Icon";
-import { siteConfig } from "@/config/site";
+import { Icon } from '@/components/icons/Icon';
+import { siteConfig } from '@/config/site';
 
 export const BottomNav = () => {
   const pathname = usePathname();
@@ -15,7 +15,7 @@ export const BottomNav = () => {
 
   // Find the active index
   const activeIndex = siteConfig.bottomNavItems.findIndex((item) => {
-    return item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+    return item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
   });
 
   useEffect(() => {
@@ -62,14 +62,14 @@ export const BottomNav = () => {
               }}
               href={item.href}
               className={
-                "relative flex h-16 items-center justify-center transition-transform active:scale-95"
+                'relative flex h-16 items-center justify-center transition-transform active:scale-95'
               }
-              aria-current={isActive ? "page" : undefined}
+              aria-current={isActive ? 'page' : undefined}
             >
               {/* Icon */}
               <div
                 className={`relative z-10 flex h-16 w-16 items-center justify-center rounded-2xl transition-all duration-200 ${
-                  isActive ? "scale-110" : "scale-100 hover:scale-105"
+                  isActive ? 'scale-110' : 'scale-100 hover:scale-105'
                 }`}
               >
                 <Icon
@@ -79,8 +79,8 @@ export const BottomNav = () => {
                   fontSize="large"
                   className={`transition-all duration-200 ${
                     isActive
-                      ? "text-tertiary drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
-                      : "text-default-400"
+                      ? 'text-tertiary drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]'
+                      : 'text-default-400'
                   }`}
                 />
               </div>

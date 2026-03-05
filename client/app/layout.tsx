@@ -1,14 +1,14 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
-import type { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from 'next';
 
-import clsx from "clsx";
+import clsx from 'clsx';
 
-import { fontSans } from "@/config/fonts";
-import Providers from "@/config/provider";
-import { siteConfig } from "@/config/site";
-import DefaultLayout from "@/layouts/default";
-import "@/styles/globals.css";
+import { fontSans } from '@/config/fonts';
+import Providers from '@/config/provider';
+import { siteConfig } from '@/config/site';
+import DefaultLayout from '@/layouts/default';
+import '@/styles/globals.css';
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -18,16 +18,16 @@ export const metadata: Metadata = {
     description: siteConfig.description,
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: '/favicon.ico',
   },
 };
 
 export const viewport: Viewport = {
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  viewportFit: "cover",
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({
@@ -56,7 +56,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={clsx("bg-background min-h-screen font-sans antialiased", fontSans.variable)}>
+      <body className={clsx('bg-background min-h-screen font-sans antialiased', fontSans.variable)}>
         <Providers>
           <DefaultLayout>{children}</DefaultLayout>
         </Providers>

@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import MuiIcon, { IconProps as MuiIconProps } from "@mui/material/Icon";
+import MuiIcon, { IconProps as MuiIconProps } from '@mui/material/Icon';
 
-export type IconVariant = "filled" | "outlined" | "rounded" | "sharp" | "two-tone";
+export type IconVariant = 'filled' | 'outlined' | 'rounded' | 'sharp' | 'two-tone';
 
 export interface IconProps extends MuiIconProps {
   /** Name of the Material Icon (e.g., "home", "event", "account_circle") */
@@ -23,13 +23,13 @@ export interface IconProps extends MuiIconProps {
  * Variants: filled (default), outlined, rounded, sharp, two-tone
  * See: https://fonts.google.com/icons
  */
-export const Icon: React.FC<IconProps> = ({ name, variant = "filled", className, ...props }) => {
+export const Icon: React.FC<IconProps> = ({ name, variant = 'filled', className, ...props }) => {
   const variantMap: Record<IconVariant, string> = {
-    filled: "material-icons",
-    outlined: "material-icons-outlined",
-    rounded: "material-icons-round",
-    sharp: "material-icons-sharp",
-    "two-tone": "material-icons-two-tone",
+    filled: 'material-icons',
+    outlined: 'material-icons-outlined',
+    rounded: 'material-icons-round',
+    sharp: 'material-icons-sharp',
+    'two-tone': 'material-icons-two-tone',
   };
 
   return (

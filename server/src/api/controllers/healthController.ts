@@ -1,5 +1,5 @@
-import { healthService } from "@services";
-import { type NextFunction, type Request, type Response } from "express";
+import { healthService } from '@services';
+import { type NextFunction, type Request, type Response } from 'express';
 
 export const health = async (req: Request, res: Response, next: NextFunction) => {
   try {

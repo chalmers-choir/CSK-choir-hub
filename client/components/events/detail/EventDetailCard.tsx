@@ -1,40 +1,40 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 
-import { Button } from "@heroui/button";
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { Checkbox } from "@heroui/checkbox";
-import { addToast } from "@heroui/toast";
-import { IoClose } from "react-icons/io5";
+import { Button } from '@heroui/button';
+import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
+import { Checkbox } from '@heroui/checkbox';
+import { addToast } from '@heroui/toast';
+import { IoClose } from 'react-icons/io5';
 
-import { useAuth, useIntl } from "@/contexts";
-import { CSKEvent, CSKEventType, EventsService } from "@/lib/api-client";
+import { useAuth, useIntl } from '@/contexts';
+import { CSKEvent, CSKEventType, EventsService } from '@/lib/api-client';
 
-import { EventUserEntry, EventUserListAccordion } from "./EventUserListAccordion";
+import { EventUserEntry, EventUserListAccordion } from './EventUserListAccordion';
 
 const formatDate = (isoString: string | undefined, locale: string) => {
-  if (!isoString) return "N/A";
+  if (!isoString) return 'N/A';
   const date = new Date(isoString);
 
-  if (Number.isNaN(date.getTime())) return "N/A";
+  if (Number.isNaN(date.getTime())) return 'N/A';
 
   return new Intl.DateTimeFormat(locale, {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
   }).format(date);
 };
 
 const formatTime = (isoString: string | undefined, locale: string) => {
-  if (!isoString) return "N/A";
+  if (!isoString) return 'N/A';
   const date = new Date(isoString);
 
-  if (Number.isNaN(date.getTime())) return "N/A";
+  if (Number.isNaN(date.getTime())) return 'N/A';
 
   return new Intl.DateTimeFormat(locale, {
-    hour: "2-digit",
-    minute: "2-digit",
+    hour: '2-digit',
+    minute: '2-digit',
     hour12: false,
   }).format(date);
 };
@@ -44,23 +44,23 @@ interface EventDetailCardProps {
 }
 
 const CSKEventTypeString: Record<CSKEventType, string> = {
-  REHEARSAL: "Repetition",
-  CONCERT: "Konsert",
-  GIG: "Gig",
-  PARTY: "Fest",
-  MEETING: "Möte",
-  OTHER: "Övrigt",
+  REHEARSAL: 'Repetition',
+  CONCERT: 'Konsert',
+  GIG: 'Gig',
+  PARTY: 'Fest',
+  MEETING: 'Möte',
+  OTHER: 'Övrigt',
 };
 
 export const EventDetailCard = ({ event }: EventDetailCardProps) => {
   const { user } = useAuth();
   const { locale } = useIntl();
 
-  type AttendanceChoice = "yes" | "no" | undefined;
+  type AttendanceChoice = 'yes' | 'no' | undefined;
   const statusToChoice = (status?: string | null): AttendanceChoice =>
-    status === "PRESENT" ? "yes" : status === "ABSENT" ? "no" : undefined;
+    status === 'PRESENT' ? 'yes' : status === 'ABSENT' ? 'no' : undefined;
   const choiceToStatus = (choice: AttendanceChoice) =>
-    choice === "yes" ? "PRESENT" : choice === "no" ? "ABSENT" : undefined;
+    choice === 'yes' ? 'PRESENT' : choice === 'no' ? 'ABSENT' : undefined;
 
   const userAttendanceStatus = useMemo(() => {
     if (!user || !event?.attendees) return undefined;
@@ -84,22 +84,22 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
   }, [userAttendanceStatus]);
 
   const handleYesChange = (selected: boolean) => {
-    setNewEventAttendance(selected ? "yes" : undefined);
+    setNewEventAttendance(selected ? 'yes' : undefined);
   };
 
   const handleNoChange = (selected: boolean) => {
-    setNewEventAttendance(selected ? "no" : undefined);
+    setNewEventAttendance(selected ? 'no' : undefined);
   };
 
-  const eventType = event ? (CSKEventTypeString[event.type] ?? event.type) : "...";
-  const eventName = event?.name ?? "Loading event...";
-  const eventPlace = event?.place ?? "";
-  const eventDescription = event?.description ?? "No description available.";
+  const eventType = event ? (CSKEventTypeString[event.type] ?? event.type) : '...';
+  const eventName = event?.name ?? 'Loading event...';
+  const eventPlace = event?.place ?? '';
+  const eventDescription = event?.description ?? 'No description available.';
   const eventDate = formatDate(event?.dateStart, locale);
   const eventStartTime = formatTime(event?.dateStart, locale);
   const eventEndTime = formatTime(event?.dateEnd, locale);
   const eventTimeRange =
-    eventEndTime !== "N/A" ? `${eventStartTime} - ${eventEndTime}` : eventStartTime;
+    eventEndTime !== 'N/A' ? `${eventStartTime} - ${eventEndTime}` : eventStartTime;
   const registrationRequired = !!event?.requiresRegistration;
   const attendanceRecorded = !!event?.requiresAttendance;
   const hasAttendanceChanges = oldEventAttendance !== newEventAttendance;
@@ -115,7 +115,7 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
   const baseUsersForList: EventUserEntry[] = isAttendanceMode
     ? (event?.attendees?.map(({ firstName, lastName, status }) => ({
         name: `${firstName} ${lastName}`,
-        status: status === "ABSENT" ? false : status === "PRESENT" ? true : null,
+        status: status === 'ABSENT' ? false : status === 'PRESENT' ? true : null,
       })) ?? [])
     : (event?.registrations?.map(({ firstName, lastName }) => ({
         name: `${firstName} ${lastName}`,
@@ -124,7 +124,7 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
 
   const usersForList = useMemo(() => {
     if (!isAttendanceMode || !user) return baseUsersForList;
-    const displayName = `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim();
+    const displayName = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim();
 
     if (!displayName) return baseUsersForList;
 
@@ -133,9 +133,9 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
         ? {
             ...entry,
             status:
-              choiceToStatus(newEventAttendance) === "PRESENT"
+              choiceToStatus(newEventAttendance) === 'PRESENT'
                 ? true
-                : choiceToStatus(newEventAttendance) === "ABSENT"
+                : choiceToStatus(newEventAttendance) === 'ABSENT'
                   ? false
                   : null,
           }
@@ -152,19 +152,19 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
       });
 
       addToast({
-        title: "Anmäld till evenemanget",
+        title: 'Anmäld till evenemanget',
         timeout: 2000,
-        color: "success",
+        color: 'success',
       });
 
       // Reload to reflect updated lists/state
       window.location.reload();
     } catch (err: any) {
       addToast({
-        title: "Kunde inte anmäla till evenemanget",
-        description: err.message || "Något gick fel",
+        title: 'Kunde inte anmäla till evenemanget',
+        description: err.message || 'Något gick fel',
         timeout: 4000,
-        color: "danger",
+        color: 'danger',
       });
     }
   };
@@ -178,23 +178,23 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
       });
 
       addToast({
-        title: "Avanmäld från evenemanget",
+        title: 'Avanmäld från evenemanget',
         timeout: 2000,
-        color: "success",
+        color: 'success',
       });
 
       window.location.reload();
     } catch (err: any) {
       addToast({
-        title: "Kunde inte avanmäla",
-        description: err.message || "Något gick fel",
+        title: 'Kunde inte avanmäla',
+        description: err.message || 'Något gick fel',
         timeout: 4000,
-        color: "danger",
+        color: 'danger',
       });
     }
   };
 
-  const listTitle = isAttendanceMode ? "Närvaro" : "Registrerade";
+  const listTitle = isAttendanceMode ? 'Närvaro' : 'Registrerade';
 
   const handleResetAttendance = () => {
     setNewEventAttendance(oldEventAttendance);
@@ -215,19 +215,19 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
 
       setOldEventAttendance(newEventAttendance);
       addToast({
-        title: "Närvaro sparad",
+        title: 'Närvaro sparad',
         timeout: 2000,
-        color: "success",
+        color: 'success',
       });
 
       // Reload to reflect updated lists/state
       window.location.reload();
     } catch (err: any) {
       addToast({
-        title: "Kunde inte spara närvaro",
-        description: err.message || "Något gick fel",
+        title: 'Kunde inte spara närvaro',
+        description: err.message || 'Något gick fel',
         timeout: 4000,
-        color: "danger",
+        color: 'danger',
       });
     }
   };
@@ -256,12 +256,12 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
         <CardFooter className="w-full px-4">
           <div className="mx-auto flex items-center gap-3">
             <Button
-              color={isRegistered ? "default" : "success"}
+              color={isRegistered ? 'default' : 'success'}
               isDisabled={isRegistered}
               onPress={handleRegistration}
             >
               <span className="text-small font-semibold">
-                {isRegistered ? "Redan registrerad" : "Anmäl dig här!"}
+                {isRegistered ? 'Redan registrerad' : 'Anmäl dig här!'}
               </span>
             </Button>
             {isRegistered && (
@@ -278,10 +278,10 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
           <p className="text-tiny font-bold uppercase">Var du på repet?</p>
           <div className="flex w-full items-center justify-between">
             <div className="flex gap-4">
-              <Checkbox isSelected={newEventAttendance === "yes"} onValueChange={handleYesChange}>
+              <Checkbox isSelected={newEventAttendance === 'yes'} onValueChange={handleYesChange}>
                 Ja
               </Checkbox>
-              <Checkbox isSelected={newEventAttendance === "no"} onValueChange={handleNoChange}>
+              <Checkbox isSelected={newEventAttendance === 'no'} onValueChange={handleNoChange}>
                 Nej
               </Checkbox>
             </div>
@@ -298,7 +298,7 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
                 </Button>
               )}
               <Button
-                color={oldEventAttendance == newEventAttendance ? "default" : "primary"}
+                color={oldEventAttendance == newEventAttendance ? 'default' : 'primary'}
                 disabled={!hasAttendanceChanges}
                 onPress={handleSaveAttendance}
               >

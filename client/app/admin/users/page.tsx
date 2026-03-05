@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react';
 
-import { TextField } from "@/components";
-import { useTranslation } from "@/contexts";
-import { User, UsersService } from "@/lib/api-client";
-import { GroupType } from "@/types/group";
+import { TextField } from '@/components';
+import { useTranslation } from '@/contexts';
+import { User, UsersService } from '@/lib/api-client';
+import { GroupType } from '@/types/group';
 
 export default function AdminUsersPage() {
   const { t } = useTranslation();
   const router = useRouter();
   const [users, setUsers] = useState<User[] | undefined>(undefined);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortColumn, setSortColumn] = useState<string>("name");
-  const [sortDirection, setSortDirection] = useState<"ascending" | "descending">("ascending");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortColumn, setSortColumn] = useState<string>('name');
+  const [sortDirection, setSortDirection] = useState<'ascending' | 'descending'>('ascending');
 
   useEffect(() => {
     UsersService.getUsers({ includeGroups: true }).then((response) => {
@@ -28,16 +28,16 @@ export default function AdminUsersPage() {
   }, []);
 
   const columns = [
-    { name: t("admin.name_column"), key: "name" },
-    { name: t("admin.choir_column"), key: "choir" },
+    { name: t('admin.name_column'), key: 'name' },
+    { name: t('admin.choir_column'), key: 'choir' },
   ];
 
   const handleSort = (columnKey: string) => {
     if (sortColumn === columnKey) {
-      setSortDirection(sortDirection === "ascending" ? "descending" : "ascending");
+      setSortDirection(sortDirection === 'ascending' ? 'descending' : 'ascending');
     } else {
       setSortColumn(columnKey);
-      setSortDirection("ascending");
+      setSortDirection('ascending');
     }
   };
 
@@ -52,23 +52,23 @@ export default function AdminUsersPage() {
   const sortedUsers = filteredUsers?.sort((a, b) => {
     let compareValue = 0;
 
-    if (sortColumn === "name") {
+    if (sortColumn === 'name') {
       const nameA = `${a.firstName} ${a.lastName}`.toLowerCase();
       const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
 
       compareValue = nameA.localeCompare(nameB);
-    } else if (sortColumn === "mail") {
+    } else if (sortColumn === 'mail') {
       compareValue = a.email.toLowerCase().localeCompare(b.email.toLowerCase());
-    } else if (sortColumn === "choir") {
+    } else if (sortColumn === 'choir') {
       const choirA = a.groups
         ?.filter((group) => group.type === GroupType.CHOIR)
         .map((group) => group.name)
-        .join(", ")
+        .join(', ')
         .toLowerCase();
       const choirB = b.groups
         ?.filter((group) => group.type === GroupType.CHOIR)
         .map((group) => group.name)
-        .join(", ")
+        .join(', ')
         .toLowerCase();
 
       // Users with no choir should sort together at the bottom
@@ -80,22 +80,22 @@ export default function AdminUsersPage() {
       else compareValue = choirA.localeCompare(choirB);
     }
 
-    return sortDirection === "ascending" ? compareValue : -compareValue;
+    return sortDirection === 'ascending' ? compareValue : -compareValue;
   });
 
   return (
     <>
-      <h1 className="text-2xl font-bold">{t("admin.users_title")}</h1>
+      <h1 className="text-2xl font-bold">{t('admin.users_title')}</h1>
 
       <TextField
-        placeholder={t("admin.search_users")}
+        placeholder={t('admin.search_users')}
         value={searchTerm}
         onChange={setSearchTerm}
         className="my-4 max-w-sm"
       />
 
       {loading ? (
-        <p>{t("admin.loading")}</p>
+        <p>{t('admin.loading')}</p>
       ) : (
         sortedUsers && (
           <Table>
@@ -108,7 +108,7 @@ export default function AdminUsersPage() {
                 >
                   {column.name}
                   {sortColumn === column.key && (
-                    <span className="ml-2">{sortDirection === "ascending" ? "↑" : "↓"}</span>
+                    <span className="ml-2">{sortDirection === 'ascending' ? '↑' : '↓'}</span>
                   )}
                 </TableColumn>
               ))}
@@ -121,12 +121,12 @@ export default function AdminUsersPage() {
                   onClick={() => router.push(`/admin/users/${user.id}`)}
                   className="hover:bg-default-100 cursor-pointer transition-colors"
                 >
-                  <TableCell>{user.firstName + " " + user.lastName}</TableCell>
+                  <TableCell>{user.firstName + ' ' + user.lastName}</TableCell>
                   <TableCell>
                     {user.groups
                       .filter((group) => group.type === GroupType.CHOIR)
                       .map((group) => group.name)
-                      .join(", ") || t("admin.no_choir")}
+                      .join(', ') || t('admin.no_choir')}
                   </TableCell>
                 </TableRow>
               ))}

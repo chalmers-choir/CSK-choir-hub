@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Link, button as buttonStyles } from "@heroui/react";
+import { Link, button as buttonStyles } from '@heroui/react';
 
-import { useAuth, useTranslation } from "@/contexts";
+import { useAuth, useTranslation } from '@/contexts';
 
 export const EventsPageHeader = () => {
   const { t } = useTranslation();
@@ -11,15 +11,15 @@ export const EventsPageHeader = () => {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="text-center sm:text-left">
-        <h1 className="text-default-900 text-3xl font-bold">{t("events.title")}</h1>
-        <p className="text-default-500 mt-1">{t("events.subtitle")}</p>
+        <h1 className="text-default-900 text-3xl font-bold">{t('events.title')}</h1>
+        <p className="text-default-500 mt-1">{t('events.subtitle')}</p>
       </div>
       {isAdmin && (
         <Link
-          className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
+          className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
           href="/events/create"
         >
-          {t("events.create_event")}
+          {t('events.create_event')}
         </Link>
       )}
     </div>

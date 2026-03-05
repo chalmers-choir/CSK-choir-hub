@@ -1,6 +1,6 @@
-import * as tagService from "@services/tagService";
-import { BadRequestError } from "@utils/errors";
-import { type NextFunction, type Request, type Response } from "express";
+import * as tagService from '@services/tagService';
+import { BadRequestError } from '@utils/errors';
+import { type NextFunction, type Request, type Response } from 'express';
 
 // Get all tags
 export const getTags = async (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +17,7 @@ export const getTags = async (req: Request, res: Response, next: NextFunction) =
 export const createTag = async (req: Request, res: Response, next: NextFunction) => {
   const { name } = req.body;
 
-  if (!name) return next(new BadRequestError("Tag name is required"));
+  if (!name) return next(new BadRequestError('Tag name is required'));
 
   try {
     const newTag = await tagService.createTag(name);
@@ -32,7 +32,7 @@ export const createTag = async (req: Request, res: Response, next: NextFunction)
 export const deleteTag = async (req: Request, res: Response, next: NextFunction) => {
   const tagId = parseInt(req.params.id, 10);
 
-  if (isNaN(tagId)) return next(new BadRequestError("Invalid tag ID"));
+  if (isNaN(tagId)) return next(new BadRequestError('Invalid tag ID'));
 
   try {
     await tagService.deleteTag(tagId);
@@ -47,11 +47,11 @@ export const deleteTag = async (req: Request, res: Response, next: NextFunction)
 export const updateTag = async (req: Request, res: Response, next: NextFunction) => {
   const tagId = parseInt(req.params.id, 10);
 
-  if (isNaN(tagId)) return next(new BadRequestError("Invalid tag ID"));
+  if (isNaN(tagId)) return next(new BadRequestError('Invalid tag ID'));
 
   const { name } = req.body;
 
-  if (!name) return next(new BadRequestError("Tag name is required"));
+  if (!name) return next(new BadRequestError('Tag name is required'));
 
   try {
     const updatedTag = await tagService.updateTag(tagId, name);

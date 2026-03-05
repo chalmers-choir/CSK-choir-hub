@@ -1,6 +1,6 @@
-import * as bookService from "@services/bookService";
-import { BadRequestError } from "@utils/errors";
-import { type NextFunction, type Request, type Response } from "express";
+import * as bookService from '@services/bookService';
+import { BadRequestError } from '@utils/errors';
+import { type NextFunction, type Request, type Response } from 'express';
 
 // Get all books
 export const getBooks = async (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +17,7 @@ export const getBooks = async (req: Request, res: Response, next: NextFunction) 
 export const getBookWithId = async (req: Request, res: Response, next: NextFunction) => {
   const bookId = parseInt(req.params.bookId, 10);
 
-  if (isNaN(bookId)) return next(new BadRequestError("Invalid book ID"));
+  if (isNaN(bookId)) return next(new BadRequestError('Invalid book ID'));
 
   try {
     const book = await bookService.getBookById(bookId);
@@ -32,7 +32,7 @@ export const getBookWithId = async (req: Request, res: Response, next: NextFunct
 export const createBook = async (req: Request, res: Response, next: NextFunction) => {
   const { title } = req.body;
 
-  if (!title) return next(new BadRequestError("Title is required"));
+  if (!title) return next(new BadRequestError('Title is required'));
 
   try {
     const newBook = await bookService.createBook({ title });
@@ -47,7 +47,7 @@ export const createBook = async (req: Request, res: Response, next: NextFunction
 export const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
   const bookId = parseInt(req.params.bookId, 10);
 
-  if (isNaN(bookId)) return next(new BadRequestError("Invalid book ID"));
+  if (isNaN(bookId)) return next(new BadRequestError('Invalid book ID'));
 
   try {
     await bookService.deleteBook(bookId);
@@ -62,11 +62,11 @@ export const deleteBook = async (req: Request, res: Response, next: NextFunction
 export const addSongToBook = async (req: Request, res: Response, next: NextFunction) => {
   const bookId = parseInt(req.params.bookId, 10);
 
-  if (isNaN(bookId)) return next(new BadRequestError("Invalid book ID"));
+  if (isNaN(bookId)) return next(new BadRequestError('Invalid book ID'));
 
   const { songId } = req.body;
 
-  if (!songId) return next(new BadRequestError("songId is required"));
+  if (!songId) return next(new BadRequestError('songId is required'));
 
   try {
     await bookService.addSongToBook(bookId, songId);
@@ -81,11 +81,11 @@ export const addSongToBook = async (req: Request, res: Response, next: NextFunct
 export const removeSongFromBook = async (req: Request, res: Response, next: NextFunction) => {
   const bookId = parseInt(req.params.bookId, 10);
 
-  if (isNaN(bookId)) return next(new BadRequestError("Invalid book ID"));
+  if (isNaN(bookId)) return next(new BadRequestError('Invalid book ID'));
 
   const { songId } = req.body;
 
-  if (!songId) return next(new BadRequestError("songId is required"));
+  if (!songId) return next(new BadRequestError('songId is required'));
 
   try {
     await bookService.removeSongFromBook(bookId, songId);

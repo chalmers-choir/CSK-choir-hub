@@ -1,4 +1,4 @@
-import NextLink from "next/link";
+import NextLink from 'next/link';
 
 import {
   Navbar as HeroUINavbar,
@@ -6,12 +6,12 @@ import {
   NavbarContent,
   NavbarItem,
   link as linkStyles,
-} from "@heroui/react";
-import clsx from "clsx";
+} from '@heroui/react';
+import clsx from 'clsx';
 
-import { Logo, ThemeSwitch, UserMenu } from "@/components";
-import { siteConfig } from "@/config/site";
-import { useAuth, useTranslation } from "@/contexts";
+import { Logo, ThemeSwitch, UserMenu } from '@/components';
+import { siteConfig } from '@/config/site';
+import { useAuth, useTranslation } from '@/contexts';
 
 export const Navbar = () => {
   const { t } = useTranslation();
@@ -30,8 +30,8 @@ export const Navbar = () => {
             <NavbarItem key={item.href}>
               <NextLink
                 className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
+                  linkStyles({ color: 'foreground' }),
+                  'data-[active=true]:text-primary data-[active=true]:font-medium',
                 )}
                 color="foreground"
                 href={item.href}
@@ -45,8 +45,8 @@ export const Navbar = () => {
               <NavbarItem key={item.href}>
                 <NextLink
                   className={clsx(
-                    linkStyles({ color: "foreground" }),
-                    "data-[active=true]:text-primary data-[active=true]:font-medium",
+                    linkStyles({ color: 'foreground' }),
+                    'data-[active=true]:text-primary data-[active=true]:font-medium',
                   )}
                   color="foreground"
                   href={item.href}

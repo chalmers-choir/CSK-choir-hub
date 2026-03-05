@@ -1,9 +1,9 @@
-import { siteConfig } from "@/config/site";
+import { siteConfig } from '@/config/site';
 
-import { OpenAPI } from "./api-client/core/OpenAPI";
+import { OpenAPI } from './api-client/core/OpenAPI';
 
-export * from "./api-client";
+export * from './api-client';
 
 OpenAPI.BASE = siteConfig.apiBaseUrl;
 OpenAPI.WITH_CREDENTIALS = true;
-OpenAPI.CREDENTIALS = "include";
+OpenAPI.CREDENTIALS = 'include';

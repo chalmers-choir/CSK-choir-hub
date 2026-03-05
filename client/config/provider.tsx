@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from 'next-themes';
 
-import { HeroUIProvider, ToastProvider } from "@heroui/react";
+import { HeroUIProvider, ToastProvider } from '@heroui/react';
 
-import { AuthProvider, IntlProvider } from "@/contexts";
+import { AuthProvider, IntlProvider } from '@/contexts';
 
 /**
  * A wrapper component that provides authentication, theming, and UI context to its children.

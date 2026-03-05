@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { Button, Form, addToast } from "@heroui/react";
+import { Button, Form, addToast } from '@heroui/react';
 
-import { TextField } from "@/components";
-import { useAuth, useTranslation } from "@/contexts";
-import { ApiError, UsersService } from "@/lib/api-client";
-import { GroupType } from "@/types/group";
+import { TextField } from '@/components';
+import { useAuth, useTranslation } from '@/contexts';
+import { ApiError, UsersService } from '@/lib/api-client';
+import { GroupType } from '@/types/group';
 
 /**
  * Profile page for editing user information.
@@ -17,10 +17,10 @@ export default function ProfilePage() {
   const { user } = useAuth();
   const { t } = useTranslation();
 
-  const [dietPref, setDietPref] = useState<string>("");
+  const [dietPref, setDietPref] = useState<string>('');
 
   useEffect(() => {
-    setDietPref(user?.dietaryPreferences || "");
+    setDietPref(user?.dietaryPreferences || '');
   }, [user?.dietaryPreferences]);
 
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -38,16 +38,16 @@ export default function ProfilePage() {
       });
 
       addToast({
-        title: "Success",
-        description: "Profile updated successfully!",
-        color: "success",
+        title: 'Success',
+        description: 'Profile updated successfully!',
+        color: 'success',
         timeout: 2000,
       });
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error("Error updating profile:", error);
+      console.error('Error updating profile:', error);
 
-      let errorMessage = "Failed to update profile. Please try again.";
+      let errorMessage = 'Failed to update profile. Please try again.';
 
       if (error instanceof ApiError && error.body?.message) {
         errorMessage = error.body.message;
@@ -56,9 +56,9 @@ export default function ProfilePage() {
       }
 
       addToast({
-        title: "Error",
+        title: 'Error',
         description: errorMessage,
-        color: "danger",
+        color: 'danger',
         timeout: 2000,
       });
     }
@@ -68,58 +68,58 @@ export default function ProfilePage() {
     <>
       <h1 className="mb-6 text-2xl font-semibold">Hi {user?.firstName}</h1>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <TextField label={t("user.firstName")} value={user?.firstName} readOnly />
-        <TextField label={t("user.lastName")} value={user?.lastName} readOnly />
-        <TextField label={t("user.email")} value={user?.email} readOnly />
+        <TextField label={t('user.firstName')} value={user?.firstName} readOnly />
+        <TextField label={t('user.lastName')} value={user?.lastName} readOnly />
+        <TextField label={t('user.email')} value={user?.email} readOnly />
 
         <TextField
           readOnly
-          label={t("user.voice_group")}
+          label={t('user.voice_group')}
           value={user?.groups
             .filter((g) => g.type == GroupType.VOICE)
             ?.map((c) => c.name)
-            .join(", ")}
+            .join(', ')}
         />
         <TextField
           readOnly
-          label={t("user.choirs")}
+          label={t('user.choirs')}
           value={user?.groups
             .filter((g) => g.type == GroupType.CHOIR)
             ?.map((c) => c.name)
-            .join(", ")}
+            .join(', ')}
         />
         <TextField
           readOnly
-          label={t("user.committee")}
+          label={t('user.committee')}
           value={
             user?.groups
               .filter((g) => g.type == GroupType.COMMITTEE)
               ?.map((c) => c.name)
-              .join(", ") || t("profile.no_committees")
+              .join(', ') || t('profile.no_committees')
           }
         />
         <TextField
           readOnly
-          label={t("user.other")}
+          label={t('user.other')}
           value={user?.groups
             .filter((g) => g.type == GroupType.OTHER)
             ?.map((c) => c.name)
-            .join(", ")}
+            .join(', ')}
         />
         <TextField
           readOnly
-          label={t("user.roles")}
-          value={user?.roles?.map((c) => c.name).join(", ")}
+          label={t('user.roles')}
+          value={user?.roles?.map((c) => c.name).join(', ')}
         />
         <Form onSubmit={handleSave}>
-          <p className="mb-4 mt-8 text-xl font-semibold">{t("profile.edit_profile")}</p>
+          <p className="mb-4 mt-8 text-xl font-semibold">{t('profile.edit_profile')}</p>
           <TextField
-            label={t("user.dietary_preferences")}
+            label={t('user.dietary_preferences')}
             value={dietPref}
             onChange={(val) => setDietPref(val)}
           />
           <Button variant="ghost" type="submit" color="primary">
-            {t("buttons.save")}
+            {t('buttons.save')}
           </Button>
         </Form>
       </div>

@@ -1,6 +1,6 @@
-import { EventsListContent } from "@/components/events/overview/EventsListContent";
-import { EventsPageHeader } from "@/components/events/overview/EventsPageHeader";
-import { EventsService } from "@/lib/serverApiClient";
+import { EventsListContent } from '@/components/events/overview/EventsListContent';
+import { EventsPageHeader } from '@/components/events/overview/EventsPageHeader';
+import { EventsService } from '@/lib/serverApiClient';
 
 export default async function IndexPage() {
   const res = await EventsService.getEvents();
