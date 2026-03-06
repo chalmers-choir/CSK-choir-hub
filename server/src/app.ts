@@ -35,10 +35,14 @@ app.use(
     origin: (origin, callback) => {
       // allow non-browser/SSR requests (no origin) and any whitelisted origin
       if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, origin ?? true);
-      } else {
-        callback(new Error(`CORS: origin ${origin} not allowed`));
+        return callback(null, origin ?? true);
       }
+
+      if (process.env.NODE_ENV === 'development') {
+        return callback(null, origin ?? true);
+      }
+
+      return callback(new Error(`CORS: origin ${origin} not allowed`));
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
