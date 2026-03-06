@@ -1,77 +1,50 @@
 'use client';
 
-import { startTransition, useActionState, useEffect, useState } from 'react';
+import { useActionState, useEffect, useRef } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { Autocomplete, AutocompleteItem } from '@heroui/autocomplete';
-import { Button } from '@heroui/button';
 import { DatePicker } from '@heroui/date-picker';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/dropdown';
+import { Button } from '@heroui/button';
 import { Input, Textarea } from '@heroui/input';
-import { button as buttonStyles } from '@heroui/theme';
-import { DateValue } from '@internationalized/date';
 import { I18nProvider } from '@react-aria/i18n';
-
-import { CSKEventType } from '@/lib/apiClient';
+import { button as buttonStyles } from '@heroui/theme';
 
 import {
   type CreateEventActionState,
   createEventAction,
-  initialCreateEventActionState,
 } from './actions';
-import type { CreateEventActionInput } from './schema';
 
-const eventTypeDbKeyToName: Record<CSKEventType, string> = {
+const eventTypeDbKeyToName = {
   REHEARSAL: 'Rep',
   CONCERT: 'Konsert',
   GIG: 'Gig',
   PARTY: 'Fest',
   MEETING: 'Möte',
   OTHER: 'Annat',
-};
+} as const;
 
-const autocompletePlaceNames: Record<string, string> = {
-  klok: 'Klok',
-  scania: 'Scaniasalen',
-  kårres: 'Kårrestaurangen',
-  palmstedt: 'Palmstedtsalen',
-  maskin: 'ML11',
-  sbm500: 'SB-M500',
-};
+const autocompletePlaceNames = [
+  'Klok',
+  'Scaniasalen',
+  'Kårrestaurangen',
+  'Palmstedtsalen',
+  'ML11',
+  'SB-M500',
+];
+
+const defaultVariant = 'bordered';
+const selectClassName =
+  'h-14 rounded-large border border-default-200 bg-transparent px-3 text-sm outline-none focus:border-primary';
+const initialCreateEventActionState: CreateEventActionState = { status: 'idle' };
 
 export default function CreateEventPage() {
   const router = useRouter();
-
-  const [name, setName] = useState('');
-
-  const [type, setType] = useState<CSKEventType | undefined>(undefined);
-  const [typeIsInvalid, setTypeIsInvalid] = useState(false);
-
-  const [description, setDescription] = useState('');
-
-  const [dateStart, setDateStart] = useState<DateValue | null>(null);
-  const [dateIsInvalid, setDateIsInvalid] = useState(false);
-
-  const [place, setPlace] = useState('');
-  const [placeIsInvalid, setPlaceIsInvalid] = useState(false);
-
-  const resetState = () => {
-    setName('');
-    setType(undefined);
-    setTypeIsInvalid(false);
-    setDescription('');
-    setDateStart(null);
-    setDateIsInvalid(false);
-    setPlace('');
-    setPlaceIsInvalid(false);
-  };
-
-  const [clientValidationMessage, setClientValidationMessage] = useState<string | null>(null);
+  const dateStartInputRef = useRef<HTMLInputElement>(null);
 
   const [actionState, submitCreateEvent, isSubmitting] = useActionState<
     CreateEventActionState,
-    CreateEventActionInput
+    FormData
   >(createEventAction, initialCreateEventActionState);
 
   useEffect(() => {
@@ -79,138 +52,90 @@ export default function CreateEventPage() {
       return;
     }
 
-    resetState();
     router.push(`/events/${actionState.eventId}`);
   }, [actionState, router]);
 
-  const handleSubmit = (e: React.SubmitEvent) => {
-    e.preventDefault();
-    setClientValidationMessage(null);
-
-    const missingType = !type;
-    const missingDate = !dateStart;
-    const missingPlace = !place.trim();
-
-    setTypeIsInvalid(missingType);
-    setDateIsInvalid(missingDate);
-    setPlaceIsInvalid(missingPlace);
-
-    if (missingType || missingDate || missingPlace) {
-      setClientValidationMessage('Vänligen fyll i alla obligatoriska fält.');
-
-      return;
-    }
-
-    const payload: CreateEventActionInput = {
-      name,
-      type,
-      description,
-      dateStart: dateStart.toString(),
-      place,
-    };
-
-    startTransition(() => {
-      submitCreateEvent(payload);
-    });
-  };
-
-  const defaultVariant = 'bordered';
   const fieldErrors = actionState.fieldErrors;
-  const formErrorMessage = clientValidationMessage ?? actionState.formError ?? null;
-  const typeErrorMessage = fieldErrors?.type;
-  const dateStartErrorMessage = fieldErrors?.dateStart;
-  const placeErrorMessage = fieldErrors?.place;
+  const formErrorMessage = actionState.formError ?? null;
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <form className="w-md mx-auto mt-20 flex max-w-full flex-col gap-2" onSubmit={handleSubmit}>
+      <form
+        className="w-md mx-auto mt-20 flex max-w-full flex-col gap-2"
+        action={submitCreateEvent}
+      >
         <h2 className="w-full text-center text-lg font-semibold">Skapa nytt evenemang</h2>
 
         <Input
-          required
+          isRequired
           errorMessage={fieldErrors?.name}
           isInvalid={Boolean(fieldErrors?.name)}
           label="Namn på evenemanget"
+          name="name"
           type="text"
-          value={name}
           variant={defaultVariant}
-          onChange={(e) => setName(e.target.value)}
         />
 
-        <Dropdown>
-          <DropdownTrigger>
-            <Button
-              color={typeIsInvalid || Boolean(typeErrorMessage) ? 'danger' : 'default'}
-              variant={defaultVariant}
-              onPress={() => {
-                setTypeIsInvalid(false);
-                setClientValidationMessage(null);
-              }}
-            >
-              {type ? eventTypeDbKeyToName[type] : 'Välj typ'}
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu
-            items={Object.entries(eventTypeDbKeyToName)}
-            onAction={(key) => {
-              setType(key as CSKEventType);
-              setTypeIsInvalid(false);
-              setClientValidationMessage(null);
-            }}
-          >
-            {(item) => <DropdownItem key={item[0]}>{item[1]}</DropdownItem>}
-          </DropdownMenu>
-        </Dropdown>
-        {typeErrorMessage && <p className="text-sm text-red-500">{typeErrorMessage}</p>}
+        <label className="text-sm" htmlFor="type">
+          Typ
+        </label>
+        <select
+          aria-invalid={Boolean(fieldErrors?.type)}
+          className={selectClassName}
+          id="type"
+          name="type"
+          required
+        >
+          <option value="">Välj typ</option>
+          {Object.entries(eventTypeDbKeyToName).map(([value, label]) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
+        {fieldErrors?.type && <p className="text-sm text-red-500">{fieldErrors.type}</p>}
 
         <Textarea
           errorMessage={fieldErrors?.description}
           isInvalid={Boolean(fieldErrors?.description)}
           label="Beskrivning"
-          type="text"
-          value={description}
+          name="description"
           variant={defaultVariant}
-          onChange={(e) => setDescription(e.target.value)}
         />
 
         <I18nProvider locale="sv-SE">
           <DatePicker
             classNames={{ label: 'after:content-none' }}
             granularity="minute"
-            isInvalid={dateIsInvalid || Boolean(dateStartErrorMessage)}
+            isInvalid={Boolean(fieldErrors?.dateStart)}
             label="Datum och tid"
-            value={dateStart}
             variant={defaultVariant}
-            onChange={(e) => e && setDateStart(e)}
-            onFocus={() => {
-              setDateIsInvalid(false);
-              setClientValidationMessage(null);
+            onChange={(value) => {
+              if (dateStartInputRef.current) {
+                dateStartInputRef.current.value = value ? value.toString() : '';
+              }
             }}
           />
+          <input ref={dateStartInputRef} name="dateStart" type="hidden" />
         </I18nProvider>
-        {dateStartErrorMessage && <p className="text-sm text-red-500">{dateStartErrorMessage}</p>}
+        {fieldErrors?.dateStart && <p className="text-sm text-red-500">{fieldErrors.dateStart}</p>}
 
-        <Autocomplete
-          allowsCustomValue
-          inputValue={place}
-          isInvalid={placeIsInvalid || Boolean(placeErrorMessage)}
-          items={Object.entries(autocompletePlaceNames)}
-          label="Plats (välj från listan eller skriv egen)"
+        <Input
+          isRequired
+          errorMessage={fieldErrors?.place}
+          isInvalid={Boolean(fieldErrors?.place)}
+          label="Plats"
+          list="autocompletePlaceNames"
+          name="place"
+          type="text"
           variant={defaultVariant}
-          onFocus={() => {
-            setPlaceIsInvalid(false);
-            setClientValidationMessage(null);
-          }}
-          onInputChange={(e) => {
-            setPlace(e);
-            if (e.trim()) {
-              setPlaceIsInvalid(false);
-            }
-          }}
-        >
-          {(item) => <AutocompleteItem key={item[0]}>{item[1]}</AutocompleteItem>}
-        </Autocomplete>
-        {placeErrorMessage && <p className="text-sm text-red-500">{placeErrorMessage}</p>}
+        />
+        <datalist id="autocompletePlaceNames">
+          {autocompletePlaceNames.map((name) => (
+            <option key={name} value={name} />
+          ))}
+        </datalist>
+        {fieldErrors?.place && <p className="text-sm text-red-500">{fieldErrors.place}</p>}
 
         {formErrorMessage && <p className="text-sm text-red-500">{formErrorMessage}</p>}
 

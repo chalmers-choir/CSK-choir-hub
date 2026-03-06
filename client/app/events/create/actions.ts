@@ -13,7 +13,6 @@ import {
 } from '@/lib/apiClient';
 
 import {
-  type CreateEventActionInput,
   type CreateEventFieldErrors,
   type CreateEventRequestBody,
   createEventSchema,
@@ -27,10 +26,6 @@ export type CreateEventActionState = {
   formError?: string;
   eventId?: number;
   fieldErrors?: CreateEventFieldErrors;
-};
-
-export const initialCreateEventActionState: CreateEventActionState = {
-  status: 'idle',
 };
 
 function getFieldErrors(inputErrors: Record<string, string[] | undefined>): CreateEventFieldErrors {
@@ -101,8 +96,16 @@ function getActionErrorMessage(error: unknown): string {
 
 export async function createEventAction(
   _prevState: CreateEventActionState,
-  input: CreateEventActionInput,
+  formData: FormData,
 ): Promise<CreateEventActionState> {
+  const input = {
+    name: String(formData.get('name') ?? ''),
+    type: String(formData.get('type') ?? ''),
+    description: String(formData.get('description') ?? ''),
+    dateStart: String(formData.get('dateStart') ?? ''),
+    place: String(formData.get('place') ?? ''),
+  };
+
   const parsed = createEventSchema.safeParse(input);
 
   if (!parsed.success) {
