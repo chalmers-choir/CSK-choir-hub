@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Button, Form, addToast } from '@heroui/react';
 
 import { TextField } from '@/components';
-import { useAuth, useTranslation } from '@/contexts';
+import { useTranslation } from '@/contexts';
 import { ApiError, UsersService } from '@/lib/api-client';
 import { GroupType } from '@/types/group';
 
