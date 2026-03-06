@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-import { AuthService } from './lib/serverApiClient';
+import { authenticate } from './lib/api-client';
 
 export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
@@ -30,9 +30,9 @@ export async function proxy(req: NextRequest) {
   // Admin-only guard: verify user groups via authenticate endpoint
   if (isAdminSection) {
     try {
-      const res = await AuthService.authenticate();
+      const res = await authenticate();
 
-      const groups: { name: string }[] = res.user?.groups ?? [];
+      const groups: { name: string }[] = res.data?.user?.groups ?? [];
       const isAdmin = groups.some((g) => g.name === 'Admins');
 
       if (!isAdmin) {

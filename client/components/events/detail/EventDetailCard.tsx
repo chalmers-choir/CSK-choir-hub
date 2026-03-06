@@ -9,7 +9,13 @@ import { addToast } from '@heroui/toast';
 import { IoClose } from 'react-icons/io5';
 
 import { useAuth, useIntl } from '@/contexts';
-import { CSKEvent, CSKEventType, EventsService } from '@/lib/api-client';
+import {
+  CskEvent,
+  CskEventType,
+  markAttendance,
+  markRegistration,
+  unmarkRegistration,
+} from '@/lib/api-client';
 
 import { EventUserEntry, EventUserListAccordion } from './EventUserListAccordion';
 
@@ -40,10 +46,10 @@ const formatTime = (isoString: string | undefined, locale: string) => {
 };
 
 interface EventDetailCardProps {
-  event: CSKEvent | undefined;
+  event: CskEvent | undefined;
 }
 
-const CSKEventTypeString: Record<CSKEventType, string> = {
+const CSKEventTypeString: Record<CskEventType, string> = {
   REHEARSAL: 'Repetition',
   CONCERT: 'Konsert',
   GIG: 'Gig',
@@ -146,9 +152,9 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
   const handleRegistration = async () => {
     if (!user || !event) return;
     try {
-      await EventsService.markRegistration({
-        eventId: event.id,
-        requestBody: { userId: user.id },
+      await markRegistration({
+        path: { eventId: event.id },
+        body: { userId: user.id },
       });
 
       addToast({
@@ -172,9 +178,9 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
   const handleUnregister = async () => {
     if (!user || !event) return;
     try {
-      await EventsService.unmarkRegistration({
-        eventId: event.id,
-        requestBody: { userId: user.id },
+      await unmarkRegistration({
+        path: { eventId: event.id },
+        body: { userId: user.id },
       });
 
       addToast({
@@ -204,32 +210,30 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
     if (!user || !event) return;
     const status = choiceToStatus(newEventAttendance);
 
-    try {
-      await EventsService.markAttendance({
-        eventId: event.id,
-        requestBody: {
-          userId: user.id,
-          status,
-        },
-      });
+    const res = await markAttendance({
+      path: { eventId: event.id },
+      body: {
+        userId: user.id,
+        status,
+      },
+    });
 
-      setOldEventAttendance(newEventAttendance);
-      addToast({
-        title: 'Närvaro sparad',
-        timeout: 2000,
-        color: 'success',
-      });
-
-      // Reload to reflect updated lists/state
-      window.location.reload();
-    } catch (err: any) {
-      addToast({
+    if (res.error) {
+      return addToast({
         title: 'Kunde inte spara närvaro',
-        description: err.message || 'Något gick fel',
+        description: 'Något gick fel',
         timeout: 4000,
         color: 'danger',
       });
     }
+
+    setOldEventAttendance(newEventAttendance);
+
+    addToast({
+      title: 'Närvaro sparad',
+      timeout: 2000,
+      color: 'success',
+    });
   };
 
   return (

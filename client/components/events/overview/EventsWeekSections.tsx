@@ -1,5 +1,5 @@
 import { useTranslation } from '@/contexts';
-import { CSKEvent } from '@/lib/apiClient';
+import { CskEvent } from '@/lib/api-client';
 
 import { EventListCard } from './EventListCard';
 
@@ -7,7 +7,7 @@ interface EventWeekGroup {
   key: string;
   weekNumber: number;
   rangeLabel: string;
-  items: CSKEvent[];
+  items: CskEvent[];
 }
 
 interface EventsWeekSectionsProps {

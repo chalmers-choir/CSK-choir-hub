@@ -1,3 +1,4 @@
+import { zCreateEventInput } from '@interface/zod.gen';
 import { eventService } from '@services';
 import { BadRequestError, NotFoundError } from '@utils/errors';
 import { type NextFunction, type Request, type Response } from 'express';
@@ -43,18 +44,18 @@ export const deleteEvent = async (req: Request, res: Response, next: NextFunctio
 
 // Create a new event
 export const createEvent = async (req: Request, res: Response, next: NextFunction) => {
-  const { name, type, description, dateStart: _dateStart, place } = req.body;
+  const eventData = zCreateEventInput.parse(req.body);
 
-  if (!name || !_dateStart || !place)
+  if (!eventData.name || !eventData.dateStart || !eventData.place)
     return next(new BadRequestError('Name, start date, and place are required'));
 
   try {
-    const dateStart = new Date(_dateStart);
+    const dateStart = new Date(eventData.dateStart);
 
     if (isNaN(dateStart.getTime())) {
       return next(new BadRequestError('Invalid date format: expected ISO-8601 string'));
     }
-    const newEvent = await eventService.createEvent({ name, type, description, dateStart, place });
+    const newEvent = await eventService.createEvent(eventData);
 
     return res.status(201).json({ event: newEvent });
   } catch (error) {

@@ -8,8 +8,8 @@ import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from 
 
 import { TextField } from '@/components';
 import { useTranslation } from '@/contexts';
-import { User, UsersService } from '@/lib/api-client';
-import { GroupType } from '@/types/group';
+import { User, getUsers } from '@/lib/api-client';
+import { ComponentsGroupType as GroupType } from '@/lib/api-client';
 
 export default function AdminUsersPage() {
   const { t } = useTranslation();
@@ -21,8 +21,8 @@ export default function AdminUsersPage() {
   const [sortDirection, setSortDirection] = useState<'ascending' | 'descending'>('ascending');
 
   useEffect(() => {
-    UsersService.getUsers({ includeGroups: true }).then((response) => {
-      setUsers(response.users);
+    getUsers({ query: { includeGroups: true } }).then((response) => {
+      setUsers(response.data?.users);
       setLoading(false);
     });
   }, []);
