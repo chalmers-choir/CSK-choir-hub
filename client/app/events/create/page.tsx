@@ -1,19 +1,14 @@
 'use client';
 
-import { useActionState, useEffect, useRef } from 'react';
+import { useActionState, useRef } from 'react';
 
-import { useRouter } from 'next/navigation';
-
-import { DatePicker } from '@heroui/date-picker';
 import { Button } from '@heroui/button';
+import { DatePicker } from '@heroui/date-picker';
 import { Input, Textarea } from '@heroui/input';
-import { I18nProvider } from '@react-aria/i18n';
 import { button as buttonStyles } from '@heroui/theme';
+import { I18nProvider } from '@react-aria/i18n';
 
-import {
-  type CreateEventActionState,
-  createEventAction,
-} from './actions';
+import { type CreateEventActionState, createEventAction } from './actions';
 
 const eventTypeDbKeyToName = {
   REHEARSAL: 'Rep',
@@ -39,21 +34,12 @@ const selectClassName =
 const initialCreateEventActionState: CreateEventActionState = { status: 'idle' };
 
 export default function CreateEventPage() {
-  const router = useRouter();
   const dateStartInputRef = useRef<HTMLInputElement>(null);
 
   const [actionState, submitCreateEvent, isSubmitting] = useActionState<
     CreateEventActionState,
     FormData
   >(createEventAction, initialCreateEventActionState);
-
-  useEffect(() => {
-    if (actionState.status !== 'success' || !actionState.eventId) {
-      return;
-    }
-
-    router.push(`/events/${actionState.eventId}`);
-  }, [actionState, router]);
 
   const fieldErrors = actionState.fieldErrors;
   const formErrorMessage = actionState.formError ?? null;

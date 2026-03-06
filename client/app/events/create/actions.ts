@@ -1,16 +1,9 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-import { request as apiRequest } from '@/lib/api-client/core/request';
-import {
-  ApiError,
-  type CSKEvent,
-  type CSKEventSummary,
-  OpenAPI,
-  type OpenAPIConfig,
-} from '@/lib/apiClient';
+import { ApiError, type CSKEventSummary, EventsService } from '@/lib/serverApiClient';
 
 import {
   type CreateEventFieldErrors,
@@ -44,37 +37,6 @@ function toApiRequestBody(input: CreateEventRequestBody): CSKEventSummary {
     requiresRegistration: false,
     requiresAttendance: false,
   };
-}
-
-async function addEventWithRequestScopedHeaders(
-  requestBody: CSKEventSummary,
-  cookie: string | null,
-): Promise<{ event: CSKEvent }> {
-  const baseHeadersConfig = OpenAPI.HEADERS;
-
-  const requestConfig: OpenAPIConfig = {
-    ...OpenAPI,
-    HEADERS: async (options) => {
-      const baseHeaders =
-        typeof baseHeadersConfig === 'function'
-          ? await baseHeadersConfig(options)
-          : (baseHeadersConfig ?? {});
-
-      return cookie ? { ...baseHeaders, cookie } : { ...baseHeaders };
-    },
-  };
-
-  return apiRequest<{ event: CSKEvent }>(requestConfig, {
-    method: 'POST',
-    url: '/events',
-    body: requestBody,
-    mediaType: 'application/json',
-    errors: {
-      400: 'Invalid event data',
-      401: 'Unauthorized',
-      403: 'Forbidden',
-    },
-  });
 }
 
 function getActionErrorMessage(error: unknown): string {
@@ -117,24 +79,18 @@ export async function createEventAction(
     };
   }
 
-  const requestHeaders = await headers();
-  const cookie = requestHeaders.get('cookie');
-
   try {
-    const { event } = await addEventWithRequestScopedHeaders(toApiRequestBody(parsed.data), cookie);
+    const { event } = await EventsService.addEvent({
+      requestBody: toApiRequestBody(parsed.data),
+    });
 
     revalidatePath('/events');
     revalidatePath(`/events/${event.id}`);
-
-    return {
-      status: 'success',
-      message: 'Evenemang skapat!',
-      eventId: event.id,
-    };
   } catch (error) {
     return {
       status: 'error',
       formError: getActionErrorMessage(error),
     };
   }
+  redirect(`/events`);
 }

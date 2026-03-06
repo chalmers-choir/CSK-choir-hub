@@ -1,4 +1,4 @@
-import { headers } from 'next/headers';
+import { cookies } from 'next/headers';
 
 import 'server-only';
 
@@ -13,10 +13,10 @@ OpenAPI.WITH_CREDENTIALS = true;
 OpenAPI.CREDENTIALS = 'include';
 
 OpenAPI.HEADERS = async () => {
-  const h = await headers();
-  const cookie = h.get('cookie');
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value ?? null;
 
   return {
-    ...(cookie ? { cookie } : {}),
+    ...(token ? { token } : {}),
   };
 };
