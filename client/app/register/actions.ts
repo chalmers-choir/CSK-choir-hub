@@ -1,21 +1,21 @@
-"use server";
+'use server';
 
-import * as z from "zod";
+import * as z from 'zod';
 
-import { AuthService } from "@/lib/serverApiClient";
+import { AuthService } from '@/lib/serverApiClient';
 
 export const SignupFormSchema = z.object({
-  username: z.string().min(2, { error: "Username must be at least 2 characters long." }).trim(),
-  firstName: z.string().min(2, { error: "First name must be at least 2 characters long." }).trim(),
-  lastName: z.string().min(2, { error: "Last name must be at least 2 characters long." }).trim(),
-  email: z.email({ error: "Please enter a valid email." }).trim(),
+  username: z.string().min(2, { error: 'Username must be at least 2 characters long.' }).trim(),
+  firstName: z.string().min(2, { error: 'First name must be at least 2 characters long.' }).trim(),
+  lastName: z.string().min(2, { error: 'Last name must be at least 2 characters long.' }).trim(),
+  email: z.email({ error: 'Please enter a valid email.' }).trim(),
   password: z
     .string()
-    .min(8, { error: "Be at least 8 characters long" })
-    .regex(/[a-zA-Z]/, { error: "Contain at least one letter." })
-    .regex(/[0-9]/, { error: "Contain at least one number." })
+    .min(8, { error: 'Be at least 8 characters long' })
+    .regex(/[a-zA-Z]/, { error: 'Contain at least one letter.' })
+    .regex(/[0-9]/, { error: 'Contain at least one number.' })
     .regex(/[^a-zA-Z0-9]/, {
-      error: "Contain at least one special character.",
+      error: 'Contain at least one special character.',
     })
     .trim(),
 });
@@ -34,11 +34,11 @@ export type FormState = {
 export async function signup(_prevState: FormState, formData: FormData): Promise<FormState> {
   // Validate form fields
   const validatedFields = SignupFormSchema.safeParse({
-    username: formData.get("username"),
-    firstName: formData.get("firstName"),
-    lastName: formData.get("lastName"),
-    email: formData.get("email"),
-    password: formData.get("password"),
+    username: formData.get('username'),
+    firstName: formData.get('firstName'),
+    lastName: formData.get('lastName'),
+    email: formData.get('email'),
+    password: formData.get('password'),
   });
 
   // If any form fields are invalid, return early
@@ -64,7 +64,7 @@ export async function signup(_prevState: FormState, formData: FormData): Promise
 
   if (!res.user) {
     return {
-      message: "An error occurred while creating your account.",
+      message: 'An error occurred while creating your account.',
     };
   }
 
