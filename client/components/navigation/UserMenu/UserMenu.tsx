@@ -1,10 +1,10 @@
-import { Avatar } from "@heroui/react";
-import { AccountCircleOutlined } from "@mui/icons-material";
+import { Avatar } from '@heroui/react';
+import { AccountCircleOutlined } from '@mui/icons-material';
 
-import { LinkDropDownMenuRef, LinkDropdownMenu } from "@/components";
-import { siteConfig } from "@/config/site";
-import { useTranslation } from "@/contexts";
-import { User } from "@/lib/api-client";
+import { LinkDropDownMenuRef, LinkDropdownMenu } from '@/components';
+import { siteConfig } from '@/config/site';
+import { useTranslation } from '@/contexts';
+import { User } from '@/lib/api-client';
 
 export interface UserMenuProps {
   isAuthenticated: boolean;
@@ -21,7 +21,7 @@ export const UserMenu = ({ isAuthenticated, logout, user }: UserMenuProps) => {
       as="button"
       className="transition-transform"
       color="primary"
-      name={user?.firstName + " " + user?.lastName}
+      name={user?.firstName + ' ' + user?.lastName}
       size="sm"
     />
   ) : (
@@ -30,13 +30,13 @@ export const UserMenu = ({ isAuthenticated, logout, user }: UserMenuProps) => {
 
   const items: LinkDropDownMenuRef[] = isAuthenticated
     ? [
-        { key: "profile", name: t("common.profile"), href: siteConfig.links.profile },
-        { key: "settings", name: t("common.settings"), href: siteConfig.links.settings },
-        { key: "logout", className: "text-danger", name: t("common.logout"), onPress: logout },
+        { key: 'profile', name: t('common.profile'), href: siteConfig.links.profile },
+        { key: 'settings', name: t('common.settings'), href: siteConfig.links.settings },
+        { key: 'logout', className: 'text-danger', name: t('common.logout'), onPress: logout },
       ]
     : [
-        { key: "login", name: t("common.login"), href: siteConfig.links.login },
-        { key: "register", name: t("common.register"), href: siteConfig.links.register },
+        { key: 'login', name: t('common.login'), href: siteConfig.links.login },
+        { key: 'register', name: t('common.register'), href: siteConfig.links.register },
       ];
 
   return <LinkDropdownMenu trigger={menuTrigger} items={items} />;

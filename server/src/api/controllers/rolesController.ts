@@ -1,6 +1,6 @@
-import * as roleService from "@services/roleService";
-import { BadRequestError } from "@utils/errors";
-import { type NextFunction, type Request, type Response } from "express";
+import * as roleService from '@services/roleService';
+import { BadRequestError } from '@utils/errors';
+import { type NextFunction, type Request, type Response } from 'express';
 
 // Get all roles
 export const getRoles = async (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +17,7 @@ export const getRoles = async (req: Request, res: Response, next: NextFunction) 
 export const createRole = async (req: Request, res: Response, next: NextFunction) => {
   const { name, description } = req.body;
 
-  if (!name) return next(new BadRequestError("name not provided"));
+  if (!name) return next(new BadRequestError('name not provided'));
 
   try {
     const newRole = await roleService.createRole(name, description);
@@ -32,7 +32,7 @@ export const createRole = async (req: Request, res: Response, next: NextFunction
 export const deleteRole = async (req: Request, res: Response, next: NextFunction) => {
   const roleId = parseInt(req.params.id, 10);
 
-  if (isNaN(roleId)) return next(new BadRequestError("Invalid role ID"));
+  if (isNaN(roleId)) return next(new BadRequestError('Invalid role ID'));
 
   try {
     await roleService.deleteRole(roleId);
@@ -49,7 +49,7 @@ export const assignUserToRole = async (req: Request, res: Response, next: NextFu
   const roleId = parseInt(req.params.roleId, 10);
 
   if (isNaN(userId) || isNaN(roleId))
-    return next(new BadRequestError("Invalid user ID or role ID"));
+    return next(new BadRequestError('Invalid user ID or role ID'));
 
   try {
     await roleService.assignUser(userId, roleId);
@@ -64,7 +64,7 @@ export const assignUserToRole = async (req: Request, res: Response, next: NextFu
 export const removeUserFromRole = async (req: Request, res: Response, next: NextFunction) => {
   const roleId = parseInt(req.params.roleId, 10);
 
-  if (isNaN(roleId)) return next(new BadRequestError("Invalid role ID"));
+  if (isNaN(roleId)) return next(new BadRequestError('Invalid role ID'));
 
   try {
     await roleService.removeUser(roleId);

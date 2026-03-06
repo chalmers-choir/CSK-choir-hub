@@ -1,2 +1,2 @@
-export * from "./AuthContext";
-export * from "./IntlContext";
+export * from './AuthContext';
+export * from './IntlContext';

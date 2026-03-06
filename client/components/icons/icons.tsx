@@ -1,8 +1,8 @@
-import Image from "next/image";
+import Image from 'next/image';
 
-import logoLight from "@/public/logo/small.png";
-import logoDark from "@/public/logo/small_invert.png";
-import { IconSvgProps } from "@/types/icon";
+import logoLight from '@/public/logo/small.png';
+import logoDark from '@/public/logo/small_invert.png';
+import { IconSvgProps } from '@/types/icon';
 
 export const Logo = () => {
   return (

@@ -1,6 +1,6 @@
-import fs from "fs";
-import path from "path";
-import winston from "winston";
+import fs from 'fs';
+import path from 'path';
+import winston from 'winston';
 
 interface CustomLogger extends winston.Logger {
   infoObject: (obj: any, message?: string) => void;
@@ -12,7 +12,7 @@ interface CustomLogger extends winston.Logger {
 }
 
 const { combine, timestamp, printf, colorize } = winston.format;
-const isServerlessRuntime = process.env.VERCEL === "1";
+const isServerlessRuntime = process.env.VERCEL === '1';
 
 // Custom log format
 const myFormat = printf(({ level, message, timestamp }) => {
@@ -22,14 +22,14 @@ const myFormat = printf(({ level, message, timestamp }) => {
 const transports: winston.transport[] = [new winston.transports.Console()];
 
 if (!isServerlessRuntime) {
-  const logDir = path.resolve(process.cwd(), "logs");
+  const logDir = path.resolve(process.cwd(), 'logs');
 
   try {
     fs.mkdirSync(logDir, { recursive: true });
 
     transports.push(
       new winston.transports.File({
-        filename: path.join(logDir, "combined.log"),
+        filename: path.join(logDir, 'combined.log'),
         format: winston.format.uncolorize(),
       }),
     );
@@ -39,7 +39,7 @@ if (!isServerlessRuntime) {
 }
 
 const logger = winston.createLogger({
-  level: process.env.NODE_ENV === "production" ? "info" : "debug",
+  level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
   format: combine(timestamp(), colorize(), myFormat),
   transports,
 }) as CustomLogger;

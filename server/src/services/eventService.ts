@@ -1,6 +1,6 @@
-import { eventModel, userModel } from "@db";
-import { type AttendanceStatus, type EventType } from "@prisma/generated/client";
-import { NotFoundError } from "@utils";
+import { eventModel, userModel } from '@db';
+import { type AttendanceStatus, type EventType } from '@prisma/generated/client';
+import { NotFoundError } from '@utils';
 
 /**
  * Get all events in the system.
@@ -114,11 +114,11 @@ export async function updateUserAttendance(
 export async function registerUser(eventId: number, userId: number) {
   const user = await userModel.findById(userId);
 
-  if (!user) throw new NotFoundError("User not Found");
+  if (!user) throw new NotFoundError('User not Found');
 
   const event = await eventModel.findById(eventId);
 
-  if (!event) throw new NotFoundError("Event not Found");
+  if (!event) throw new NotFoundError('Event not Found');
 
   return await eventModel.registerUser(eventId, userId);
 }

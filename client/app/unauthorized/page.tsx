@@ -1,6 +1,6 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import { Button } from "@heroui/button";
+import { Button } from '@heroui/button';
 
 export default function UnauthorizedPage() {
   return (

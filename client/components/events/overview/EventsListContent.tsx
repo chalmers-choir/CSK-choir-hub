@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useIntl } from "@/contexts";
-import { CSKEvent } from "@/lib/apiClient";
+import { useIntl } from '@/contexts';
+import { CSKEvent } from '@/lib/apiClient';
 
-import { EventsWeekSections } from "./EventsWeekSections";
+import { EventsWeekSections } from './EventsWeekSections';
 
 const getIsoWeekNumber = (date: Date) => {
   const tempDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -32,7 +32,7 @@ const getWeekMeta = (isoDate: string, locale: string) => {
   endOfWeek.setDate(startOfWeek.getDate() + 6);
   endOfWeek.setHours(23, 59, 59, 999);
 
-  const dayFormatter = new Intl.DateTimeFormat(locale, { month: "short", day: "numeric" });
+  const dayFormatter = new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric' });
 
   return {
     key: `${startOfWeek.getFullYear()}-v${weekNumber}`,
@@ -70,7 +70,7 @@ export const EventsListContent = ({ events }: EventsListContentProps) => {
     <>
       {eventsByWeek.length === 0 ? (
         <div className="border-default-200 bg-default-100/60 text-default-500 rounded-lg border p-6 text-center">
-          {t("events.no_events")}
+          {t('events.no_events')}
         </div>
       ) : (
         <EventsWeekSections weeks={eventsByWeek} />

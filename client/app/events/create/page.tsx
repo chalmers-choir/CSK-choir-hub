@@ -1,65 +1,65 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
-import { Button } from "@heroui/button";
-import { DatePicker } from "@heroui/date-picker";
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
-import { Input, Textarea } from "@heroui/input";
-import { button as buttonStyles } from "@heroui/theme";
-import { DateValue } from "@internationalized/date";
-import { I18nProvider } from "@react-aria/i18n";
+import { Autocomplete, AutocompleteItem } from '@heroui/autocomplete';
+import { Button } from '@heroui/button';
+import { DatePicker } from '@heroui/date-picker';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/dropdown';
+import { Input, Textarea } from '@heroui/input';
+import { button as buttonStyles } from '@heroui/theme';
+import { DateValue } from '@internationalized/date';
+import { I18nProvider } from '@react-aria/i18n';
 
-import { RequestLogin } from "@/components";
-import { useAuth } from "@/contexts";
-import { CSKEventType, EventsService } from "@/lib/apiClient";
+import { RequestLogin } from '@/components';
+import { useAuth } from '@/contexts';
+import { CSKEventType, EventsService } from '@/lib/apiClient';
 
 interface ResultData {
-  type: "success" | "error";
+  type: 'success' | 'error';
   message: string;
 }
 
 type Result = ResultData | undefined;
 
 const eventTypeDbKeyToName: Record<CSKEventType, string> = {
-  REHEARSAL: "Rep",
-  CONCERT: "Konsert",
-  GIG: "Gig",
-  PARTY: "Fest",
-  MEETING: "Möte",
-  OTHER: "Annat",
+  REHEARSAL: 'Rep',
+  CONCERT: 'Konsert',
+  GIG: 'Gig',
+  PARTY: 'Fest',
+  MEETING: 'Möte',
+  OTHER: 'Annat',
 };
 
 const autocompletePlaceNames: Record<string, string> = {
-  klok: "Klok",
-  scania: "Scaniasalen",
-  kårres: "Kårrestaurangen",
-  palmstedt: "Palmstedtsalen",
-  maskin: "ML11",
-  sbm500: "SB-M500",
+  klok: 'Klok',
+  scania: 'Scaniasalen',
+  kårres: 'Kårrestaurangen',
+  palmstedt: 'Palmstedtsalen',
+  maskin: 'ML11',
+  sbm500: 'SB-M500',
 };
 
 export default function CreateEventPage() {
   const { loading, isAdmin } = useAuth();
 
   // name, type, description, dateStart, place
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [type, setType] = useState<CSKEventType | undefined>(undefined);
   const [typeIsInvalid, setTypeIsInvalid] = useState(false);
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState('');
   const [dateStart, setDateStart] = useState<DateValue | null>(null);
   const [dateIsInvalid, setDateIsInvalid] = useState(false);
-  const [place, setPlace] = useState("");
+  const [place, setPlace] = useState('');
   const [placeIsInvalid, setPlaceIsInvalid] = useState(false);
   const resetState = () => {
-    setName("");
+    setName('');
     setType(undefined);
     setTypeIsInvalid(false);
-    setDescription("");
+    setDescription('');
     setDateStart(null);
     setDateIsInvalid(false);
-    setPlace("");
+    setPlace('');
     setPlaceIsInvalid(false);
   };
 
@@ -78,7 +78,7 @@ export default function CreateEventPage() {
         setPlaceIsInvalid(true);
       }
       if (!type || !dateStart || !place) {
-        throw new Error("Vänligen fyll i alla fält.");
+        throw new Error('Vänligen fyll i alla fält.');
       }
 
       const eventData = {
@@ -95,14 +95,14 @@ export default function CreateEventPage() {
       const eventId = newEvent.id;
 
       resetState();
-      setResult({ type: "success", message: "Evenemang skapat!" });
+      setResult({ type: 'success', message: 'Evenemang skapat!' });
       window.location.href = `/events/${eventId}`;
     } catch (err: any) {
-      setResult({ type: "error", message: err.message });
+      setResult({ type: 'error', message: err.message });
     }
   };
 
-  const defaultVariant = "bordered";
+  const defaultVariant = 'bordered';
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -122,11 +122,11 @@ export default function CreateEventPage() {
           <Dropdown>
             <DropdownTrigger>
               <Button
-                color={typeIsInvalid ? "danger" : "default"}
+                color={typeIsInvalid ? 'danger' : 'default'}
                 variant={defaultVariant}
                 onPress={() => setTypeIsInvalid(false)}
               >
-                {type ? eventTypeDbKeyToName[type] : "Välj typ"}
+                {type ? eventTypeDbKeyToName[type] : 'Välj typ'}
               </Button>
             </DropdownTrigger>
             <DropdownMenu
@@ -148,7 +148,7 @@ export default function CreateEventPage() {
 
           <I18nProvider locale="sv-SE">
             <DatePicker
-              classNames={{ label: "after:content-none" }}
+              classNames={{ label: 'after:content-none' }}
               granularity="minute"
               isInvalid={dateIsInvalid}
               label="Datum och tid"
@@ -173,13 +173,13 @@ export default function CreateEventPage() {
           </Autocomplete>
 
           {result && (
-            <p className={result.type == "success" ? "text-green-500" : "text-red-500"}>
+            <p className={result.type == 'success' ? 'text-green-500' : 'text-red-500'}>
               {result.message}
             </p>
           )}
 
           <Button
-            className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
+            className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
             type="submit"
           >
             Skapa

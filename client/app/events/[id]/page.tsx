@@ -1,7 +1,7 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import { EventDetailCard } from "@/components/events/detail/EventDetailCard";
-import { ApiError, CSKEvent, EventsService } from "@/lib/serverApiClient";
+import { EventDetailCard } from '@/components/events/detail/EventDetailCard';
+import { ApiError, CSKEvent, EventsService } from '@/lib/serverApiClient';
 
 function EventNotFound() {
   return (

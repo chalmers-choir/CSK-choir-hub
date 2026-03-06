@@ -1,5 +1,5 @@
-import { prisma } from "@db";
-import { type KnowledgeLevel, type Voice } from "@prisma/generated/client";
+import { prisma } from '@db';
+import { type KnowledgeLevel, type Voice } from '@prisma/generated/client';
 
 /**
  * Update the knowledge level of a user for a specific song.

@@ -1,5 +1,5 @@
-import logger from "@utils/logger";
-import { type NextFunction, type Request, type Response } from "express";
+import logger from '@utils/logger';
+import { type NextFunction, type Request, type Response } from 'express';
 
 type LogLevel = 1 | 2 | 3 | 4;
 
@@ -14,11 +14,11 @@ export const logAtLevel = (level: LogLevel) => {
       const { method, originalUrl, body, query, user } = req;
       const start = Date.now();
 
-      res.on("finish", () => {
+      res.on('finish', () => {
         const duration = Date.now() - start;
         const { statusCode } = res;
 
-        const userInfo = user ? ` user=${JSON.stringify(user)}` : "";
+        const userInfo = user ? ` user=${JSON.stringify(user)}` : '';
 
         if (level >= 4) {
           logger.debug(

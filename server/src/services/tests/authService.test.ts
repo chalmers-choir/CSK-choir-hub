@@ -1,25 +1,25 @@
-import * as userModel from "@db/models/userModel";
-import { beforeEach, describe, expect, it, jest } from "@jest/globals";
+import * as userModel from '@db/models/userModel';
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 
-import * as userService from "../userService";
+import * as userService from '../userService';
 
-jest.mock("@db/models/userModel");
+jest.mock('@db/models/userModel');
 
-describe("userService", () => {
+describe('userService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("creates a user if email and username are unique", async () => {
+  it('creates a user if email and username are unique', async () => {
     (userModel.findByEmail as any).mockResolvedValue(null);
     (userModel.findByUsername as any).mockResolvedValue(null);
 
     const token = await userService.registerUser({
-      email: "test@example.com",
-      username: "tester",
-      password: "pass",
-      firstName: "Test",
-      lastName: "User",
+      email: 'test@example.com',
+      username: 'tester',
+      password: 'pass',
+      firstName: 'Test',
+      lastName: 'User',
     });
 
     expect(token).toBeDefined();

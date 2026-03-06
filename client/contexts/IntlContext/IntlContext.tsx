@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React, { ReactNode, createContext, useContext, useEffect, useState } from "react";
+import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 
-import { NextIntlClientProvider, useTranslations } from "next-intl";
+import { NextIntlClientProvider, useTranslations } from 'next-intl';
 
-import deMessages from "@/locales/de.json";
-import enMessages from "@/locales/en.json";
-import svMessages from "@/locales/sv.json";
+import deMessages from '@/locales/de.json';
+import enMessages from '@/locales/en.json';
+import svMessages from '@/locales/sv.json';
 
-type Locale = "en" | "sv" | "de";
+type Locale = 'en' | 'sv' | 'de';
 
 type TranslationValue = string | { [key: string]: TranslationValue };
 type Messages = { [key: string]: TranslationValue };
@@ -30,18 +30,18 @@ const messages: Record<Locale, Messages> = {
   de: deMessages,
 };
 
-const LOCALE_STORAGE_KEY = "preferred-locale";
-const DEFAULT_TIME_ZONE = "Europe/Stockholm";
+const LOCALE_STORAGE_KEY = 'preferred-locale';
+const DEFAULT_TIME_ZONE = 'Europe/Stockholm';
 
 export const IntlProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [locale, setLocaleState] = useState<Locale>("sv"); // Default to Swedish
+  const [locale, setLocaleState] = useState<Locale>('sv'); // Default to Swedish
 
   useEffect(() => {
     // Load saved locale from localStorage
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       const savedLocale = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
 
-      if (savedLocale && (savedLocale === "en" || savedLocale === "sv" || savedLocale === "de")) {
+      if (savedLocale && (savedLocale === 'en' || savedLocale === 'sv' || savedLocale === 'de')) {
         setLocaleState(savedLocale);
       }
     }
@@ -49,7 +49,7 @@ export const IntlProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       localStorage.setItem(LOCALE_STORAGE_KEY, newLocale);
     }
   };
@@ -77,7 +77,7 @@ export const useIntl = (): IntlContextValue => {
   const translate = useTranslations();
 
   if (!context) {
-    throw new Error("useIntl must be used within IntlProvider");
+    throw new Error('useIntl must be used within IntlProvider');
   }
 
   return {

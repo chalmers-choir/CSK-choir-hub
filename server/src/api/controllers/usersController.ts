@@ -1,13 +1,13 @@
-import * as userService from "@services/userService";
-import { BadRequestError } from "@utils/errors";
-import { type NextFunction, type Request, type Response } from "express";
+import * as userService from '@services/userService';
+import { BadRequestError } from '@utils/errors';
+import { type NextFunction, type Request, type Response } from 'express';
 
 // Get all users
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Parse include query parameters
-    const includeRoles = req.query.includeRoles === "true";
-    const includeGroups = req.query.includeGroups === "true";
+    const includeRoles = req.query.includeRoles === 'true';
+    const includeGroups = req.query.includeGroups === 'true';
     const include =
       includeRoles || includeGroups ? { roles: includeRoles, groups: includeGroups } : undefined;
 
@@ -27,7 +27,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
 export const getUserWithId = async (req: Request, res: Response, next: NextFunction) => {
   const userId = parseInt(req.params.userId, 10);
 
-  if (isNaN(userId)) return next(new BadRequestError("Invalid user ID"));
+  if (isNaN(userId)) return next(new BadRequestError('Invalid user ID'));
 
   try {
     const user = await userService.getUser(userId);
@@ -42,7 +42,7 @@ export const getUserWithId = async (req: Request, res: Response, next: NextFunct
 export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
   const userId = parseInt(req.params.userId, 10);
 
-  if (isNaN(userId)) return next(new BadRequestError("Invalid user ID"));
+  if (isNaN(userId)) return next(new BadRequestError('Invalid user ID'));
 
   const { firstName, lastName, email, dietaryPreferences } = req.body;
 
@@ -64,7 +64,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   const userId = parseInt(req.params.userId, 10);
 
-  if (isNaN(userId)) return next(new BadRequestError("Invalid user ID"));
+  if (isNaN(userId)) return next(new BadRequestError('Invalid user ID'));
 
   try {
     await userService.deleteUser(userId);

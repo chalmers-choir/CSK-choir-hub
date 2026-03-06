@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from 'react';
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from 'next/navigation';
 
-import { Button, Form, Input, Link, button as buttonStyles } from "@heroui/react";
+import { Button, Form, Input, Link, button as buttonStyles } from '@heroui/react';
 
-import { AuthLoading } from "@/components";
-import { siteConfig } from "@/config/site";
-import { useAuth, useTranslation } from "@/contexts";
+import { AuthLoading } from '@/components';
+import { siteConfig } from '@/config/site';
+import { useAuth, useTranslation } from '@/contexts';
 
 function LoginPageContent() {
   const { login, isAuthenticated, loading } = useAuth();
@@ -16,11 +16,11 @@ function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  const [error, setError] = useState("");
-  const redirectTo = searchParams.get("next") || "/";
+  const [error, setError] = useState('');
+  const redirectTo = searchParams.get('next') || '/';
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
@@ -44,33 +44,33 @@ function LoginPageContent() {
       className="mx-auto mt-20 flex max-w-sm flex-col items-center gap-2"
       onSubmit={handleSubmit}
     >
-      <h2 className="w-full text-center text-lg font-semibold">{t("welcome.singer")}</h2>
+      <h2 className="w-full text-center text-lg font-semibold">{t('welcome.singer')}</h2>
       <Input
         name="username"
-        placeholder={t("common.username")}
+        placeholder={t('common.username')}
         type="text"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
       <Input
         name="password"
-        placeholder={t("common.password")}
+        placeholder={t('common.password')}
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
       {error && <p className="text-red-500">{error}</p>}
       <Button
-        className={buttonStyles({ color: "primary", radius: "md", variant: "shadow" }) + " px-8"}
+        className={buttonStyles({ color: 'primary', radius: 'md', variant: 'shadow' }) + ' px-8'}
         type="submit"
       >
-        {t("common.login")}
+        {t('common.login')}
       </Button>
       <Link
         className="mt-4 inline-block w-full text-center text-sm text-blue-500"
         href={siteConfig.links.register}
       >
-        {t("common.no_account")}
+        {t('common.no_account')}
       </Link>
     </Form>
   );

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Link } from "@heroui/link";
+import { Link } from '@heroui/link';
 
-import { BottomNav, Navbar } from "@/components";
+import { BottomNav, Navbar } from '@/components';
 
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   return (

@@ -1,11 +1,11 @@
-import { prisma } from "@db/prisma";
+import { prisma } from '@db/prisma';
 import type {
   AttendanceStatus,
   EventAttendance,
   EventRegistration,
   EventType,
   Prisma,
-} from "@prisma/generated/client";
+} from '@prisma/generated/client';
 
 /**
  * Create a new event.

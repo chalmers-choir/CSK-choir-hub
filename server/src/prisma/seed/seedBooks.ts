@@ -1,23 +1,23 @@
-import { type PrismaClient } from "@prisma/generated/client";
-import { type Book } from "@prisma/generated/client";
+import { type PrismaClient } from '@prisma/generated/client';
+import { type Book } from '@prisma/generated/client';
 
 export default async function seedBooks(prisma: PrismaClient): Promise<Books> {
   // Create Books
   const utantill = await prisma.book.create({
     data: {
-      title: "Utanill",
+      title: 'Utanill',
     },
   });
 
   const grona = await prisma.book.create({
     data: {
-      title: "Gröna Boken",
+      title: 'Gröna Boken',
     },
   });
 
   const svarta = await prisma.book.create({
     data: {
-      title: "Lilla Svarta",
+      title: 'Lilla Svarta',
     },
   });
 

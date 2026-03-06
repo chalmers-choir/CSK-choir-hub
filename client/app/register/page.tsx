@@ -1,31 +1,31 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 
-import { Button, Form, Input, Link, button as buttonStyles } from "@heroui/react";
-import clsx from "clsx";
+import { Button, Form, Input, Link, button as buttonStyles } from '@heroui/react';
+import clsx from 'clsx';
 
-import { AuthLoading } from "@/components";
-import { siteConfig } from "@/config/site";
-import { useAuth } from "@/contexts";
+import { AuthLoading } from '@/components';
+import { siteConfig } from '@/config/site';
+import { useAuth } from '@/contexts';
 
 export default function RegisterPage() {
   const { register, isAuthenticated, loading } = useAuth();
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      router.replace("/");
+      router.replace('/');
     }
   }, [isAuthenticated, loading, router]);
 
@@ -96,8 +96,8 @@ export default function RegisterPage() {
 
       <Button
         className={clsx(
-          buttonStyles({ color: "primary", radius: "md", variant: "shadow" }),
-          "px-8",
+          buttonStyles({ color: 'primary', radius: 'md', variant: 'shadow' }),
+          'px-8',
         )}
         type="submit"
       >

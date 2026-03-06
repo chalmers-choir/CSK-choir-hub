@@ -1,7 +1,7 @@
-import { useTranslation } from "@/contexts";
-import { CSKEvent } from "@/lib/apiClient";
+import { useTranslation } from '@/contexts';
+import { CSKEvent } from '@/lib/apiClient';
 
-import { EventListCard } from "./EventListCard";
+import { EventListCard } from './EventListCard';
 
 interface EventWeekGroup {
   key: string;
@@ -23,7 +23,7 @@ export const EventsWeekSections = ({ weeks }: EventsWeekSectionsProps) => {
         <div key={weekGroup.key} className="flex flex-col gap-3">
           <div className="flex items-baseline gap-2">
             <h2 className="text-default-900 text-xl font-semibold">
-              {t("common.week")} {weekGroup.weekNumber}
+              {t('common.week')} {weekGroup.weekNumber}
             </h2>
             <span className="text-default-500 text-sm">{weekGroup.rangeLabel}</span>
           </div>

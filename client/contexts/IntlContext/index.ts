@@ -1,1 +1,1 @@
-export * from "./IntlContext";
+export * from './IntlContext';
