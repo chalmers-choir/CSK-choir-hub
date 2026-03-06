@@ -1,195 +1,138 @@
 'use client';
 
-import { useState } from 'react';
+import { useActionState, useRef } from 'react';
 
-import { Autocomplete, AutocompleteItem } from '@heroui/autocomplete';
 import { Button } from '@heroui/button';
 import { DatePicker } from '@heroui/date-picker';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/dropdown';
 import { Input, Textarea } from '@heroui/input';
 import { button as buttonStyles } from '@heroui/theme';
-import { DateValue } from '@internationalized/date';
 import { I18nProvider } from '@react-aria/i18n';
 
-import { RequestLogin } from '@/components';
-import { useAuth } from '@/contexts';
-import { CSKEventType, EventsService } from '@/lib/apiClient';
+import { type CreateEventActionState, createEventAction } from './actions';
 
-interface ResultData {
-  type: 'success' | 'error';
-  message: string;
-}
-
-type Result = ResultData | undefined;
-
-const eventTypeDbKeyToName: Record<CSKEventType, string> = {
+const eventTypeDbKeyToName = {
   REHEARSAL: 'Rep',
   CONCERT: 'Konsert',
   GIG: 'Gig',
   PARTY: 'Fest',
   MEETING: 'Möte',
   OTHER: 'Annat',
-};
+} as const;
 
-const autocompletePlaceNames: Record<string, string> = {
-  klok: 'Klok',
-  scania: 'Scaniasalen',
-  kårres: 'Kårrestaurangen',
-  palmstedt: 'Palmstedtsalen',
-  maskin: 'ML11',
-  sbm500: 'SB-M500',
-};
+const autocompletePlaceNames = [
+  'Klok',
+  'Scaniasalen',
+  'Kårrestaurangen',
+  'Palmstedtsalen',
+  'ML11',
+  'SB-M500',
+];
+
+const defaultVariant = 'bordered';
+const selectClassName =
+  'h-14 rounded-large border border-default-200 bg-transparent px-3 text-sm outline-none focus:border-primary';
+const initialCreateEventActionState: CreateEventActionState = { status: 'idle' };
 
 export default function CreateEventPage() {
-  const { loading, isAdmin } = useAuth();
+  const dateStartInputRef = useRef<HTMLInputElement>(null);
 
-  // name, type, description, dateStart, place
-  const [name, setName] = useState('');
-  const [type, setType] = useState<CSKEventType | undefined>(undefined);
-  const [typeIsInvalid, setTypeIsInvalid] = useState(false);
-  const [description, setDescription] = useState('');
-  const [dateStart, setDateStart] = useState<DateValue | null>(null);
-  const [dateIsInvalid, setDateIsInvalid] = useState(false);
-  const [place, setPlace] = useState('');
-  const [placeIsInvalid, setPlaceIsInvalid] = useState(false);
-  const resetState = () => {
-    setName('');
-    setType(undefined);
-    setTypeIsInvalid(false);
-    setDescription('');
-    setDateStart(null);
-    setDateIsInvalid(false);
-    setPlace('');
-    setPlaceIsInvalid(false);
-  };
+  const [actionState, submitCreateEvent, isSubmitting] = useActionState<
+    CreateEventActionState,
+    FormData
+  >(createEventAction, initialCreateEventActionState);
 
-  const [result, setResult] = useState<Result>(undefined);
-
-  const handleSubmit = async (e: React.SubmitEvent) => {
-    e.preventDefault();
-    try {
-      if (!type) {
-        setTypeIsInvalid(true);
-      }
-      if (!dateStart) {
-        setDateIsInvalid(true);
-      }
-      if (!place) {
-        setPlaceIsInvalid(true);
-      }
-      if (!type || !dateStart || !place) {
-        throw new Error('Vänligen fyll i alla fält.');
-      }
-
-      const eventData = {
-        name,
-        type,
-        description,
-        dateStart: dateStart?.toString(),
-        place,
-        requiresRegistration: false,
-        requiresAttendance: false,
-      };
-
-      const { event: newEvent } = await EventsService.addEvent({ requestBody: eventData }); // Invalidate cache
-      const eventId = newEvent.id;
-
-      resetState();
-      setResult({ type: 'success', message: 'Evenemang skapat!' });
-      window.location.href = `/events/${eventId}`;
-    } catch (err: any) {
-      setResult({ type: 'error', message: err.message });
-    }
-  };
-
-  const defaultVariant = 'bordered';
+  const fieldErrors = actionState.fieldErrors;
+  const formErrorMessage = actionState.formError ?? null;
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      {isAdmin ? (
-        <form className="w-md mx-auto mt-20 flex max-w-full flex-col gap-2" onSubmit={handleSubmit}>
-          <h2 className="w-full text-center text-lg font-semibold">Skapa nytt evenemang</h2>
+      <form
+        className="w-md mx-auto mt-20 flex max-w-full flex-col gap-2"
+        action={submitCreateEvent}
+      >
+        <h2 className="w-full text-center text-lg font-semibold">Skapa nytt evenemang</h2>
 
-          <Input
-            required
-            label="Namn på evenemanget"
-            type="text"
-            value={name}
+        <Input
+          isRequired
+          errorMessage={fieldErrors?.name}
+          isInvalid={Boolean(fieldErrors?.name)}
+          label="Namn på evenemanget"
+          name="name"
+          type="text"
+          variant={defaultVariant}
+        />
+
+        <label className="text-sm" htmlFor="type">
+          Typ
+        </label>
+        <select
+          aria-invalid={Boolean(fieldErrors?.type)}
+          className={selectClassName}
+          id="type"
+          name="type"
+          required
+        >
+          <option value="">Välj typ</option>
+          {Object.entries(eventTypeDbKeyToName).map(([value, label]) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
+        {fieldErrors?.type && <p className="text-sm text-red-500">{fieldErrors.type}</p>}
+
+        <Textarea
+          errorMessage={fieldErrors?.description}
+          isInvalid={Boolean(fieldErrors?.description)}
+          label="Beskrivning"
+          name="description"
+          variant={defaultVariant}
+        />
+
+        <I18nProvider locale="sv-SE">
+          <DatePicker
+            classNames={{ label: 'after:content-none' }}
+            granularity="minute"
+            isInvalid={Boolean(fieldErrors?.dateStart)}
+            label="Datum och tid"
             variant={defaultVariant}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(value) => {
+              if (dateStartInputRef.current) {
+                dateStartInputRef.current.value = value ? value.toString() : '';
+              }
+            }}
           />
+          <input ref={dateStartInputRef} name="dateStart" type="hidden" />
+        </I18nProvider>
+        {fieldErrors?.dateStart && <p className="text-sm text-red-500">{fieldErrors.dateStart}</p>}
 
-          <Dropdown>
-            <DropdownTrigger>
-              <Button
-                color={typeIsInvalid ? 'danger' : 'default'}
-                variant={defaultVariant}
-                onPress={() => setTypeIsInvalid(false)}
-              >
-                {type ? eventTypeDbKeyToName[type] : 'Välj typ'}
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              items={Object.entries(eventTypeDbKeyToName)}
-              onAction={(key) => setType(key as CSKEventType)}
-            >
-              {(item) => <DropdownItem key={item[0]}>{item[1]}</DropdownItem>}
-            </DropdownMenu>
-          </Dropdown>
+        <Input
+          isRequired
+          errorMessage={fieldErrors?.place}
+          isInvalid={Boolean(fieldErrors?.place)}
+          label="Plats"
+          list="autocompletePlaceNames"
+          name="place"
+          type="text"
+          variant={defaultVariant}
+        />
+        <datalist id="autocompletePlaceNames">
+          {autocompletePlaceNames.map((name) => (
+            <option key={name} value={name} />
+          ))}
+        </datalist>
+        {fieldErrors?.place && <p className="text-sm text-red-500">{fieldErrors.place}</p>}
 
-          <Textarea
-            required
-            label="Beskrivning"
-            type="text"
-            value={description}
-            variant={defaultVariant}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+        {formErrorMessage && <p className="text-sm text-red-500">{formErrorMessage}</p>}
 
-          <I18nProvider locale="sv-SE">
-            <DatePicker
-              classNames={{ label: 'after:content-none' }}
-              granularity="minute"
-              isInvalid={dateIsInvalid}
-              label="Datum och tid"
-              value={dateStart}
-              variant={defaultVariant}
-              onChange={(e) => e && setDateStart(e)}
-              onFocus={() => setDateIsInvalid(false)}
-            />
-          </I18nProvider>
-
-          <Autocomplete
-            allowsCustomValue
-            inputValue={place}
-            isInvalid={placeIsInvalid}
-            items={Object.entries(autocompletePlaceNames)}
-            label="Plats (välj från listan eller skriv egen)"
-            variant={defaultVariant}
-            onFocus={() => setPlaceIsInvalid(false)}
-            onInputChange={(e) => setPlace(e)}
-          >
-            {(item) => <AutocompleteItem key={item[0]}>{item[1]}</AutocompleteItem>}
-          </Autocomplete>
-
-          {result && (
-            <p className={result.type == 'success' ? 'text-green-500' : 'text-red-500'}>
-              {result.message}
-            </p>
-          )}
-
-          <Button
-            className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
-            type="submit"
-          >
-            Skapa
-          </Button>
-        </form>
-      ) : loading ? (
-        <>Loading...</>
-      ) : (
-        <RequestLogin>Vänligen logga in som administratör för att skapa evenemang.</RequestLogin>
-      )}
+        <Button
+          className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
+          isDisabled={isSubmitting}
+          type="submit"
+        >
+          {isSubmitting ? 'Skapar...' : 'Skapa'}
+        </Button>
+      </form>
     </section>
   );
 }
