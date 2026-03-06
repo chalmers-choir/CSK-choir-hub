@@ -18,9 +18,9 @@
 
 Requires `npm install` in:
 
-- [ ] Root
-- [ ] Client
-- [ ] Server
+- Root?
+- Client?
+- Server?
 
 ## Checklist
 
