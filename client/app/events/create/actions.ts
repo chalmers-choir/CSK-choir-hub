@@ -1,25 +1,25 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
+import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
 
-import { request as apiRequest } from "@/lib/api-client/core/request";
+import { request as apiRequest } from '@/lib/api-client/core/request';
 import {
   ApiError,
   type CSKEvent,
   type CSKEventSummary,
   OpenAPI,
   type OpenAPIConfig,
-} from "@/lib/apiClient";
+} from '@/lib/apiClient';
 
 import {
   type CreateEventActionInput,
   type CreateEventFieldErrors,
   type CreateEventRequestBody,
   createEventSchema,
-} from "./schema";
+} from './schema';
 
-type ActionStatus = "idle" | "success" | "error";
+type ActionStatus = 'idle' | 'success' | 'error';
 
 export type CreateEventActionState = {
   status: ActionStatus;
@@ -30,7 +30,7 @@ export type CreateEventActionState = {
 };
 
 export const initialCreateEventActionState: CreateEventActionState = {
-  status: "idle",
+  status: 'idle',
 };
 
 function getFieldErrors(inputErrors: Record<string, string[] | undefined>): CreateEventFieldErrors {
@@ -61,7 +61,7 @@ async function addEventWithRequestScopedHeaders(
     ...OpenAPI,
     HEADERS: async (options) => {
       const baseHeaders =
-        typeof baseHeadersConfig === "function"
+        typeof baseHeadersConfig === 'function'
           ? await baseHeadersConfig(options)
           : (baseHeadersConfig ?? {});
 
@@ -70,14 +70,14 @@ async function addEventWithRequestScopedHeaders(
   };
 
   return apiRequest<{ event: CSKEvent }>(requestConfig, {
-    method: "POST",
-    url: "/events",
+    method: 'POST',
+    url: '/events',
     body: requestBody,
-    mediaType: "application/json",
+    mediaType: 'application/json',
     errors: {
-      400: "Invalid event data",
-      401: "Unauthorized",
-      403: "Forbidden",
+      400: 'Invalid event data',
+      401: 'Unauthorized',
+      403: 'Forbidden',
     },
   });
 }
@@ -85,18 +85,18 @@ async function addEventWithRequestScopedHeaders(
 function getActionErrorMessage(error: unknown): string {
   if (error instanceof ApiError) {
     const bodyMessage =
-      typeof error.body === "object" && error.body && "message" in error.body
+      typeof error.body === 'object' && error.body && 'message' in error.body
         ? (error.body.message as string | undefined)
         : undefined;
 
-    return bodyMessage || error.message || "Kunde inte skapa evenemang.";
+    return bodyMessage || error.message || 'Kunde inte skapa evenemang.';
   }
 
   if (error instanceof Error) {
     return error.message;
   }
 
-  return "Kunde inte skapa evenemang.";
+  return 'Kunde inte skapa evenemang.';
 }
 
 export async function createEventAction(
@@ -109,28 +109,28 @@ export async function createEventAction(
     const { fieldErrors } = parsed.error.flatten();
 
     return {
-      status: "error",
+      status: 'error',
       fieldErrors: getFieldErrors(fieldErrors),
     };
   }
 
   const requestHeaders = await headers();
-  const cookie = requestHeaders.get("cookie");
+  const cookie = requestHeaders.get('cookie');
 
   try {
     const { event } = await addEventWithRequestScopedHeaders(toApiRequestBody(parsed.data), cookie);
 
-    revalidatePath("/events");
+    revalidatePath('/events');
     revalidatePath(`/events/${event.id}`);
 
     return {
-      status: "success",
-      message: "Evenemang skapat!",
+      status: 'success',
+      message: 'Evenemang skapat!',
       eventId: event.id,
     };
   } catch (error) {
     return {
-      status: "error",
+      status: 'error',
       formError: getActionErrorMessage(error),
     };
   }
