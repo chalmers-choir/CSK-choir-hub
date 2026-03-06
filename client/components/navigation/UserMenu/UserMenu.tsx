@@ -1,9 +1,10 @@
+import { useTranslations } from 'next-intl';
+
 import { Avatar } from '@heroui/react';
 import { AccountCircleOutlined } from '@mui/icons-material';
 
 import { LinkDropDownMenuRef, LinkDropdownMenu } from '@/components';
 import { siteConfig } from '@/config/site';
-import { useTranslation } from '@/contexts';
 import { User } from '@/lib/api-client';
 
 export interface UserMenuProps {
@@ -13,7 +14,7 @@ export interface UserMenuProps {
 }
 
 export const UserMenu = ({ isAuthenticated, logout, user }: UserMenuProps) => {
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   const menuTrigger = isAuthenticated ? (
     <Avatar

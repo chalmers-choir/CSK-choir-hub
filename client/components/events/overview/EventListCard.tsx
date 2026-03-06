@@ -1,8 +1,9 @@
+import { useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 
 import { Card, CardBody, CardHeader } from '@heroui/card';
 
-import { useIntl } from '@/contexts';
 import { CSKEvent, CSKEventType } from '@/lib/apiClient';
 
 const eventTypeMeta: Record<CSKEventType, { label: string; color: string }> = {
@@ -42,7 +43,8 @@ interface EventListCardProps {
 }
 
 export const EventListCard = ({ event }: EventListCardProps) => {
-  const { locale, t } = useIntl();
+  const t = useTranslations();
+  const locale = useLocale();
   const badge = eventTypeMeta[event.type] ?? eventTypeMeta.OTHER;
 
   return (

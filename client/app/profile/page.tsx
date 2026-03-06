@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { Button, Form, addToast } from '@heroui/react';
 
 import { TextField } from '@/components';
-import { useAuth, useTranslation } from '@/contexts';
+import { useAuth } from '@/contexts';
 import { ApiError, UsersService } from '@/lib/api-client';
 import { GroupType } from '@/types/group';
 
@@ -15,7 +17,7 @@ import { GroupType } from '@/types/group';
  */
 export default function ProfilePage() {
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   const [dietPref, setDietPref] = useState<string>('');
 

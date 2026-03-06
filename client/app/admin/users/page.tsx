@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from 'react';
 
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react';
 
 import { TextField } from '@/components';
-import { useTranslation } from '@/contexts';
 import { User, UsersService } from '@/lib/api-client';
 import { GroupType } from '@/types/group';
 
 export default function AdminUsersPage() {
-  const { t } = useTranslation();
+  const t = useTranslations();
   const router = useRouter();
   const [users, setUsers] = useState<User[] | undefined>(undefined);
   const [loading, setLoading] = useState(true);
