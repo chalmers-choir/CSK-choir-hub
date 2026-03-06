@@ -1,12 +1,14 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { Card } from '@heroui/react';
 
-import { LanguageSwitcher, ThemeSwitch } from '@/components';
-import { useTranslation } from '@/contexts';
+import { LanguageSwitcher } from '@/components/language-switcher';
+import { ThemeSwitch } from '@/components/theme-switch';
 
 export default function SettingsPage() {
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   return (
     <Card className="mx-auto max-w-lg p-4">

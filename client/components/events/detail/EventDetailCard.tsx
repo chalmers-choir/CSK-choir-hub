@@ -2,13 +2,15 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import { useLocale } from 'next-intl';
+
 import { Button } from '@heroui/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
 import { Checkbox } from '@heroui/checkbox';
 import { addToast } from '@heroui/toast';
 import { IoClose } from 'react-icons/io5';
 
-import { useAuth, useIntl } from '@/contexts';
+import { useAuth } from '@/contexts/AuthContext';
 import { CSKEvent, CSKEventType, EventsService } from '@/lib/api-client';
 
 import { EventUserEntry, EventUserListAccordion } from './EventUserListAccordion';
@@ -54,7 +56,7 @@ const CSKEventTypeString: Record<CSKEventType, string> = {
 
 export const EventDetailCard = ({ event }: EventDetailCardProps) => {
   const { user } = useAuth();
-  const { locale } = useIntl();
+  const locale = useLocale();
 
   type AttendanceChoice = 'yes' | 'no' | undefined;
   const statusToChoice = (status?: string | null): AttendanceChoice =>
