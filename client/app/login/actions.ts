@@ -1,5 +1,8 @@
 'use server';
 
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+
 import * as z from 'zod';
 
 import { AuthService } from '@/lib/serverApiClient';
@@ -17,39 +20,49 @@ export type FormState = {
   message?: string;
 };
 
+const AUTH_TOKEN_COOKIE_NAME = 'token';
+const isCrossSiteCookies = process.env.CROSS_SITE_COOKIES === 'true';
+const isSecureCookie = process.env.NODE_ENV === 'production' || isCrossSiteCookies;
+const crossSiteSameSite = isCrossSiteCookies ? 'none' : 'lax';
+
 export async function signin(_prevState: FormState, formData: FormData): Promise<FormState> {
-  // Validate form fields
   const validatedFields = SigninFormSchema.safeParse({
     username: formData.get('username'),
     password: formData.get('password'),
   });
 
-  // If any form fields are invalid, return early
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     };
   }
 
-  // Call the provider or db to create a user...
-  // 2. Prepare data for insertion into database
   const { username, password } = validatedFields.data;
-  // e.g. Hash the user's password before storing it
-  const res = await AuthService.loginUser({
-    requestBody: {
-      username,
-      password,
-    },
-  });
 
-  if (!res.user) {
+  try {
+    const response = await AuthService.loginUser({ requestBody: { username, password } });
+
+    // TODO: get cookie from reponse cookie instead of using a magic value
+    const token = 'magic value';
+
+    const cookieStore = await cookies();
+
+    cookieStore.set({
+      name: AUTH_TOKEN_COOKIE_NAME,
+      value: token,
+      httpOnly: true,
+      secure: isSecureCookie,
+      sameSite: crossSiteSameSite,
+      path: '/',
+      maxAge: 24 * 60 * 60,
+    });
+  } catch (error) {
+    const fallback = error instanceof Error ? error.message : 'An error occurred while logging in.';
+
     return {
-      message: 'An error occurred while logging in.',
+      message: fallback,
     };
   }
 
-  // TODO:
-  // 4. Create user session
-  // 5. Redirect user
-  return {};
+  redirect('/');
 }
