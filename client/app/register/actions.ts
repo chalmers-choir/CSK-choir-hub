@@ -1,5 +1,7 @@
 'use server';
 
+import { redirect } from 'next/navigation';
+
 import * as z from 'zod';
 
 import { AuthService } from '@/lib/serverApiClient';
@@ -23,8 +25,7 @@ export type FormState = {
   message?: string;
 };
 
-export async function signup(_prevState: FormState, formData: FormData): Promise<FormState> {
-  // Validate form fields
+export async function signup(initialState: FormState, formData: FormData): Promise<FormState> {
   const validatedFields = SignupFormSchema.safeParse({
     username: formData.get('username'),
     firstName: formData.get('firstName'),
@@ -33,35 +34,31 @@ export async function signup(_prevState: FormState, formData: FormData): Promise
     password: formData.get('password'),
   });
 
-  // If any form fields are invalid, return early
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     };
   }
 
-  // Call the provider or db to create a user...
-  // 2. Prepare data for insertion into database
   const { username, firstName, lastName, email, password } = validatedFields.data;
-  // e.g. Hash the user's password before storing it
-  const res = await AuthService.registerUser({
-    requestBody: {
-      username,
-      firstName,
-      lastName,
-      email,
-      password,
-    },
-  });
 
-  if (!res.user) {
+  try {
+    const response = await AuthService.registerUser({
+      requestBody: {
+        username,
+        firstName,
+        lastName,
+        email,
+        password,
+      },
+    });
+  } catch (error) {
+    const fallback = error instanceof Error ? error.message : 'An error occurred while logging in.';
+
     return {
-      message: 'An error occurred while creating your account.',
+      message: fallback,
     };
   }
 
-  // TODO:
-  // 4. Create user session
-  // 5. Redirect user
-  return {};
+  redirect('/');
 }
