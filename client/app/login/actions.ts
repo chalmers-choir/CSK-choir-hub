@@ -3,11 +3,11 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-import * as z from 'zod';
+import { z } from 'zod';
 
 import { AuthService } from '@/lib/serverApiClient';
 
-const SigninFormSchema = z.object({
+const schema = z.object({
   username: z.string().trim().min(1, { error: 'Username is required.' }),
   password: z.string().trim().min(1, { error: 'Password is required.' }),
 });
@@ -25,8 +25,8 @@ const isCrossSiteCookies = process.env.CROSS_SITE_COOKIES === 'true';
 const isSecureCookie = process.env.NODE_ENV === 'production' || isCrossSiteCookies;
 const crossSiteSameSite = isCrossSiteCookies ? 'none' : 'lax';
 
-export async function signin(_prevState: FormState, formData: FormData): Promise<FormState> {
-  const validatedFields = SigninFormSchema.safeParse({
+export async function signin(initialState: FormState, formData: FormData): Promise<FormState> {
+  const validatedFields = schema.safeParse({
     username: formData.get('username'),
     password: formData.get('password'),
   });
