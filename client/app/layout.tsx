@@ -9,6 +9,10 @@ import Providers from '@/config/provider';
 import { siteConfig } from '@/config/site';
 import DefaultLayout from '@/layouts/default';
 import '@/styles/globals.css';
+import { Inter } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -36,7 +40,7 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="sv" suppressHydrationWarning>
+    <html lang="sv" suppressHydrationWarning className={cn("font-sans", inter.variable)}>
       <head>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <link
