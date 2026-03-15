@@ -2,11 +2,12 @@
 
 import React from 'react';
 
+import { NextIntlClientProvider } from 'next-intl';
 import { ThemeProvider } from 'next-themes';
 
 import { HeroUIProvider, ToastProvider } from '@heroui/react';
 
-import { AuthProvider, IntlProvider } from '@/contexts';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 /**
  * A wrapper component that provides authentication, theming, and UI context to its children.
@@ -16,7 +17,7 @@ import { AuthProvider, IntlProvider } from '@/contexts';
  */
 export default function Providers({ children }: { children: React.ReactNode }): React.JSX.Element {
   return (
-    <IntlProvider>
+    <NextIntlClientProvider>
       <AuthProvider>
         <HeroUIProvider>
           <ThemeProvider attribute="class" defaultTheme="light">
@@ -25,6 +26,6 @@ export default function Providers({ children }: { children: React.ReactNode }): 
           </ThemeProvider>
         </HeroUIProvider>
       </AuthProvider>
-    </IntlProvider>
+    </NextIntlClientProvider>
   );
 }

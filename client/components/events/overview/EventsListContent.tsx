@@ -1,6 +1,8 @@
 'use client';
 
-import { useIntl } from '@/contexts';
+import { useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
+
 import { CSKEvent } from '@/lib/apiClient';
 
 import { EventsWeekSections } from './EventsWeekSections';
@@ -46,7 +48,8 @@ interface EventsListContentProps {
 }
 
 export const EventsListContent = ({ events }: EventsListContentProps) => {
-  const { locale, t } = useIntl();
+  const t = useTranslations();
+  const locale = useLocale();
 
   const eventsGroupedByWeek = new Map<
     string,

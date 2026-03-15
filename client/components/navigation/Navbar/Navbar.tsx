@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import NextLink from 'next/link';
 
 import {
@@ -11,10 +12,10 @@ import clsx from 'clsx';
 
 import { Logo, ThemeSwitch, UserMenu } from '@/components';
 import { siteConfig } from '@/config/site';
-import { useAuth, useTranslation } from '@/contexts';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const Navbar = () => {
-  const { t } = useTranslation();
+  const t = useTranslations();
   const { isAuthenticated, logout, user, isAdmin } = useAuth();
 
   return (

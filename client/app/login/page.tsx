@@ -2,17 +2,18 @@
 
 import { Suspense, useEffect, useState } from 'react';
 
+import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { Button, Form, Input, Link, button as buttonStyles } from '@heroui/react';
 
 import { AuthLoading } from '@/components';
 import { siteConfig } from '@/config/site';
-import { useAuth, useTranslation } from '@/contexts';
+import { useAuth } from '@/contexts/AuthContext';
 
 function LoginPageContent() {
   const { login, isAuthenticated, loading } = useAuth();
-  const { t } = useTranslation();
+  const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
 

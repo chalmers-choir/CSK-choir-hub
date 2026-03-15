@@ -1,8 +1,9 @@
+import { useTranslations } from 'next-intl';
+
 import { Link } from '@heroui/link';
 import { button as buttonStyles } from '@heroui/theme';
 
 import { siteConfig } from '@/config/site';
-import { useTranslation } from '@/contexts/IntlContext';
 
 type LoggedOutCtaProps = {
   message?: string;
@@ -12,7 +13,7 @@ type LoggedOutCtaProps = {
  * Reusable call-to-action for unauthenticated visitors.
  */
 export const LoggedOutCta = ({ message }: LoggedOutCtaProps) => {
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   return (
     <div className="flex flex-col items-center gap-3 text-center">

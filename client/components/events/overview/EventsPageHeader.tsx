@@ -1,11 +1,14 @@
 'use client';
 
-import { Link, button as buttonStyles } from '@heroui/react';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 
-import { useAuth, useTranslation } from '@/contexts';
+import { button as buttonStyles } from '@heroui/theme';
+
+import { useAuth } from '@/contexts/AuthContext';
 
 export const EventsPageHeader = () => {
-  const { t } = useTranslation();
+  const t = useTranslations();
   const { isAdmin } = useAuth();
 
   return (

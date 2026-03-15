@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
@@ -9,7 +10,6 @@ import { Button, addToast } from '@heroui/react';
 import { ArrowBackIosNew } from '@mui/icons-material';
 
 import { TextField } from '@/components';
-import { useTranslation } from '@/contexts';
 import { ApiError, User, UsersService } from '@/lib/api-client';
 
 /**
@@ -17,7 +17,7 @@ import { ApiError, User, UsersService } from '@/lib/api-client';
  * @returns The rendered user detail page.
  */
 export default function UserDetailPage() {
-  const { t } = useTranslation();
+  const t = useTranslations();
   const params = useParams<{ id: string }>();
   const id = params.id;
 

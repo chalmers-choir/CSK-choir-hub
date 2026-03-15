@@ -1,12 +1,14 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { AuthLoading, LoggedOutCta } from '@/components';
-import { useAuth, useTranslation } from '@/contexts';
+import { useAuth } from '@/contexts/AuthContext';
 import { subtitle, title } from '@/styles/primitives';
 
 export default function IndexPage() {
   const { user, isAuthenticated, loading } = useAuth();
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   if (loading) {
     return <AuthLoading />;
@@ -24,7 +26,9 @@ export default function IndexPage() {
 
       {isAuthenticated ? (
         <div className="text-center">
-          <p className="mb-2 text-lg">{t('common.welcome_back', { name: user?.firstName })}</p>
+          <p className="mb-2 text-lg">
+            {t('common.welcome_back', { name: user?.firstName ?? 'sångare' })}
+          </p>
         </div>
       ) : (
         <LoggedOutCta />

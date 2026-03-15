@@ -1,4 +1,5 @@
-import { useTranslation } from '@/contexts';
+import { useTranslations } from 'next-intl';
+
 import { CSKEvent } from '@/lib/apiClient';
 
 import { EventListCard } from './EventListCard';
@@ -15,7 +16,7 @@ interface EventsWeekSectionsProps {
 }
 
 export const EventsWeekSections = ({ weeks }: EventsWeekSectionsProps) => {
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   return (
     <div className="flex flex-col gap-8">
