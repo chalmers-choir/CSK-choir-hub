@@ -1,7 +1,7 @@
 'use client';
 
 import { useIntl } from '@/contexts';
-import { CSKEvent } from '@/lib/apiClient';
+import { CskEvent } from '@/lib/api-client';
 
 import { EventsWeekSections } from './EventsWeekSections';
 
@@ -42,7 +42,7 @@ const getWeekMeta = (isoDate: string, locale: string) => {
 };
 
 interface EventsListContentProps {
-  events: CSKEvent[];
+  events: CskEvent[];
 }
 
 export const EventsListContent = ({ events }: EventsListContentProps) => {
@@ -50,7 +50,7 @@ export const EventsListContent = ({ events }: EventsListContentProps) => {
 
   const eventsGroupedByWeek = new Map<
     string,
-    { key: string; weekNumber: number; rangeLabel: string; items: CSKEvent[] }
+    { key: string; weekNumber: number; rangeLabel: string; items: CskEvent[] }
   >();
 
   events.forEach((event) => {

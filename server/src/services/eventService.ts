@@ -1,4 +1,5 @@
 import { eventModel, userModel } from '@db';
+import { type CreateEventInput } from '@interface';
 import { type AttendanceStatus, type EventType } from '@prisma/generated/client';
 import { NotFoundError } from '@utils';
 
@@ -57,13 +58,7 @@ export async function deleteEvent(eventId: number) {
  * @param eventData - The event data.
  * @returns The created event.
  */
-export async function createEvent(eventData: {
-  name: string;
-  description?: string;
-  dateStart: Date;
-  type: EventType;
-  place: string;
-}) {
+export async function createEvent(eventData: CreateEventInput) {
   return await eventModel.create(eventData);
 }
 

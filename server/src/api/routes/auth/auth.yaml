@@ -1,4 +1,5 @@
 paths:
+  security: []
   /auth/register:
     post:
       tags:
@@ -6,9 +7,9 @@ paths:
       summary: Register a new user
       operationId: registerUser
       requestBody:
-        $ref: '../../docs/openapi.yaml#/components/requestBodies/RegisterUser'
+        $ref: "../../docs/openapi.yaml#/components/requestBodies/RegisterUser"
       responses:
-        '201':
+        "201":
           description: User registered
           content:
             application/json:
@@ -16,7 +17,7 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: '../../docs/openapi.yaml#/components/schemas/User'
+                    $ref: "../../docs/openapi.yaml#/components/schemas/User"
 
   /auth/login:
     post:
@@ -25,9 +26,9 @@ paths:
       summary: Login a user
       operationId: loginUser
       requestBody:
-        $ref: '../../docs/openapi.yaml#/components/requestBodies/LoginUser'
+        $ref: "../../docs/openapi.yaml#/components/requestBodies/LoginUser"
       responses:
-        '200':
+        "200":
           description: Login successful
           content:
             application/json:
@@ -35,26 +36,18 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: '../../docs/openapi.yaml#/components/schemas/User'
-
-  /auth/logout:
-    post:
-      tags:
-        - auth
-      summary: Logout current user
-      operationId: logout
-      responses:
-        '200':
-          description: Session cleared
+                    $ref: "../../docs/openapi.yaml#/components/schemas/User"
 
   /auth/authenticate:
+    security:
+      - authCookie: []
     get:
       tags:
         - auth
       summary: Validate session
       operationId: authenticate
       responses:
-        '200':
+        "200":
           description: Current authenticated user
           content:
             application/json:
@@ -62,6 +55,6 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: '../../docs/openapi.yaml#/components/schemas/User'
-        '401':
+                    $ref: "../../docs/openapi.yaml#/components/schemas/User"
+        "401":
           description: Not authenticated

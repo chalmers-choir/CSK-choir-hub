@@ -9,8 +9,8 @@ import { Button, addToast } from '@heroui/react';
 import { ArrowBackIosNew } from '@mui/icons-material';
 
 import { TextField } from '@/components';
-import { useTranslation } from '@/contexts';
-import { ApiError, User, UsersService } from '@/lib/api-client';
+import { useTranslation } from '@/contexts/IntlContext';
+import { User, getUser, updateUser } from '@/lib/api-client';
 
 /**
  * Admin page for viewing and editing user details.
@@ -30,26 +30,18 @@ export default function UserDetailPage() {
     if (Number.isNaN(userId)) return;
 
     const fetchUser = async () => {
-      try {
-        const res = await UsersService.getUser({ userId });
+      const res = await getUser({ path: { userId } });
 
-        setUser(res.user);
-      } catch (error) {
-        let errorMessage = 'Failed to fetch user details. Please try again.';
-
-        if (error instanceof ApiError && error.body?.message) {
-          errorMessage = error.body.message;
-        } else if (error instanceof Error) {
-          errorMessage = error.message;
-        }
-
-        addToast({
+      if (res.error) {
+        return addToast({
           title: 'Error',
-          description: errorMessage,
+          description: 'Failed to fetch user details. Please try again.',
           color: 'danger',
           timeout: 2000,
         });
       }
+
+      setUser(res.data?.user);
     };
 
     fetchUser();
@@ -59,40 +51,31 @@ export default function UserDetailPage() {
     e.preventDefault();
     if (!user) return;
 
-    try {
-      // Update user info including group memberships
-      await UsersService.updateUser({
-        userId: user.id,
-        requestBody: {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          dietaryPreferences: user.dietaryPreferences,
-        },
-      });
+    // Update user info including group memberships
+    const res = await updateUser({
+      path: { userId: user.id },
+      body: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        dietaryPreferences: user.dietaryPreferences,
+      },
+    });
 
-      addToast({
-        title: 'Success',
-        description: 'User updated successfully!',
-        color: 'success',
-        timeout: 2000,
-      });
-    } catch (error) {
-      let errorMessage = 'Failed to update user. Please try again.';
-
-      if (error instanceof ApiError && error.body?.message) {
-        errorMessage = error.body.message;
-      } else if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-
-      addToast({
+    if (res.error) {
+      return addToast({
         title: 'Error',
-        description: errorMessage,
+        description: 'Failed to update user details.',
         color: 'danger',
-        timeout: 2000,
       });
     }
+
+    addToast({
+      title: 'Success',
+      description: 'User updated successfully!',
+      color: 'success',
+      timeout: 2000,
+    });
   };
 
   return (

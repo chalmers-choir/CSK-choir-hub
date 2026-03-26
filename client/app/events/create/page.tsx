@@ -13,7 +13,7 @@ import { I18nProvider } from '@react-aria/i18n';
 
 import { RequestLogin } from '@/components';
 import { useAuth } from '@/contexts';
-import { CSKEventType, EventsService } from '@/lib/apiClient';
+import { CskEventType, addEvent } from '@/lib/api-client';
 
 interface ResultData {
   type: 'success' | 'error';
@@ -22,7 +22,7 @@ interface ResultData {
 
 type Result = ResultData | undefined;
 
-const eventTypeDbKeyToName: Record<CSKEventType, string> = {
+const eventTypeDbKeyToName: Record<CskEventType, string> = {
   REHEARSAL: 'Rep',
   CONCERT: 'Konsert',
   GIG: 'Gig',
@@ -45,7 +45,7 @@ export default function CreateEventPage() {
 
   // name, type, description, dateStart, place
   const [name, setName] = useState('');
-  const [type, setType] = useState<CSKEventType | undefined>(undefined);
+  const [type, setType] = useState<CskEventType | undefined>(undefined);
   const [typeIsInvalid, setTypeIsInvalid] = useState(false);
   const [description, setDescription] = useState('');
   const [dateStart, setDateStart] = useState<DateValue | null>(null);
@@ -91,8 +91,8 @@ export default function CreateEventPage() {
         requiresAttendance: false,
       };
 
-      const { event: newEvent } = await EventsService.addEvent({ requestBody: eventData }); // Invalidate cache
-      const eventId = newEvent.id;
+      const { data } = await addEvent({ body: eventData });
+      const eventId = data?.event.id;
 
       resetState();
       setResult({ type: 'success', message: 'Evenemang skapat!' });
@@ -131,7 +131,7 @@ export default function CreateEventPage() {
             </DropdownTrigger>
             <DropdownMenu
               items={Object.entries(eventTypeDbKeyToName)}
-              onAction={(key) => setType(key as CSKEventType)}
+              onAction={(key) => setType(key as CskEventType)}
             >
               {(item) => <DropdownItem key={item[0]}>{item[1]}</DropdownItem>}
             </DropdownMenu>

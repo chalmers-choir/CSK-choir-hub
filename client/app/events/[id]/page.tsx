@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { EventDetailCard } from '@/components/events/detail/EventDetailCard';
-import { ApiError, CSKEvent, EventsService } from '@/lib/serverApiClient';
+import { CskEvent, getEventById } from '@/lib/api-client';
 
 function EventNotFound() {
   return (
@@ -23,23 +23,15 @@ export default async function EventDetailPage(props: { params: Promise<{ id: str
     return <EventNotFound />;
   }
 
-  let event: CSKEvent;
+  let event: CskEvent;
 
-  try {
-    const res = await EventsService.getEventById({ eventId });
+  const res = await getEventById({ path: { eventId } });
 
-    if (!res.event) {
-      return <EventNotFound />;
-    }
-
-    event = res.event;
-  } catch (error) {
-    if (error instanceof ApiError && error.status === 404) {
-      return <EventNotFound />;
-    }
-
-    throw error;
+  if (!res.data?.event) {
+    return <EventNotFound />;
   }
+
+  event = res.data.event;
 
   return (
     <section className="flex min-h-[70vh] w-full items-center justify-center py-8">

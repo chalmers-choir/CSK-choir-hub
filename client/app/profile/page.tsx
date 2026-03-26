@@ -6,8 +6,8 @@ import { Button, Form, addToast } from '@heroui/react';
 
 import { TextField } from '@/components';
 import { useAuth, useTranslation } from '@/contexts';
-import { ApiError, UsersService } from '@/lib/api-client';
-import { GroupType } from '@/types/group';
+import { updateUser } from '@/lib/api-client';
+import { ComponentsGroupType as GroupType } from '@/lib/api-client';
 
 /**
  * Profile page for editing user information.
@@ -25,43 +25,32 @@ export default function ProfilePage() {
 
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const data = {
-        dietaryPreferences: dietPref,
-      };
 
-      if (!user) return;
+    const data = {
+      dietaryPreferences: dietPref,
+    };
 
-      await UsersService.updateUser({
-        userId: user.id,
-        requestBody: data,
-      });
+    if (!user) return;
 
-      addToast({
-        title: 'Success',
-        description: 'Profile updated successfully!',
-        color: 'success',
-        timeout: 2000,
-      });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error updating profile:', error);
+    const res = await updateUser({
+      path: { userId: user.id },
+      body: data,
+    });
 
-      let errorMessage = 'Failed to update profile. Please try again.';
-
-      if (error instanceof ApiError && error.body?.message) {
-        errorMessage = error.body.message;
-      } else if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-
-      addToast({
+    if (res.error) {
+      return addToast({
         title: 'Error',
-        description: errorMessage,
+        description: 'Failed to update profile.',
         color: 'danger',
-        timeout: 2000,
       });
     }
+
+    addToast({
+      title: 'Success',
+      description: 'Profile updated successfully!',
+      color: 'success',
+      timeout: 2000,
+    });
   };
 
   return (

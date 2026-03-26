@@ -4,7 +4,7 @@ import React, { ReactNode, createContext, useContext, useEffect, useState } from
 
 import { useRouter } from 'next/navigation';
 
-import { AuthService, User } from '@/lib/apiClient';
+import { User, authenticate, loginUser, registerUser } from '@/lib/api-client';
 import { AuthContextType, RegisterForm } from '@/types/auth';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -32,9 +32,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const fetchUser = async () => {
     setLoading(true);
     try {
-      const res = await AuthService.authenticate();
+      const res = await authenticate();
 
-      setUser(res.user);
+      setUser(res.data?.user);
     } catch {
       setUser(undefined);
     } finally {
@@ -49,9 +49,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (username: string, password: string, redirectTo = '/') => {
     setLoading(true);
     try {
-      const res = await AuthService.loginUser({ requestBody: { username, password } });
+      const res = await loginUser({ body: { username, password } });
 
-      setUser(res.user);
+      setUser(res.data?.user);
       router.push(redirectTo);
     } catch {
       setUser(undefined);
@@ -64,7 +64,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(true);
 
     try {
-      await AuthService.registerUser({ requestBody: userData });
+      await registerUser({ body: userData });
       router.push('/login');
     } catch {
       setUser(undefined);
@@ -77,7 +77,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(true);
 
     try {
-      await AuthService.logout();
+      await logout();
       setUser(undefined);
       router.push('/');
     } catch {

@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { Card, CardBody, CardHeader } from '@heroui/card';
 
 import { useIntl } from '@/contexts';
-import { CSKEvent, CSKEventType } from '@/lib/apiClient';
+import { CskEvent, CskEventType } from '@/lib/api-client';
 
-const eventTypeMeta: Record<CSKEventType, { label: string; color: string }> = {
+const eventTypeMeta: Record<CskEventType, { label: string; color: string }> = {
   REHEARSAL: { label: 'Repetition', color: 'bg-sky-100 text-sky-700' },
   CONCERT: { label: 'Konsert', color: 'bg-purple-100 text-purple-700' },
   GIG: { label: 'Gig', color: 'bg-amber-100 text-amber-800' },
@@ -38,7 +38,7 @@ const formatTimeRange = (start: string, locale: string, end?: string | null) => 
 };
 
 interface EventListCardProps {
-  event: CSKEvent;
+  event: CskEvent;
 }
 
 export const EventListCard = ({ event }: EventListCardProps) => {
