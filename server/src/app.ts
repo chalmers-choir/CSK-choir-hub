@@ -29,12 +29,20 @@ app.use(logAtLevel(4));
 /* ---- CORS configuration ---- */
 const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000').split(',');
 
+// Helper function to check if origin is a local development URL
+const isLocalDevelopment = (origin: string | undefined): boolean => {
+  if (!origin) return false;
+
+  // If NODE_ENV is explicitly set to development, allow local development patterns
+  return process.env.NODE_ENV === "development";
+};
+
 app.use(
   cors({
     // Dynamically validate Origin so ACAO matches the requesting site when allowed.
     origin: (origin, callback) => {
-      // allow non-browser/SSR requests (no origin) and any whitelisted origin
-      if (!origin || allowedOrigins.includes(origin)) {
+      // allow non-browser/SSR requests (no origin), whitelisted origins, or local dev
+      if (!origin || allowedOrigins.includes(origin) || isLocalDevelopment(origin)) {
         callback(null, origin ?? true);
       } else {
         callback(new Error(`CORS: origin ${origin} not allowed`));
