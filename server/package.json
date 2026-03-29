@@ -10,7 +10,6 @@
     "api:generate": "openapi --input ./src/api/docs/openapi.yaml --output ../client/lib/api-client --client fetch --useOptions --useUnionTypes",
     "api:watch": "chokidar \"src/api/**/*.yaml\" -c \"npm run api:generate\"",
     "build": "tsc && tsc-alias",
-    "setup-db": "ts-node src/scripts/setup-database.ts",
     "type-check": "tsc --noEmit",
     "test": "jest"
   },
