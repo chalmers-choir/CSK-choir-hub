@@ -14,7 +14,7 @@ import registrationRoutes from './registrations';
 const router = Router();
 
 router.get('/', getEvents);
-router.post('/', requireAuth({ groups: ['Admins'] }), createEvent);
+router.post('/', createEvent);
 
 router.get('/:id', getEventDetail);
 router.put('/:id', requireAuth({ groups: ['Admins'] }), updateEvent);
