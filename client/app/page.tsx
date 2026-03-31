@@ -1,16 +1,16 @@
 'use client';
 
-import { AuthLoading, LoggedOutCta } from '@/components';
-import { useAuth, useTranslation } from '@/contexts';
+import { LoggedOutCta } from '@/components';
+import { useTranslation } from '@/contexts/IntlContext';
 import { subtitle, title } from '@/styles/primitives';
 
 export default function IndexPage() {
-  const { user, isAuthenticated, loading } = useAuth();
   const { t } = useTranslation();
 
-  if (loading) {
-    return <AuthLoading />;
-  }
+  const isAuthenticated = false; // Replace with actual authentication logic
+  const user = {
+    firstName: 'John',
+  }; // Replace with actual user data
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">

@@ -1,7 +1,5 @@
 import { headers } from 'next/headers';
 
-import 'server-only';
-
 import { siteConfig } from '@/config/site';
 
 import { OpenAPI } from './api-client/core/OpenAPI';

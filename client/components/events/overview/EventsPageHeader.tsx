@@ -2,11 +2,11 @@
 
 import { Link, button as buttonStyles } from '@heroui/react';
 
-import { useAuth, useTranslation } from '@/contexts';
+import { useTranslation } from '@/contexts/IntlContext';
 
 export const EventsPageHeader = () => {
   const { t } = useTranslation();
-  const { isAdmin } = useAuth();
+  const isAdmin = false;
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

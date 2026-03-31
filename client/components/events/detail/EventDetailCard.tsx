@@ -8,7 +8,7 @@ import { Checkbox } from '@heroui/checkbox';
 import { addToast } from '@heroui/toast';
 import { IoClose } from 'react-icons/io5';
 
-import { useAuth, useIntl } from '@/contexts';
+import { useIntl } from '@/contexts';
 import { CSKEvent, CSKEventType, EventsService } from '@/lib/api-client';
 
 import { EventUserEntry, EventUserListAccordion } from './EventUserListAccordion';
@@ -53,8 +53,12 @@ const CSKEventTypeString: Record<CSKEventType, string> = {
 };
 
 export const EventDetailCard = ({ event }: EventDetailCardProps) => {
-  const { user } = useAuth();
   const { locale } = useIntl();
+  const user = {
+    firstName: 'John',
+    lastName: 'Doe',
+    id: 123,
+  };
 
   type AttendanceChoice = 'yes' | 'no' | undefined;
   const statusToChoice = (status?: string | null): AttendanceChoice =>
