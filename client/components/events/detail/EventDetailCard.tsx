@@ -2,12 +2,12 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import { Button } from '@heroui/button';
-import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
-import { Checkbox } from '@heroui/checkbox';
-import { addToast } from '@heroui/toast';
 import { IoClose } from 'react-icons/io5';
+import { toast } from 'sonner';
 
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth, useIntl } from '@/contexts';
 import { CSKEvent, CSKEventType, EventsService } from '@/lib/api-client';
 
@@ -151,20 +151,13 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
         requestBody: { userId: user.id },
       });
 
-      addToast({
-        title: 'Anmäld till evenemanget',
-        timeout: 2000,
-        color: 'success',
-      });
+      toast.success('Anmäld till evenemanget');
 
       // Reload to reflect updated lists/state
       window.location.reload();
     } catch (err: any) {
-      addToast({
-        title: 'Kunde inte anmäla till evenemanget',
+      toast.error('Kunde inte anmäla till evenemanget', {
         description: err.message || 'Något gick fel',
-        timeout: 4000,
-        color: 'danger',
       });
     }
   };
@@ -177,19 +170,12 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
         requestBody: { userId: user.id },
       });
 
-      addToast({
-        title: 'Avanmäld från evenemanget',
-        timeout: 2000,
-        color: 'success',
-      });
+      toast.success('Avanmäld från evenemanget');
 
       window.location.reload();
     } catch (err: any) {
-      addToast({
-        title: 'Kunde inte avanmäla',
+      toast.error('Kunde inte avanmäla', {
         description: err.message || 'Något gick fel',
-        timeout: 4000,
-        color: 'danger',
       });
     }
   };
@@ -214,59 +200,52 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
       });
 
       setOldEventAttendance(newEventAttendance);
-      addToast({
-        title: 'Närvaro sparad',
-        timeout: 2000,
-        color: 'success',
-      });
+      toast.success('Närvaro sparad');
 
       // Reload to reflect updated lists/state
       window.location.reload();
     } catch (err: any) {
-      addToast({
-        title: 'Kunde inte spara närvaro',
+      toast.error('Kunde inte spara närvaro', {
         description: err.message || 'Något gick fel',
-        timeout: 4000,
-        color: 'danger',
       });
     }
   };
 
   return (
-    <Card className="mx-auto max-w-2xl p-4">
+    <Card className="mx-auto max-w-2xl">
       <CardHeader className="flex-col">
         <div className="mb-2 w-full">
           <div className="flex justify-between">
-            <p className="text-tiny font-bold uppercase">{eventType}</p>
-            <p className="text-tiny font-bold uppercase">@{eventPlace}</p>
+            <p className="text-xs font-bold uppercase">{eventType}</p>
+            <p className="text-xs font-bold uppercase">@{eventPlace}</p>
           </div>
           <div className="flex justify-between">
-            <small className="text-default-500">{eventDate}</small>
-            <small className="text-default-500">{eventTimeRange}</small>
+            <small className="text-muted-foreground">{eventDate}</small>
+            <small className="text-muted-foreground">{eventTimeRange}</small>
           </div>
         </div>
         <h4 className="text-2xl font-bold">{eventName}</h4>
       </CardHeader>
 
-      <CardBody className="px-4">
+      <CardContent className="px-6">
         <p className="mx-auto mb-4">{eventDescription}</p>
-      </CardBody>
+      </CardContent>
 
       {registrationRequired && (
-        <CardFooter className="w-full px-4">
+        <CardFooter className="w-full px-6">
           <div className="mx-auto flex items-center gap-3">
             <Button
-              color={isRegistered ? 'default' : 'success'}
-              isDisabled={isRegistered}
-              onPress={handleRegistration}
+              variant={isRegistered ? 'secondary' : 'default'}
+              disabled={isRegistered}
+              onClick={handleRegistration}
             >
-              <span className="text-small font-semibold">
+              <span className="text-sm font-semibold">
                 {isRegistered ? 'Redan registrerad' : 'Anmäl dig här!'}
               </span>
             </Button>
             {isRegistered && (
-              <Button color="danger" variant="flat" onPress={handleUnregister}>
-                <span className="text-small font-semibold">Avanmäl</span>
+              <Button variant="destructive" onClick={handleUnregister}>
+                <span className="text-sm font-semibold">Avanmäl</span>
               </Button>
             )}
           </div>
@@ -274,35 +253,45 @@ export const EventDetailCard = ({ event }: EventDetailCardProps) => {
       )}
 
       {attendanceRecorded && (
-        <CardFooter className="flex-col items-start px-4 pb-0 pt-2">
-          <p className="text-tiny font-bold uppercase">Var du på repet?</p>
+        <CardFooter className="flex-col items-start px-6 pb-0 pt-2">
+          <p className="text-xs font-bold uppercase">Var du på repet?</p>
           <div className="flex w-full items-center justify-between">
             <div className="flex gap-4">
-              <Checkbox isSelected={newEventAttendance === 'yes'} onValueChange={handleYesChange}>
-                Ja
-              </Checkbox>
-              <Checkbox isSelected={newEventAttendance === 'no'} onValueChange={handleNoChange}>
-                Nej
-              </Checkbox>
+              <label htmlFor="attendance-yes" className="flex cursor-pointer items-center gap-2">
+                <Checkbox
+                  id="attendance-yes"
+                  checked={newEventAttendance === 'yes'}
+                  onCheckedChange={(checked) => handleYesChange(checked === true)}
+                />
+                <span>Ja</span>
+              </label>
+              <label htmlFor="attendance-no" className="flex cursor-pointer items-center gap-2">
+                <Checkbox
+                  id="attendance-no"
+                  checked={newEventAttendance === 'no'}
+                  onCheckedChange={(checked) => handleNoChange(checked === true)}
+                />
+                <span>Nej</span>
+              </label>
             </div>
             <div className="flex items-center gap-4">
               {hasAttendanceChanges && (
                 <Button
-                  isIconOnly
+                  size="icon"
                   aria-label="Ångra närvaroval"
-                  radius="full"
-                  size="sm"
-                  onPress={handleResetAttendance}
+                  variant="ghost"
+                  className="rounded-full"
+                  onClick={handleResetAttendance}
                 >
                   <IoClose size={18} />
                 </Button>
               )}
               <Button
-                color={oldEventAttendance == newEventAttendance ? 'default' : 'primary'}
+                variant={oldEventAttendance == newEventAttendance ? 'secondary' : 'default'}
                 disabled={!hasAttendanceChanges}
-                onPress={handleSaveAttendance}
+                onClick={handleSaveAttendance}
               >
-                <span className="text-small font-semibold">Spara</span>
+                <span className="text-sm font-semibold">Spara</span>
               </Button>
             </div>
           </div>

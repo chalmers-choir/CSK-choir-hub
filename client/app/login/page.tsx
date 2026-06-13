@@ -2,13 +2,15 @@
 
 import { Suspense, useEffect, useState } from 'react';
 
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { Button, Form, Input, Link, button as buttonStyles } from '@heroui/react';
-
-import { AuthLoading } from '@/components';
+import { AuthLoading } from '@/components/auth/AuthLoading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { siteConfig } from '@/config/site';
-import { useAuth, useTranslation } from '@/contexts';
+import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/contexts/IntlContext/IntlContext';
 
 function LoginPageContent() {
   const { login, isAuthenticated, loading } = useAuth();
@@ -40,7 +42,7 @@ function LoginPageContent() {
   return loading ? (
     <AuthLoading />
   ) : (
-    <Form
+    <form
       className="mx-auto mt-20 flex max-w-sm flex-col items-center gap-2"
       onSubmit={handleSubmit}
     >
@@ -60,10 +62,7 @@ function LoginPageContent() {
         onChange={(e) => setPassword(e.target.value)}
       />
       {error && <p className="text-red-500">{error}</p>}
-      <Button
-        className={buttonStyles({ color: 'primary', radius: 'md', variant: 'shadow' }) + ' px-8'}
-        type="submit"
-      >
+      <Button className="rounded-md px-8" type="submit">
         {t('common.login')}
       </Button>
       <Link
@@ -72,7 +71,7 @@ function LoginPageContent() {
       >
         {t('common.no_account')}
       </Link>
-    </Form>
+    </form>
   );
 }
 

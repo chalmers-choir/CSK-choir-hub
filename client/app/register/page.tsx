@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from 'react';
 
+import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { Button, Form, Input, Link, button as buttonStyles } from '@heroui/react';
-import clsx from 'clsx';
-
-import { AuthLoading } from '@/components';
+import { AuthLoading } from '@/components/auth/AuthLoading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { siteConfig } from '@/config/site';
 import { useAuth } from '@/contexts';
 
@@ -47,7 +47,7 @@ export default function RegisterPage() {
   return loading ? (
     <AuthLoading />
   ) : (
-    <Form
+    <form
       className="mx-auto mt-20 flex max-w-sm flex-col items-center gap-2"
       onSubmit={handleSubmit}
     >
@@ -94,21 +94,15 @@ export default function RegisterPage() {
 
       {error && <p className="text-red-500">{error}</p>}
 
-      <Button
-        className={clsx(
-          buttonStyles({ color: 'primary', radius: 'md', variant: 'shadow' }),
-          'px-8',
-        )}
-        type="submit"
-      >
+      <Button className="rounded-md px-8" type="submit">
         Register
       </Button>
-      <Link
+      <NextLink
         className="mt-4 inline-block w-full text-center text-sm text-blue-500"
         href={siteConfig.links.login}
       >
         Already have an account? Login
-      </Link>
-    </Form>
+      </NextLink>
+    </form>
   );
 }

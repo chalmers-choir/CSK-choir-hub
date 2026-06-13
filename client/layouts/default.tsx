@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-import { BottomNav, Navbar } from '@/components';
+import { BottomNav, Navbar } from '@/components/navigation/';
 
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   return (

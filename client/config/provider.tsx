@@ -4,8 +4,7 @@ import React from 'react';
 
 import { ThemeProvider } from 'next-themes';
 
-import { HeroUIProvider, ToastProvider } from '@heroui/react';
-
+import { Toaster } from '@/components/ui/sonner';
 import { AuthProvider, IntlProvider } from '@/contexts';
 
 /**
@@ -18,12 +17,10 @@ export default function Providers({ children }: { children: React.ReactNode }): 
   return (
     <IntlProvider>
       <AuthProvider>
-        <HeroUIProvider>
-          <ThemeProvider attribute="class" defaultTheme="light">
-            <ToastProvider />
-            {children}
-          </ThemeProvider>
-        </HeroUIProvider>
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <Toaster />
+          {children}
+        </ThemeProvider>
       </AuthProvider>
     </IntlProvider>
   );

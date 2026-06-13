@@ -1,6 +1,7 @@
 'use client';
 
-import { AuthLoading, LoggedOutCta } from '@/components';
+import { AuthLoading } from '@/components/auth/AuthLoading';
+import { LoggedOutCta } from '@/components/auth/LoggedOutCta';
 import { useAuth, useTranslation } from '@/contexts';
 import { subtitle, title } from '@/styles/primitives';
 

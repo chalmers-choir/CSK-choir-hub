@@ -4,10 +4,16 @@ import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react';
-
-import { TextField } from '@/components';
-import { useTranslation } from '@/contexts';
+import { TextField } from '@/components/forms/fields/TextField';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { useTranslation } from '@/contexts/IntlContext';
 import { User, UsersService } from '@/lib/api-client';
 import { GroupType } from '@/types/group';
 
@@ -100,18 +106,20 @@ export default function AdminUsersPage() {
         sortedUsers && (
           <Table>
             <TableHeader>
-              {columns.map((column) => (
-                <TableColumn
-                  key={column.key}
-                  className="cursor-pointer"
-                  onClick={() => handleSort(column.key)}
-                >
-                  {column.name}
-                  {sortColumn === column.key && (
-                    <span className="ml-2">{sortDirection === 'ascending' ? '↑' : '↓'}</span>
-                  )}
-                </TableColumn>
-              ))}
+              <TableRow>
+                {columns.map((column) => (
+                  <TableHead
+                    key={column.key}
+                    className="cursor-pointer"
+                    onClick={() => handleSort(column.key)}
+                  >
+                    {column.name}
+                    {sortColumn === column.key && (
+                      <span className="ml-2">{sortDirection === 'ascending' ? '↑' : '↓'}</span>
+                    )}
+                  </TableHead>
+                ))}
+              </TableRow>
             </TableHeader>
 
             <TableBody>
@@ -119,7 +127,7 @@ export default function AdminUsersPage() {
                 <TableRow
                   key={user.id}
                   onClick={() => router.push(`/admin/users/${user.id}`)}
-                  className="hover:bg-default-100 cursor-pointer transition-colors"
+                  className="hover:bg-muted cursor-pointer transition-colors"
                 >
                   <TableCell>{user.firstName + ' ' + user.lastName}</TableCell>
                   <TableCell>

@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react';
 
-import { Button, Form, addToast } from '@heroui/react';
+import { toast } from 'sonner';
 
-import { TextField } from '@/components';
+import { TextField } from '@/components/forms/fields/TextField';
+import { Button } from '@/components/ui/button';
 import { useAuth, useTranslation } from '@/contexts';
 import { ApiError, UsersService } from '@/lib/api-client';
 import { GroupType } from '@/types/group';
@@ -37,12 +38,7 @@ export default function ProfilePage() {
         requestBody: data,
       });
 
-      addToast({
-        title: 'Success',
-        description: 'Profile updated successfully!',
-        color: 'success',
-        timeout: 2000,
-      });
+      toast.success('Profile updated successfully!');
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error updating profile:', error);
@@ -55,12 +51,7 @@ export default function ProfilePage() {
         errorMessage = error.message;
       }
 
-      addToast({
-        title: 'Error',
-        description: errorMessage,
-        color: 'danger',
-        timeout: 2000,
-      });
+      toast.error(errorMessage);
     }
   };
 
@@ -111,17 +102,17 @@ export default function ProfilePage() {
           label={t('user.roles')}
           value={user?.roles?.map((c) => c.name).join(', ')}
         />
-        <Form onSubmit={handleSave}>
+        <form onSubmit={handleSave}>
           <p className="mb-4 mt-8 text-xl font-semibold">{t('profile.edit_profile')}</p>
           <TextField
             label={t('user.dietary_preferences')}
             value={dietPref}
             onChange={(val) => setDietPref(val)}
           />
-          <Button variant="ghost" type="submit" color="primary">
+          <Button variant="outline" type="submit">
             {t('buttons.save')}
           </Button>
-        </Form>
+        </form>
       </div>
     </>
   );
