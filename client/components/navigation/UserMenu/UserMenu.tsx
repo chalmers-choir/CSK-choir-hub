@@ -1,7 +1,10 @@
-import { Avatar } from '@heroui/react';
 import { AccountCircleOutlined } from '@mui/icons-material';
 
-import { LinkDropDownMenuRef, LinkDropdownMenu } from '@/components';
+import {
+  LinkDropDownMenuRef,
+  LinkDropdownMenu,
+} from '@/components/menus/LinkDropdownMenu/LinkDropdownMenu';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { siteConfig } from '@/config/site';
 import { useTranslation } from '@/contexts';
 import { User } from '@/lib/api-client';
@@ -16,14 +19,11 @@ export const UserMenu = ({ isAuthenticated, logout, user }: UserMenuProps) => {
   const { t } = useTranslation();
 
   const menuTrigger = isAuthenticated ? (
-    <Avatar
-      isBordered
-      as="button"
-      className="transition-transform"
-      color="primary"
-      name={user?.firstName + ' ' + user?.lastName}
-      size="sm"
-    />
+    <Avatar className="border-primary size-8 cursor-pointer border-2 transition-transform hover:scale-105">
+      <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+        {user ? `${user.firstName[0]}${user.lastName[0]}` : '?'}
+      </AvatarFallback>
+    </Avatar>
   ) : (
     <AccountCircleOutlined />
   );

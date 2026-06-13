@@ -1,7 +1,6 @@
 'use client';
 
-import { Button, ButtonGroup } from '@heroui/react';
-
+import { Button } from '@/components/ui/button';
 import { useIntl } from '@/contexts';
 
 const languages = [
@@ -14,7 +13,7 @@ export const LanguageSwitcher = () => {
   const { locale, setLocale } = useIntl();
 
   return (
-    <ButtonGroup aria-label="Language selection" variant="flat">
+    <div className="flex" aria-label="Language selection" role="group">
       {languages.map((lang) => {
         const isActive = locale === lang.code;
 
@@ -23,13 +22,13 @@ export const LanguageSwitcher = () => {
             key={lang.code}
             aria-pressed={isActive}
             className={isActive ? 'font-bold' : undefined}
-            color={isActive ? 'primary' : 'default'}
-            onPress={() => setLocale(lang.code)}
+            variant={isActive ? 'default' : 'outline'}
+            onClick={() => setLocale(lang.code)}
           >
             {lang.label}
           </Button>
         );
       })}
-    </ButtonGroup>
+    </div>
   );
 };

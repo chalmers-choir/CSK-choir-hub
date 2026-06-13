@@ -1,14 +1,17 @@
 import type { ReactNode } from 'react';
 
 import type { Metadata, Viewport } from 'next';
+import { Inter, Roboto_Slab } from 'next/font/google';
 
-import clsx from 'clsx';
-
-import { fontSans } from '@/config/fonts';
 import Providers from '@/config/provider';
 import { siteConfig } from '@/config/site';
 import DefaultLayout from '@/layouts/default';
+import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
+
+const robotoSlabHeading = Roboto_Slab({ subsets: ['latin'], variable: '--font-heading' });
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -36,7 +39,11 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="sv" suppressHydrationWarning>
+    <html
+      lang="sv"
+      suppressHydrationWarning
+      className={cn('font-sans', inter.variable, robotoSlabHeading.variable)}
+    >
       <head>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <link
@@ -56,7 +63,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={clsx('bg-background min-h-screen font-sans antialiased', fontSans.variable)}>
+      <body className={cn('bg-background min-h-screen font-sans antialiased', inter.variable)}>
         <Providers>
           <DefaultLayout>{children}</DefaultLayout>
         </Providers>

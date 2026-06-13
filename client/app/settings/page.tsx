@@ -1,8 +1,8 @@
 'use client';
 
-import { Card } from '@heroui/react';
-
-import { LanguageSwitcher, ThemeSwitch } from '@/components';
+import { LanguageSwitcher } from '@/components/settings/LanguageSwitcher';
+import { ThemeSwitch } from '@/components/settings/ThemeSwitcher';
+import { Card } from '@/components/ui/card';
 import { useTranslation } from '@/contexts';
 
 export default function SettingsPage() {
@@ -12,9 +12,9 @@ export default function SettingsPage() {
     <Card className="mx-auto max-w-lg p-4">
       <div className="flex flex-col gap-2">
         <h2 className="text-xl font-bold">{t('settings.title')}</h2>
-        <p className="text-default-600 text-sm">{t('settings.language')}</p>
+        <p className="text-muted-foreground text-sm">{t('settings.language')}</p>
         <LanguageSwitcher />
-        <p className="text-default-600 text-sm">{t('settings.theme')}</p>
+        <p className="text-muted-foreground text-sm">{t('settings.theme')}</p>
         <ThemeSwitch />
       </div>
     </Card>

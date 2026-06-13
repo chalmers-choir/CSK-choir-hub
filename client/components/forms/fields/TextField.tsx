@@ -1,4 +1,5 @@
-import { Input } from '@heroui/react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 import { ReadOnlyTextField } from './ReadOnlyTextField';
 
@@ -16,9 +17,12 @@ export interface TextFieldProps {
   className?: string;
 }
 
-export const TextField = ({ onChange, readOnly, ...props }: TextFieldProps) =>
+export const TextField = ({ onChange, readOnly, label, className, ...props }: TextFieldProps) =>
   readOnly ? (
-    <ReadOnlyTextField {...props} />
+    <ReadOnlyTextField label={label} {...props} />
   ) : (
-    <Input {...props} onValueChange={onChange} readOnly={readOnly} />
+    <div className={`flex flex-col gap-1 ${className ?? ''}`}>
+      {label && <Label>{label}</Label>}
+      <Input {...props} onChange={(e) => onChange?.(e.target.value)} />
+    </div>
   );

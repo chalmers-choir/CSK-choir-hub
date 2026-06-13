@@ -1,8 +1,8 @@
 'use client';
 
-import { Link } from '@heroui/link';
+import Link from 'next/link';
 
-import { BottomNav, Navbar } from '@/components';
+import { BottomNav, Navbar } from '@/components/navigation/';
 
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -13,7 +13,6 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
       </main>
       <footer className="hidden w-full items-center justify-center py-3 sm:flex">
         <Link
-          isExternal
           className="flex items-center gap-1 text-current"
           href="https://github.com/chalmers-choir"
           title="webmästariets github"

@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
-import { Button, addToast } from '@heroui/react';
 import { ArrowBackIosNew } from '@mui/icons-material';
+import { toast } from 'sonner';
 
-import { TextField } from '@/components';
+import { TextField } from '@/components/forms/fields/TextField';
+import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/contexts';
 import { ApiError, User, UsersService } from '@/lib/api-client';
 
@@ -43,12 +44,7 @@ export default function UserDetailPage() {
           errorMessage = error.message;
         }
 
-        addToast({
-          title: 'Error',
-          description: errorMessage,
-          color: 'danger',
-          timeout: 2000,
-        });
+        toast.error(errorMessage);
       }
     };
 
@@ -71,12 +67,7 @@ export default function UserDetailPage() {
         },
       });
 
-      addToast({
-        title: 'Success',
-        description: 'User updated successfully!',
-        color: 'success',
-        timeout: 2000,
-      });
+      toast.success('User updated successfully!');
     } catch (error) {
       let errorMessage = 'Failed to update user. Please try again.';
 
@@ -86,12 +77,7 @@ export default function UserDetailPage() {
         errorMessage = error.message;
       }
 
-      addToast({
-        title: 'Error',
-        description: errorMessage,
-        color: 'danger',
-        timeout: 2000,
-      });
+      toast.error(errorMessage);
     }
   };
 
@@ -100,7 +86,7 @@ export default function UserDetailPage() {
       <div className="flex items-center gap-2">
         <Link
           href="/admin/users"
-          className="text-default-500 hover:text-default-700 text-md flex items-center gap-1 transition-colors"
+          className="text-muted-foreground hover:text-foreground text-md flex items-center gap-1 transition-colors"
         >
           <ArrowBackIosNew className="cursor-pointer" onClick={() => window.history.back()} />
           {t('buttons.back')}
@@ -124,9 +110,7 @@ export default function UserDetailPage() {
             value={user.email}
             onChange={(val) => setUser((prev) => (prev ? { ...prev, email: val } : undefined))}
           />
-          <Button type="submit" color="primary">
-            {t('buttons.save')}
-          </Button>
+          <Button type="submit">{t('buttons.save')}</Button>
         </form>
       ) : (
         <p>Loading user details...</p>

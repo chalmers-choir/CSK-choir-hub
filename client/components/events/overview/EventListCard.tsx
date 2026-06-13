@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
-import { Card, CardBody, CardHeader } from '@heroui/card';
-
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useIntl } from '@/contexts';
 import { CSKEvent, CSKEventType } from '@/lib/apiClient';
 
@@ -51,27 +50,27 @@ export const EventListCard = ({ event }: EventListCardProps) => {
       className="block"
       href={`/events/${event.id}`}
     >
-      <Card className="border-default-100/80 bg-content1/70 hover:border-primary/40 border shadow-sm backdrop-blur transition hover:-translate-y-[1px] hover:shadow-md">
-        <CardHeader className="flex flex-col gap-1">
+      <Card className="border-border/80 bg-card/70 hover:border-primary/40 shadow-sm backdrop-blur transition hover:-translate-y-[1px] hover:shadow-md">
+        <CardHeader className="flex flex-col gap-1 pb-2">
           <div className="flex w-full flex-wrap items-center justify-between">
-            <span className="bg-default-100 text-default-500 rounded-full px-3 py-1 text-xs font-medium">
+            <span className="bg-muted text-muted-foreground rounded-full px-3 py-1 text-xs font-medium">
               {event.place}
             </span>
-            <div className="text-default-700 font-semibold">
-              {formatDate(event.dateStart, locale)}
-            </div>
+            <div className="font-semibold">{formatDate(event.dateStart, locale)}</div>
           </div>
-          <div className="text-default-500 flex w-full flex-wrap justify-between text-sm">
+          <div className="text-muted-foreground flex w-full flex-wrap justify-between text-sm">
             <span className={`rounded-full px-3 py-1 text-xs font-semibold ${badge.color}`}>
               {badge.label}
             </span>
             <div>{formatTimeRange(event.dateStart, locale, event.dateEnd)}</div>
           </div>
         </CardHeader>
-        <CardBody className="gap-3">
+        <CardContent className="gap-3">
           <div className="flex flex-col gap-1">
-            <h3 className="text-default-900 text-xl font-semibold">{event.name}</h3>
-            {event.description && <p className="text-default-500 text-sm">{event.description}</p>}
+            <h3 className="text-xl font-semibold">{event.name}</h3>
+            {event.description && (
+              <p className="text-muted-foreground text-sm">{event.description}</p>
+            )}
           </div>
           <div className="flex flex-wrap gap-2">
             {event.requiresAttendance && (
@@ -85,7 +84,7 @@ export const EventListCard = ({ event }: EventListCardProps) => {
               </span>
             )}
           </div>
-        </CardBody>
+        </CardContent>
       </Card>
     </Link>
   );

@@ -1,6 +1,6 @@
-import { Link } from '@heroui/link';
-import { button as buttonStyles } from '@heroui/theme';
+import Link from 'next/link';
 
+import { buttonVariants } from '@/components/ui/button';
 import { siteConfig } from '@/config/site';
 import { useTranslation } from '@/contexts/IntlContext';
 
@@ -18,16 +18,10 @@ export const LoggedOutCta = ({ message }: LoggedOutCtaProps) => {
     <div className="flex flex-col items-center gap-3 text-center">
       {message && <p className="mb-1 text-lg">{message}</p>}
       <div className="flex gap-3">
-        <Link
-          className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
-          href={siteConfig.links.login}
-        >
+        <Link className={buttonVariants()} href={siteConfig.links.login}>
           {t('common.login')}
         </Link>
-        <Link
-          className={buttonStyles({ variant: 'bordered', radius: 'full' })}
-          href={siteConfig.links.register}
-        >
+        <Link className={buttonVariants({ variant: 'outline' })} href={siteConfig.links.register}>
           {t('common.register')}
         </Link>
       </div>

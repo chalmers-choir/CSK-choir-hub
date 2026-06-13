@@ -2,16 +2,17 @@
 
 import { useState } from 'react';
 
-import { Autocomplete, AutocompleteItem } from '@heroui/autocomplete';
-import { Button } from '@heroui/button';
-import { DatePicker } from '@heroui/date-picker';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/dropdown';
-import { Input, Textarea } from '@heroui/input';
-import { button as buttonStyles } from '@heroui/theme';
-import { DateValue } from '@internationalized/date';
-import { I18nProvider } from '@react-aria/i18n';
-
-import { RequestLogin } from '@/components';
+import { RequestLogin } from '@/components/auth/RequestLogin';
+import { Button, buttonVariants } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/contexts';
 import { CSKEventType, EventsService } from '@/lib/apiClient';
 
@@ -48,7 +49,7 @@ export default function CreateEventPage() {
   const [type, setType] = useState<CSKEventType | undefined>(undefined);
   const [typeIsInvalid, setTypeIsInvalid] = useState(false);
   const [description, setDescription] = useState('');
-  const [dateStart, setDateStart] = useState<DateValue | null>(null);
+  const [dateStart, setDateStart] = useState<string>('');
   const [dateIsInvalid, setDateIsInvalid] = useState(false);
   const [place, setPlace] = useState('');
   const [placeIsInvalid, setPlaceIsInvalid] = useState(false);
@@ -57,7 +58,7 @@ export default function CreateEventPage() {
     setType(undefined);
     setTypeIsInvalid(false);
     setDescription('');
-    setDateStart(null);
+    setDateStart('');
     setDateIsInvalid(false);
     setPlace('');
     setPlaceIsInvalid(false);
@@ -85,7 +86,7 @@ export default function CreateEventPage() {
         name,
         type,
         description,
-        dateStart: dateStart?.toString(),
+        dateStart: dateStart,
         place,
         requiresRegistration: false,
         requiresAttendance: false,
@@ -102,7 +103,7 @@ export default function CreateEventPage() {
     }
   };
 
-  const defaultVariant = 'bordered';
+  const defaultVariant = 'outline' as const;
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -110,67 +111,68 @@ export default function CreateEventPage() {
         <form className="w-md mx-auto mt-20 flex max-w-full flex-col gap-2" onSubmit={handleSubmit}>
           <h2 className="w-full text-center text-lg font-semibold">Skapa nytt evenemang</h2>
 
-          <Input
-            required
-            label="Namn på evenemanget"
-            type="text"
-            value={name}
-            variant={defaultVariant}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <div className="flex flex-col gap-1">
+            <Label>Namn på evenemanget</Label>
+            <Input required type="text" value={name} onChange={(e) => setName(e.target.value)} />
+          </div>
 
-          <Dropdown>
-            <DropdownTrigger>
-              <Button
-                color={typeIsInvalid ? 'danger' : 'default'}
-                variant={defaultVariant}
-                onPress={() => setTypeIsInvalid(false)}
-              >
-                {type ? eventTypeDbKeyToName[type] : 'Välj typ'}
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              items={Object.entries(eventTypeDbKeyToName)}
-              onAction={(key) => setType(key as CSKEventType)}
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              className={buttonVariants({
+                variant: typeIsInvalid ? 'destructive' : defaultVariant,
+              })}
+              onClick={() => setTypeIsInvalid(false)}
             >
-              {(item) => <DropdownItem key={item[0]}>{item[1]}</DropdownItem>}
-            </DropdownMenu>
-          </Dropdown>
+              {type ? eventTypeDbKeyToName[type] : 'Välj typ'}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {Object.entries(eventTypeDbKeyToName).map(([key, label]) => (
+                <DropdownMenuItem key={key} onClick={() => setType(key as CSKEventType)}>
+                  {label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <Textarea
-            required
-            label="Beskrivning"
-            type="text"
-            value={description}
-            variant={defaultVariant}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-
-          <I18nProvider locale="sv-SE">
-            <DatePicker
-              classNames={{ label: 'after:content-none' }}
-              granularity="minute"
-              isInvalid={dateIsInvalid}
-              label="Datum och tid"
-              value={dateStart}
-              variant={defaultVariant}
-              onChange={(e) => e && setDateStart(e)}
-              onFocus={() => setDateIsInvalid(false)}
+          <div className="flex flex-col gap-1">
+            <Label>Beskrivning</Label>
+            <Textarea
+              required
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
-          </I18nProvider>
+          </div>
 
-          <Autocomplete
-            allowsCustomValue
-            inputValue={place}
-            isInvalid={placeIsInvalid}
-            items={Object.entries(autocompletePlaceNames)}
-            label="Plats (välj från listan eller skriv egen)"
-            variant={defaultVariant}
-            onFocus={() => setPlaceIsInvalid(false)}
-            onInputChange={(e) => setPlace(e)}
-          >
-            {(item) => <AutocompleteItem key={item[0]}>{item[1]}</AutocompleteItem>}
-          </Autocomplete>
+          <div className="flex flex-col gap-1">
+            <Label>Datum och tid</Label>
+            <Input
+              type="datetime-local"
+              value={dateStart}
+              className={dateIsInvalid ? 'border-destructive' : ''}
+              onChange={(e) => {
+                setDateStart(e.target.value);
+                setDateIsInvalid(false);
+              }}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <Label>Plats (välj från listan eller skriv egen)</Label>
+            <Input
+              list="places-list"
+              value={place}
+              className={placeIsInvalid ? 'border-destructive' : ''}
+              onChange={(e) => {
+                setPlace(e.target.value);
+                setPlaceIsInvalid(false);
+              }}
+            />
+            <datalist id="places-list">
+              {Object.entries(autocompletePlaceNames).map(([key, label]) => (
+                <option key={key} value={label} />
+              ))}
+            </datalist>
+          </div>
 
           {result && (
             <p className={result.type == 'success' ? 'text-green-500' : 'text-red-500'}>
@@ -178,10 +180,7 @@ export default function CreateEventPage() {
             </p>
           )}
 
-          <Button
-            className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
-            type="submit"
-          >
+          <Button className="rounded-full" type="submit">
             Skapa
           </Button>
         </form>

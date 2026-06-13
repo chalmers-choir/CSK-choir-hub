@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Button } from '@heroui/button';
+import { buttonVariants } from '@/components/ui/button';
 
 export default function UnauthorizedPage() {
   return (
@@ -10,11 +10,11 @@ export default function UnauthorizedPage() {
         You don&apos;t have permission to access this page.
       </p>
       <div className="flex gap-4">
-        <Link href="/">
-          <Button color="primary">Go Home</Button>
+        <Link className={buttonVariants()} href="/">
+          Go Home
         </Link>
-        <Link href="/login">
-          <Button variant="bordered">Login</Button>
+        <Link className={buttonVariants({ variant: 'outline' })} href="/login">
+          Login
         </Link>
       </div>
     </div>

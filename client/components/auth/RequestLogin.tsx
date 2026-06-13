@@ -1,5 +1,6 @@
-import { Link } from '@heroui/link';
-import { button as buttonStyles } from '@heroui/theme';
+import Link from 'next/link';
+
+import { buttonVariants } from '@/components/ui/button';
 
 interface RequestLoginProps {
   children?: string;
@@ -12,13 +13,10 @@ export const RequestLogin = ({ children }: RequestLoginProps) => {
         <p className="mb-2 text-lg">{children ?? <>Vänligen logga in för att se innehållet.</>}</p>
       </div>
       <div className="flex justify-center gap-3">
-        <Link
-          className={buttonStyles({ color: 'primary', radius: 'full', variant: 'shadow' })}
-          href="/login"
-        >
+        <Link className={buttonVariants()} href="/login">
           Login
         </Link>
-        <Link className={buttonStyles({ variant: 'bordered', radius: 'full' })} href="/register">
+        <Link className={buttonVariants({ variant: 'outline' })} href="/register">
           Register
         </Link>
       </div>

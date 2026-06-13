@@ -1,4 +1,9 @@
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export interface LinkDropdownMenuProps {
   trigger: React.ReactNode;
@@ -15,21 +20,16 @@ export type LinkDropDownMenuRef = {
 
 export const LinkDropdownMenu = ({ items, trigger }: LinkDropdownMenuProps) => {
   return (
-    <Dropdown>
-      <DropdownTrigger>{trigger}</DropdownTrigger>
+    <DropdownMenu>
+      <DropdownMenuTrigger>{trigger}</DropdownMenuTrigger>
 
-      <DropdownMenu>
+      <DropdownMenuContent align="end">
         {items.map((item) => (
-          <DropdownItem
-            key={item.key}
-            href={item.href}
-            onPress={item.onPress}
-            className={item.className}
-          >
-            {item.name}
-          </DropdownItem>
+          <DropdownMenuItem key={item.key} className={item.className} onClick={item.onPress}>
+            {item.href ? <a href={item.href}>{item.name}</a> : item.name}
+          </DropdownMenuItem>
         ))}
-      </DropdownMenu>
-    </Dropdown>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
